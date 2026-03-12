@@ -1,0 +1,55 @@
+---
+import { site } from "../content/site";
+
+const raw = site.contact.whatsapp ?? site.contact.phone;
+const waNumber = String(raw).replace(/[^\d]/g, ""); // тільки цифри
+const text = encodeURIComponent(site.contact.whatsappText ?? "Hi! I’d like to request a quote.");
+const href = waNumber ? `https://wa.me/${waNumber}?text=${text}` : null;
+---
+
+{href ? (
+  <a
+    class="waFab"
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Chat on WhatsApp"
+  >
+    <svg viewBox="0 0 32 32" width="22" height="22" aria-hidden="true">
+      <path
+        fill="currentColor"
+        d="M19.11 17.62c-.27-.14-1.62-.8-1.87-.9-.25-.09-.44-.14-.62.14-.18.27-.71.9-.87 1.09-.16.18-.32.2-.59.07-.27-.14-1.15-.42-2.2-1.35-.82-.73-1.37-1.64-1.53-1.91-.16-.27-.02-.42.12-.55.12-.12.27-.32.41-.48.14-.16.18-.27.27-.46.09-.18.05-.34-.02-.48-.07-.14-.62-1.5-.85-2.05-.22-.53-.45-.46-.62-.46l-.53-.01c-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.29 0 1.34.98 2.64 1.12 2.82.14.18 1.94 2.96 4.7 4.15.66.28 1.17.45 1.57.57.66.21 1.26.18 1.73.11.53-.08 1.62-.66 1.85-1.3.23-.64.23-1.18.16-1.3-.07-.11-.25-.18-.52-.32zM16.04 4.67c-6.24 0-11.31 5.02-11.31 11.19 0 2 .54 3.96 1.56 5.67L4.5 27.33l5.98-1.57a11.34 11.34 0 0 0 5.56 1.45c6.24 0 11.31-5.02 11.31-11.19S22.28 4.67 16.04 4.67zm0 20.6c-1.85 0-3.66-.49-5.25-1.42l-.38-.22-3.55.93.95-3.43-.25-.36a9.23 9.23 0 0 1-1.49-5.02c0-5.08 4.18-9.21 9.33-9.21 5.15 0 9.33 4.13 9.33 9.21 0 5.08-4.18 9.21-9.33 9.21z"
+      />
+    </svg>
+  </a>
+) : null}
+
+<style is:global>
+  .waFab{
+    position: fixed;
+    left: 18px;
+    bottom: 18px;
+    z-index: 60;
+    width: 54px;
+    height: 54px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(255,255,255,.78);
+    border: 1px solid var(--border2);
+    box-shadow: 0 18px 48px rgba(10,10,20,.12);
+    backdrop-filter: blur(10px);
+
+    color: #25D366;
+    transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+  }
+  .waFab:hover{
+    transform: translateY(-1px);
+    box-shadow: 0 22px 60px rgba(10,10,20,.14);
+  }
+  @media (prefers-reduced-motion: reduce){
+    .waFab{ transition: none; }
+  }
+</style>

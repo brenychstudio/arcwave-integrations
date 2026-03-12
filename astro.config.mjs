@@ -1,9 +1,20 @@
-// @ts-check
-import { defineConfig } from 'astro/config';
+﻿import { defineConfig } from "astro/config";
+import react from "@astrojs/react";
+import sitemap from "@astrojs/sitemap";
 
-import react from '@astrojs/react';
-
-// https://astro.build/config
 export default defineConfig({
-  integrations: [react()]
+  // IMPORTANT: update to your actual Cloudflare Pages URL after first deploy
+  site: "https://arcwave-integrations.pages.dev",
+  integrations: [
+    react(),
+    sitemap({
+      filter: (page) =>
+        ![
+          "/privacy",
+          "/cookies",
+          "/es/privacy",
+          "/es/cookies",
+        ].includes(page),
+    }),
+  ],
 });

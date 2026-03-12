@@ -1,0 +1,219 @@
+--- 
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import HeroBanner from "../../components/HeroBanner.astro";
+import Section from "../../components/Section.astro";
+
+import { site } from "../../content/site";
+import { COMPANY } from "../../content/company";
+import { services } from "../../content/services";
+import type { Service } from "../../content/services";
+
+export async function getStaticPaths() {
+  // Guard against malformed data (prevents Astro's "Missing parameter: slug" error)
+  return services
+    .filter((s) => typeof s?.key === "string" && s.key.trim().length > 0)
+    .map((s) => ({
+      params: { slug: s.key },
+      props: { service: s },
+    }));
+}
+
+const service = (Astro.props as { service?: Service }).service;
+if (!service) {
+  return Astro.redirect("/services");
+}
+
+const quoteHref = `/contact?service=${service.key}#quote`;
+const desc = service.description || service.short;
+---
+
+<BaseLayout title={`${service.title} — ${site.name}`} description={desc}>
+      <HeroBanner
+    title={service.title}
+    subtitle={service.short}
+    image={service.heroImage}
+    primaryCta={{ label: "Request a quote", href: quoteHref }}
+    secondaryCta={{ label: "All services", href: "/services" }}
+  />
+
+  <div class="container"><div class="hr"></div></div>
+
+  <Section eyebrow="Overview" title="What this covers" note="Scope is confirmed on a short call after we review your brief.">
+    <div class="cols">
+      <div class="card box">
+        <div class="prose">
+          <p>{desc}</p>
+        </div>
+
+        {service.bullets?.length ? (
+          <>
+            <div class="hr" style="margin:14px 0;"></div>
+            <div class="k">Typical deliverables</div>
+            <ul class="list">
+              {service.bullets.map((b) => (
+                <li class="li">{b}</li>
+              ))}
+            </ul>
+          </>
+        ) : null}
+      </div>
+
+      <div class="card box side">
+        <div class="k">Quick facts</div>
+        <div class="facts">
+          <div class="fact">
+            <div class="kk">Response</div>
+            <div class="vv">1–2 business days</div>
+          </div>
+          <div class="fact">
+            <div class="kk">Service area</div>
+            <div class="vv">{site.contact.serviceArea}</div>
+          </div>
+          <div class="fact">
+            <div class="kk">Contact</div>
+            <div class="vv"><a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a></div>
+          </div>
+        </div>
+
+        <div class="hr" style="margin:14px 0;"></div>
+
+        <a class="cta" href={quoteHref}>Request a quote →</a>
+        <div class="muted">Preselects: {service.title}</div>
+      </div>
+    </div>
+  </Section>
+
+  <Section eyebrow="Quality" title="Documentation & handover" note="Built to be clean, supportable, and easy to maintain.">
+    <div class="grid3">
+      <div class="card box">
+        <div class="k">Labeling</div>
+        <div class="p">Clear labeling and tidy terminations for serviceability.</div>
+      </div>
+      <div class="card box">
+        <div class="k">As-built notes</div>
+        <div class="p">What was installed, where, and how it’s configured.</div>
+      </div>
+      <div class="card box">
+        <div class="k">Support ready</div>
+        <div class="p">Constraints, access info, and recommendations captured.</div>
+      </div>
+    </div>
+  </Section>
+
+  {service.faqs?.length ? (
+    <Section eyebrow="FAQ" title="Common questions">
+      <div class="faq">
+        {service.faqs.map((x) => (
+          <details class="qa">
+            <summary class="q">{x.q}</summary>
+            <div class="a">{x.a}</div>
+          </details>
+        ))}
+      </div>
+    </Section>
+  ) : null}
+
+  <Section eyebrow="Request" title="Start with a short brief" note="Pick a service, share constraints, we’ll follow up with clarifying questions.">
+    <div class="card box ctaBox">
+      <div>
+        <div class="k">Next step</div>
+        <div class="p">Open the form with <b>{service.title}</b> preselected.</div>
+      </div>
+      <a class="cta big" href={quoteHref}>Request a quote →</a>
+    </div>
+  </Section>
+
+  <style>
+    .box{ padding: 16px; border-radius: var(--radius); }
+    .cols{ display:grid; grid-template-columns: 1.2fr .8fr; gap: 14px; align-items:start; }
+    .side .facts{ display:grid; gap: 10px; margin-top: 10px; }
+    .fact{ display:grid; gap: 2px; }
+
+    /* Labels (lighter + calmer) */
+    .kk,
+    .k{
+      font-size: 12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color: var(--muted2);
+      font-weight: 520;
+    }
+
+    /* Values (was 800) */
+    .vv{
+      font-weight: var(--w-ui, 600);
+      letter-spacing: .005em;
+      line-height: 1.35;
+    }
+
+    .p{
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      font-weight: 420;
+    }
+
+    .muted{ margin-top: 6px; color: var(--muted); font-size: 12px; }
+
+    .prose p{
+      margin:0;
+      color: var(--text);
+      line-height: 1.6;
+      font-weight: 420;
+    }
+
+    .list{ list-style:none; padding:0; margin:10px 0 0; display:grid; gap: 10px; }
+    .li{ position:relative; padding-left: 14px; color: var(--text); line-height: 1.5; }
+    .li:before{ content:""; position:absolute; left:0; top:.62em; width:4px; height:4px; border-radius:999px; background: rgba(10,132,255,.45); }
+
+    .grid3{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+
+    .faq{ display:grid; gap: 10px; }
+    .qa{ border:1px solid var(--border2); border-radius: 14px; padding: 10px 12px; background: rgba(255,255,255,.55); }
+
+    /* FAQ question (was 800) */
+    .q{
+      cursor:pointer;
+      font-weight: 650;
+      letter-spacing: -.005em;
+    }
+
+    .a{
+      margin-top: 8px;
+      color: var(--muted);
+      line-height: 1.55;
+      font-weight: 420;
+    }
+
+    .ctaBox{ display:flex; align-items:center; justify-content:space-between; gap: 14px; }
+
+    /* CTA (was 800) */
+    .cta{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding: 10px 14px; border-radius: 999px;
+      border: 1px solid rgba(10,132,255,.35);
+      background: rgba(10,132,255,.10);
+      font-weight: var(--w-ui, 600);
+      letter-spacing: .008em;
+      text-decoration:none; color: var(--text);
+      box-shadow: 0 10px 24px rgba(10,10,20,.06);
+      white-space: nowrap;
+      transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+    }
+    .cta:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 14px 30px rgba(10,10,20,.08);
+      background: rgba(10,132,255,.12);
+    }
+
+    .cta.big{ padding: 12px 16px; }
+
+    @media (max-width: 980px){
+      .cols{ grid-template-columns: 1fr; }
+      .grid3{ grid-template-columns: 1fr; }
+      .ctaBox{ flex-direction: column; align-items: stretch; }
+      .cta{ width: 100%; }
+    }
+  </style>
+</BaseLayout>

@@ -1,0 +1,49 @@
+---
+export type Badge = { title: string; note: string };
+
+const { badges: badgesProp }:{ badges?: Badge[] } = Astro.props;
+const badges: Badge[] = Array.isArray(badgesProp) ? badgesProp : [];
+---
+
+{badges.length > 0 && (
+  <div class="grid" aria-label="Trust strip">
+    {badges.map((b) => (
+      <div class="card item">
+        <div class="t">{b.title}</div>
+        <div class="n">{b.note}</div>
+      </div>
+    ))}
+  </div>
+)}
+
+<style>
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(3,1fr);
+    gap:12px;
+    margin-top:18px;
+  }
+
+  .item{
+    padding:14px 16px;
+    /* a bit quieter than global --shadow (premium feel) */
+    box-shadow: 0 12px 34px rgba(10,10,20,.06);
+  }
+
+  .t{
+    font-weight:600;
+    font-size:13px;
+    letter-spacing:0.02em;
+  }
+
+  .n{
+    margin-top:6px;
+    font-size:13px;
+    color:rgba(10,10,10,0.74);
+    line-height:1.45;
+  }
+
+  @media (max-width: 900px){
+    .grid{ grid-template-columns:1fr; }
+  }
+</style>

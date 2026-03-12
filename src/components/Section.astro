@@ -1,0 +1,32 @@
+---
+type Props = { id?: string; title?: string; eyebrow?: string; note?: string };
+const { id, title, eyebrow, note } = Astro.props;
+---
+<section id={id} class="section">
+  <div class="container">
+    {(title || eyebrow || note) && (
+      <header class="head">
+        {eyebrow && <div class="eyebrow">{eyebrow}</div>}
+        {title && <h2 class="title">{title}</h2>}
+        {note && <p>{note}</p>}
+      </header>
+    )}
+    <div class="body">
+      <slot />
+    </div>
+  </div>
+</section>
+
+<style>
+  .section{ padding: 56px 0; }
+  .head{ margin-bottom: 18px; }
+  .eyebrow{
+    display:inline-flex;
+    margin-bottom: 10px;
+    font-size: 12px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .title{ font-size: clamp(22px, 2.2vw, 30px); }
+</style>

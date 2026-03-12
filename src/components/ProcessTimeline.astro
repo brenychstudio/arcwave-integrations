@@ -1,0 +1,84 @@
+---
+export type Step = { title: string; note: string };
+
+const { steps: stepsProp }:{ steps?: Step[] } = Astro.props;
+const steps: Step[] = Array.isArray(stepsProp) ? stepsProp : [];
+---
+
+{steps.length > 0 && (
+  <div class="timeline card" aria-label="Process steps">
+    {steps.map((s, idx) => (
+      <div class="row">
+        <div class="badge">{String(idx + 1).padStart(2, "0")}</div>
+        <div class="txt">
+          <div class="t">{s.title}</div>
+          <div class="n">{s.note}</div>
+        </div>
+      </div>
+    ))}
+  </div>
+)}
+
+<style>
+  .timeline{
+    margin-top:18px;
+    padding: 6px 18px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* subtle vertical rail */
+  .timeline::before{
+    content:"";
+    position:absolute;
+    left: 35px;
+    top: 18px;
+    bottom: 18px;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(10,10,20,.10), transparent);
+  }
+
+  .row{
+    display:grid;
+    grid-template-columns: 44px 1fr;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border2);
+  }
+  .row:last-child{ border-bottom: 0; }
+
+  .badge{
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size: 11px;
+    letter-spacing: .14em;
+    font-weight: 900;
+    border:1px solid var(--border2);
+    background: rgba(255,255,255,.70);
+    box-shadow: 0 10px 24px rgba(10,10,20,.06);
+  }
+
+  .t{
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: -.01em;
+  }
+
+  .n{
+    margin-top:6px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 720px){
+    .timeline{ padding: 6px 14px; }
+    .timeline::before{ left: 29px; }
+    .row{ grid-template-columns: 40px 1fr; }
+    .badge{ width: 30px; height: 30px; }
+  }
+</style>

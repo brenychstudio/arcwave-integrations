@@ -1,0 +1,55 @@
+---
+import { site } from "../content/site";
+---
+<footer class="footer">
+  <div class="container grid">
+    <div>
+      <div class="brand">
+        <span class="mark"></span>
+        <strong>{site.name}</strong>
+      </div>
+      <p class="small">Concept visuals are illustrative until real project photography is available.</p>
+    </div>
+
+    <div class="col">
+      <div class="small">Contact</div>
+      <div class="line"><span class="small">Email</span> <strong>{site.contact.email}</strong></div>
+      <div class="line"><span class="small">Phone</span> <strong>{site.contact.phone}</strong></div>
+      <div class="line"><span class="small">Area</span> <strong>{site.contact.serviceArea}</strong></div>
+    </div>
+
+    <div class="col">
+      <div class="small">Legal</div>
+      <a class="lnk" href="/legal/privacy">Privacy</a>
+    </div>
+  </div>
+
+  <div class="container bottom">
+    <div class="hr"></div>
+    <div class="small">© {new Date().getFullYear()} {site.name}. All rights reserved.</div>
+  </div>
+</footer>
+
+<style>
+  .footer{ padding: 52px 0; }
+  .grid{
+    display:grid;
+    grid-template-columns: 1.2fr .9fr .6fr;
+    gap: 26px;
+    align-items:start;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; margin-bottom: 12px; }
+  .mark{
+    width:10px; height:10px; border-radius:999px; background: var(--accent);
+    box-shadow: 0 0 0 6px rgba(10,132,255,.10);
+  }
+  .col{ display:flex; flex-direction:column; gap:10px; }
+  .line{ display:flex; justify-content:space-between; gap:16px; }
+  .lnk{ color: var(--muted); }
+  .lnk:hover{ color: var(--text); }
+  .bottom{ margin-top: 26px; display:flex; flex-direction:column; gap: 14px; }
+  @media (max-width: 900px){
+    .grid{ grid-template-columns: 1fr; }
+    .line{ justify-content:flex-start; }
+  }
+</style>

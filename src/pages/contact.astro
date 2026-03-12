@@ -1,0 +1,162 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import HeroBanner from "../components/HeroBanner.astro";
+import Section from "../components/Section.astro";
+import QuoteForm from "../components/forms/QuoteForm.tsx";
+
+import { site } from "../content/site";
+import { COMPANY } from "../content/company";
+import { services, commonQuoteFields } from "../content/services";
+import type { ServiceKey } from "../content/services";
+
+const serviceParamRaw = Astro.url.searchParams.get("service");
+const serviceParam = serviceParamRaw === "cctv" ? "alarms" : serviceParamRaw;
+
+const defaultServiceKey: ServiceKey | undefined =
+services.some((s) => s.key === serviceParam) ? (serviceParam as ServiceKey) : undefined;
+
+const telHref = `tel:${COMPANY.phoneTel}`;
+const mailHref = `mailto:${COMPANY.email}`;
+const linkedinHref = COMPANY.linkedinUrl;
+---
+
+<BaseLayout title={`Contact — ${site.name}`} description="Request a quote or reach out directly.">
+  <HeroBanner
+    title="Contact"
+    subtitle="Request a quote with a short brief, or contact us directly."
+    image="/macro/macro-network-ports-01.png"
+    primaryCta={{ label: "Request a quote", href: "#quote" }}
+    secondaryCta={{ label: "Services", href: "/services" }}
+  />
+
+  <Section
+    eyebrow="Contact"
+    title="Direct contact"
+    note="We reply within 1–2 business days. For urgent cases, include access hours and site constraints."
+  >
+    <div class="stack">
+      <div class="grid">
+        <div class="card box">
+          <div class="k">Email</div>
+          <a class="v link" href={mailHref}>{COMPANY.email}</a>
+
+          <div class="hr" style="margin:14px 0;"></div>
+
+          <div class="k">Phone</div>
+          <a class="v link" href={telHref}>{COMPANY.phoneDisplay}</a>
+
+          <div class="hr" style="margin:14px 0;"></div>
+
+          <div class="k">LinkedIn</div>
+          <a class="v link" href={linkedinHref} target="_blank" rel="noreferrer">company/example</a>
+
+          <div class="hr" style="margin:14px 0;"></div>
+
+          <div class="k">Hours</div>
+          <div class="v">{COMPANY.hours}</div>
+
+          <div class="hr" style="margin:14px 0;"></div>
+
+          <div class="k">Service area</div>
+          <div class="v">{site.contact.serviceArea}</div>
+        </div>
+
+        <div class="card box noteCard">
+          <div class="k">About</div>
+          <div class="p">{COMPANY.blurb}</div>
+
+          <div class="hr" style="margin:14px 0;"></div>
+
+          <div class="k">Notes</div>
+          <div class="p">Short brief is enough to start. We’ll confirm scope, constraints and timeline on a quick call.</div>
+
+          <div class="hr" style="margin:14px 0;"></div>
+
+          <div class="k">Tip</div>
+          <div class="p">Include: access hours, rack/panel location, distance runs, and any building rules.</div>
+        </div>
+      </div>
+
+      <div id="quote" class="card box formCard">
+        <div class="ey">REQUEST</div>
+        <div class="h">Tell us what you need</div>
+        <div class="p">Short form. We follow up with clarifying questions if needed.</div>
+
+        <div class="hr" style="margin:14px 0;"></div>
+
+        <QuoteForm
+          client:idle
+          services={services}
+          endpoint={site.form.endpoint}
+          commonFields={commonQuoteFields}
+          defaultServiceKey={defaultServiceKey}
+          fallbackEmail={COMPANY.email}
+          fallbackSubject={`${site.name} — quote request`}
+        />
+      </div>
+    </div>
+  </Section>
+
+  <style>
+    .stack{ display:grid; gap: 14px; }
+    #quote{ scroll-margin-top: 120px; }
+
+    .grid{
+      display:grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 14px;
+      align-items:start;
+    }
+
+    .box{ padding: 16px; border-radius: var(--radius); }
+
+    /* labels */
+    .k,
+    .ey{
+      font-size: 12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color: var(--muted2);
+      font-weight: 520;
+    }
+
+    /* values */
+    .v{
+      margin-top: 6px;
+      font-weight: 600;
+      letter-spacing: .005em;
+    }
+
+    /* clickable values (same look, but interactive) */
+    .link{ display:inline-block; text-decoration:none; color:inherit; }
+    .link:hover{ text-decoration: underline; text-underline-offset: 3px; }
+
+    /* form heading */
+    .h{
+      font-size: 22px;
+      font-weight: 760;
+      letter-spacing: -.01em;
+      margin-top: 6px;
+      line-height: 1.15;
+    }
+
+    .p{
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      font-weight: 420;
+    }
+
+    .noteCard{
+      background: rgba(255,255,255,.55);
+      border: 1px solid var(--border2);
+    }
+
+    .formCard{ padding: 18px; }
+
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+  </style>
+</BaseLayout>

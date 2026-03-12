@@ -1,0 +1,33 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import HeroBanner from "../components/HeroBanner.astro";
+import Section from "../components/Section.astro";
+import { site } from "../content/site";
+---
+<BaseLayout title={`About — ${site.name}`} description="Engineering-first approach, clean installs, documentation, and realistic claims.">
+  <HeroBanner
+    title="About"
+    subtitle="Engineering-first execution. Clear scope. No inflated claims. Compliance statements only when supported by documentation."
+    image="/macro/macro-pcb-01.png"
+    primaryCta={{ label: "Services", href: "/services" }}
+    secondaryCta={{ label: "Contact", href: "/contact" }}
+  />
+  <Section title="Principles" note="Premium outcome is mostly discipline: routing, labeling, testing, documentation.">
+    <div class="card box">
+      <p>
+        We focus on installations that remain maintainable: sensible topology, clear labeling, tidy routing, and a handover
+        that makes future work easier.
+      </p>
+      <div class="hr" style="margin:16px 0;"></div>
+      <p>
+        Compliance/standards references are included only when applicable to the scope and when documentation can be provided.
+      </p>
+      <div class="hr" style="margin:16px 0;"></div>
+      <p class="small">Concept visuals on this site are illustrative until real project photography is available.</p>
+    </div>
+  </Section>
+
+  <style>
+    .box{ padding: 18px; border-radius: var(--radius); }
+  </style>
+</BaseLayout>

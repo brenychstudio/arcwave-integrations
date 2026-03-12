@@ -1,0 +1,26 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Section from "../../../components/Section.astro";
+---
+
+<BaseLayout title="Cookies" description="Información sobre cookies.">
+  <Section eyebrow="Legal" title="Cookies">
+    <div class="card box">
+      <p class="p">
+        Este sitio puede usar cookies esenciales necesarias para el funcionamiento básico (por ejemplo, navegación y seguridad).
+      </p>
+
+      <div class="hr" style="margin:16px 0;"></div>
+
+      <p class="p small">
+        Si en el futuro se activan herramientas de analítica o marketing, esta página se actualizará con detalles sobre qué se utiliza y cómo gestionar preferencias.
+      </p>
+    </div>
+  </Section>
+
+  <style>
+    .box{ padding: 18px; border-radius: var(--radius); }
+    .p{ margin:0; color: var(--muted); line-height: 1.65; font-weight: 420; }
+    .small{ font-size: 13px; }
+  </style>
+</BaseLayout>

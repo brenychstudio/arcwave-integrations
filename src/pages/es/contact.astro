@@ -1,0 +1,125 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import HeroBanner from "../../components/HeroBanner.astro";
+import Section from "../../components/Section.astro";
+import QuoteForm from "../../components/forms/QuoteForm.tsx";
+
+import { siteEs } from "../../content/site.es";
+import { servicesEs, commonQuoteFieldsEs } from "../../content/services.es";
+import type { ServiceKey } from "../../content/services";
+
+const serviceParamRaw = Astro.url.searchParams.get("service");
+const serviceParam = serviceParamRaw === "cctv" ? "alarms" : serviceParamRaw;
+
+const defaultServiceKey: ServiceKey | undefined =
+  servicesEs.some((s) => s.key === serviceParam) ? (serviceParam as ServiceKey) : undefined;
+---
+
+<BaseLayout title={`Contacto — ${siteEs.name}`} description="Solicita presupuesto o contáctanos directamente.">
+  <HeroBanner
+    title="Contacto"
+    subtitle="Solicita presupuesto con un brief corto o contáctanos directamente."
+    image="/macro/macro-network-ports-01.png"
+    primaryCta={{ label: "Solicitar presupuesto", href: "#quote" }}
+    secondaryCta={{ label: "Servicios", href: "/es/services" }}
+  />
+
+  <Section
+    eyebrow="Contacto"
+    title="Contacto directo"
+    note="Respondemos en 1–2 días laborables. Si es urgente, incluye horario de acceso y limitaciones del sitio."
+  >
+    <div class="stack">
+      <div class="grid">
+        <div class="card box">
+          <div class="k">Área de servicio</div>
+          <div class="v">{siteEs.contact.serviceArea}</div>
+        </div>
+
+        <div class="card box noteCard">
+          <div class="k">Nota</div>
+          <div class="p">Un brief corto es suficiente. Confirmamos alcance y plazos en una llamada rápida.</div>
+
+          <div class="hr" style="margin:14px 0;"></div>
+
+          <div class="k">Consejo</div>
+          <div class="p">Incluye: horario de acceso, ubicación de rack/cuadro, distancias y normas del edificio.</div>
+        </div>
+      </div>
+
+      <div id="quote" class="card box formCard">
+        <div class="ey">SOLICITUD</div>
+        <div class="h">Cuéntanos lo que necesitas</div>
+        <div class="p">Formulario corto. Te contactamos con preguntas si hace falta.</div>
+
+        <div class="hr" style="margin:14px 0;"></div>
+
+        <QuoteForm
+          client:idle
+          services={servicesEs}
+          commonFields={commonQuoteFieldsEs}
+          defaultServiceKey={defaultServiceKey}
+          endpoint={siteEs.form.endpoint}
+          fallbackEmail={siteEs.contact.email}
+          fallbackSubject={`${siteEs.name} — solicitud de presupuesto`}
+        />
+      </div>
+    </div>
+  </Section>
+
+  <style>
+    .stack{ display:grid; gap: 14px; }
+    #quote{ scroll-margin-top: 120px; }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      align-items:start;
+    }
+
+    .box{ padding: 16px; border-radius: var(--radius); }
+
+    .k,
+    .ey{
+      font-size: 12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color: var(--muted2);
+      font-weight: 520;
+    }
+
+    .v{
+      margin-top: 6px;
+      font-weight: 600;
+      letter-spacing: .005em;
+    }
+
+    .h{
+      font-size: 22px;
+      font-weight: 760;
+      letter-spacing: -.01em;
+      margin-top: 6px;
+      line-height: 1.15;
+    }
+
+    .p{
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      font-weight: 420;
+    }
+
+    .noteCard{
+      background: rgba(255,255,255,.55);
+      border: 1px solid var(--border2);
+    }
+
+    .formCard{ padding: 18px; }
+
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+  </style>
+</BaseLayout>

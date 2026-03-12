@@ -1,0 +1,172 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import HeroBanner from "../../../components/HeroBanner.astro";
+import Section from "../../../components/Section.astro";
+
+import { siteEs } from "../../../content/site.es";
+import { servicesEs } from "../../../content/services.es";
+import type { Service } from "../../../content/services";
+
+export async function getStaticPaths() {
+  return servicesEs.map((s) => ({
+    params: { slug: s.key },
+    props: { service: s },
+  }));
+}
+
+const service = (Astro.props as { service?: Service }).service;
+if (!service) return Astro.redirect("/es/services");
+
+const quoteHref = `/es/contact?service=${service.key}#quote`;
+const desc = service.description || service.short;
+---
+
+<BaseLayout title={`${service.title} — ${siteEs.name}`} description={desc}>
+  <HeroBanner
+    title={service.title}
+    subtitle={service.short}
+    image={service.heroImage}
+    primaryCta={{ label: "Solicitar presupuesto", href: quoteHref }}
+    secondaryCta={{ label: "Todos los servicios", href: "/es/services" }}
+  />
+
+  <div class="container"><div class="hr"></div></div>
+
+  <Section eyebrow="Resumen" title="Qué incluye" note="Confirmamos alcance y limitaciones tras revisar tu brief.">
+    <div class="cols">
+      <div class="card box">
+        <div class="prose">
+          <p>{desc}</p>
+        </div>
+
+        {service.bullets?.length ? (
+          <>
+            <div class="hr" style="margin:14px 0;"></div>
+            <div class="k">Entregables habituales</div>
+            <ul class="list">
+              {service.bullets.map((b) => (
+                <li class="li">{b}</li>
+              ))}
+            </ul>
+          </>
+        ) : null}
+      </div>
+
+      <div class="card box side">
+        <div class="k">Datos rápidos</div>
+        <div class="facts">
+          <div class="fact">
+            <div class="kk">Respuesta</div>
+            <div class="vv">1–2 días laborables</div>
+          </div>
+          <div class="fact">
+            <div class="kk">Área de servicio</div>
+            <div class="vv">{siteEs.contact.serviceArea}</div>
+          </div>
+          <div class="fact">
+            <div class="kk">Siguiente paso</div>
+            <div class="vv"><a href={quoteHref}>Solicitar presupuesto</a></div>
+          </div>
+        </div>
+
+        <div class="hr" style="margin:14px 0;"></div>
+
+        <a class="cta" href={quoteHref}>Solicitar presupuesto →</a>
+        <div class="muted">Preselecciona: {service.title}</div>
+      </div>
+    </div>
+  </Section>
+
+  {service.faqs?.length ? (
+    <Section eyebrow="FAQ" title="Preguntas frecuentes">
+      <div class="faq">
+        {service.faqs.map((x) => (
+          <details class="qa">
+            <summary class="q">{x.q}</summary>
+            <div class="a">{x.a}</div>
+          </details>
+        ))}
+      </div>
+    </Section>
+  ) : null}
+
+  <Section eyebrow="Siguiente" title="Empezamos con un brief corto" note="Elige servicio, indica limitaciones y te contactamos con preguntas.">
+    <div class="card box ctaBox">
+      <div>
+        <div class="k">Siguiente paso</div>
+        <div class="p">Abrir el formulario con <b>{service.title}</b> preseleccionado.</div>
+      </div>
+      <a class="cta big" href={quoteHref}>Solicitar presupuesto →</a>
+    </div>
+  </Section>
+
+  <style>
+    .box{ padding: 16px; border-radius: var(--radius); }
+    .cols{ display:grid; grid-template-columns: 1.2fr .8fr; gap: 14px; align-items:start; }
+    .side .facts{ display:grid; gap: 10px; margin-top: 10px; }
+    .fact{ display:grid; gap: 2px; }
+
+    .kk,
+    .k{
+      font-size: 12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color: var(--muted2);
+      font-weight: 520;
+    }
+
+    .vv{
+      font-weight: var(--w-ui, 600);
+      letter-spacing: .005em;
+      line-height: 1.35;
+    }
+
+    .p{
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      font-weight: 420;
+    }
+
+    .muted{ margin-top: 6px; color: var(--muted); font-size: 12px; }
+
+    .prose p{
+      margin:0;
+      color: var(--text);
+      line-height: 1.6;
+      font-weight: 420;
+    }
+
+    .list{ list-style:none; padding:0; margin:10px 0 0; display:grid; gap: 10px; }
+    .li{ position:relative; padding-left: 14px; color: var(--text); line-height: 1.5; }
+    .li:before{ content:""; position:absolute; left:0; top:.62em; width:4px; height:4px; border-radius:999px; background: rgba(10,132,255,.45); }
+
+    .faq{ display:grid; gap: 10px; }
+    .qa{ border:1px solid var(--border2); border-radius: 14px; padding: 10px 12px; background: rgba(255,255,255,.55); }
+    .q{ cursor:pointer; font-weight: 650; letter-spacing: -.005em; }
+    .a{ margin-top: 8px; color: var(--muted); line-height: 1.55; font-weight: 420; }
+
+    .ctaBox{ display:flex; align-items:center; justify-content:space-between; gap: 14px; }
+    .cta{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding: 10px 14px; border-radius: 999px;
+      border: 1px solid rgba(10,132,255,.35);
+      background: rgba(10,132,255,.10);
+      font-weight: var(--w-ui, 600);
+      letter-spacing: .008em;
+      text-decoration:none; color: var(--text);
+      box-shadow: 0 10px 24px rgba(10,10,20,.06);
+      white-space: nowrap;
+      transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+    }
+    .cta:hover{ transform: translateY(-1px); box-shadow: 0 14px 30px rgba(10,10,20,.08); background: rgba(10,132,255,.12); }
+    .cta.big{ padding: 12px 16px; }
+
+    @media (max-width: 980px){
+      .cols{ grid-template-columns: 1fr; }
+      .ctaBox{ flex-direction: column; align-items: stretch; }
+      .cta{ width: 100%; }
+    }
+  </style>
+</BaseLayout>

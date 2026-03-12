@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import HeroBanner from "../../../components/HeroBanner.astro";
+import Section from "../../../components/Section.astro";
+import ServicesGrid from "../../../components/ServicesGrid.astro";
+import { servicesEs } from "../../../content/services.es";
+
+const title = "Servicios";
+const description = "Seis líneas principales. Alcance claro, instalación limpia y entrega documentada.";
+---
+
+<BaseLayout title={title} description={description}>
+  <HeroBanner
+    title={title}
+    subtitle={description}
+    image="/hero/hero-home-01.png"
+    variant="compact"
+    primaryCta={{ label: "Solicitar presupuesto", href: "/es/contact#quote" }}
+    secondaryCta={{ label: "Proceso", href: "/es/process" }}
+  />
+
+  <div class="container"><div class="hr"></div></div>
+
+  <Section title="Todos los servicios">
+    <ServicesGrid services={servicesEs} showQuote={true} />
+  </Section>
+</BaseLayout>

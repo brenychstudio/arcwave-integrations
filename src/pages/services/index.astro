@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import HeroBanner from "../../components/HeroBanner.astro";
+import Section from "../../components/Section.astro";
+import ServicesGrid from "../../components/ServicesGrid.astro";
+import { services } from "../../content/services";
+
+const title = "Services";
+const description = "Six core lines. Clear scope, tidy execution, and documentation-first handover.";
+---
+
+<BaseLayout title={title} description={description}>
+  <HeroBanner
+    title={title}
+    subtitle={description}
+    image="/hero/hero-home-01.png"
+    variant="compact"
+    primaryCta={{ label: "Request a quote", href: "/contact#quote" }}
+    secondaryCta={{ label: "Process", href: "/process" }}
+  />
+
+  <div class="container"><div class="hr"></div></div>
+
+  <Section title="All services">
+    <ServicesGrid services={services} showQuote={true} />
+  </Section>
+</BaseLayout>

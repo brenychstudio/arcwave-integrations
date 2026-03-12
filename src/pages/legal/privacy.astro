@@ -1,0 +1,22 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Section from "../../components/Section.astro";
+import { site } from "../../content/site";
+---
+<BaseLayout title={`Privacy — ${site.name}`} description="Privacy and data handling notes.">
+  <Section title="Privacy" note="Replace with your final legal text.">
+    <div class="card box">
+      <p>
+        We use this form only to respond to your request. Data is not sold. Retention depends on ongoing communication.
+      </p>
+      <div class="hr" style="margin:16px 0;"></div>
+      <p class="small">
+        If you use Formspree/Basin/Netlify Forms, submissions are processed by that provider. Update this policy accordingly.
+      </p>
+    </div>
+  </Section>
+
+  <style>
+    .box{ padding: 18px; border-radius: var(--radius); }
+  </style>
+</BaseLayout>

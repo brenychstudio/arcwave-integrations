@@ -1,0 +1,138 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import HeroBanner from "../components/HeroBanner.astro";
+import Section from "../components/Section.astro";
+import ProcessTimeline from "../components/ProcessTimeline.astro";
+import TrustStrip from "../components/TrustStrip.astro";
+import { site } from "../content/site";
+---
+
+<BaseLayout title={`Process — ${site.name}`} description="Survey → Proposal → Installation → Support. Clear scope and handover.">
+  <HeroBanner
+    title="Process"
+    subtitle="A simple workflow optimized for clarity, speed, and supportability."
+    image="/macro/macro-metal-01.png"
+    primaryCta={{ label: "Request a quote", href: "/contact#quote" }}
+    secondaryCta={{ label: "Services", href: "/services" }}
+  />
+
+  <div class="container"><div class="hr"></div></div>
+
+  <Section eyebrow="Trust" title="Straightforward commitments" note="No vague promises — only what we can document and support.">
+    <TrustStrip badges={site.trustBadges} />
+  </Section>
+
+  <Section eyebrow="Steps" title="A clear workflow" note="Survey → Proposal → Installation → Support">
+    <div class="grid">
+      <div class="main">
+        <ProcessTimeline steps={site.processSteps} />
+      </div>
+
+      <aside class="side">
+        <div class="card pad">
+          <div class="k">Deliverables</div>
+          <ul class="list">
+            <li>Scope + constraints summary</li>
+            <li>Bill of materials (as needed)</li>
+            <li>Labeled installation + basic testing</li>
+            <li>Handover notes for supportability</li>
+          </ul>
+        </div>
+
+        <div class="card pad">
+          <div class="k">Typical timing</div>
+
+          <div class="meta">
+            <div class="row"><span class="l">Survey</span><span class="r">1–3 days</span></div>
+            <div class="row"><span class="l">Proposal</span><span class="r">2–5 days</span></div>
+            <div class="row"><span class="l">Installation</span><span class="r">by scope</span></div>
+            <div class="row"><span class="l">Support</span><span class="r">follow-up</span></div>
+          </div>
+
+          <div class="tip">Varies by site access, materials availability, and permits.</div>
+        </div>
+      </aside>
+    </div>
+
+    <style>
+      .grid{
+        display:grid;
+        grid-template-columns: 1.6fr .9fr;
+        gap: 16px;
+        margin-top: 18px;
+        align-items:start;
+      }
+      .pad{ padding: 16px; }
+      .k{
+        font-size: 12px;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+        color: var(--muted2);
+        margin-bottom: 10px;
+      }
+      .list{
+        margin: 0;
+        padding-left: 18px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.55;
+      }
+      .list li{ margin: 8px 0; }
+
+      .meta{ display:grid; gap: 10px; }
+      .meta .row{
+        display:flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: 14px;
+        border: 1px solid var(--border2);
+        background: rgba(255,255,255,.55);
+      }
+      .meta .l{ font-weight: 800; font-size: 13px; }
+      .meta .r{ color: var(--muted); font-size: 13px; font-weight: 700; }
+
+      .tip{
+        margin-top: 12px;
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      @media (max-width: 980px){
+        .grid{ grid-template-columns: 1fr; }
+      }
+    </style>
+  </Section>
+
+  <Section eyebrow="Next" title="Ready to start?" note="Send a short brief — we’ll confirm scope and constraints on a quick call.">
+    <div class="card cta">
+      <div class="left">
+        <div class="t">Request a quote</div>
+        <div class="n">Short form. We reply within 1–2 business days.</div>
+      </div>
+      <div class="right">
+        <a class="btn primary" href="/contact#quote" data-vt="1">Request a quote</a>
+        <a class="btn" href="/services" data-vt="1">Browse services</a>
+      </div>
+    </div>
+
+    <style>
+      .cta{
+        padding: 18px;
+        display:flex;
+        align-items:center;
+        justify-content: space-between;
+        gap: 14px;
+      }
+      .t{ font-weight: 900; letter-spacing: -.01em; }
+      .n{ margin-top: 6px; color: var(--muted); font-size: 13px; line-height: 1.45; }
+      .right{ display:flex; gap: 10px; align-items:center; }
+      @media (max-width: 720px){
+        .cta{ flex-direction: column; align-items: stretch; }
+        .right{ flex-direction: column; align-items: stretch; }
+        .right .btn{ width: 100%; }
+      }
+    </style>
+  </Section>
+</BaseLayout>

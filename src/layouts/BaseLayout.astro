@@ -1,0 +1,468 @@
+---
+import Header from "../components/Header.astro";
+import WhatsAppFab from "../components/WhatsAppFab.astro";
+import { site } from "../content/site";
+import { siteEs } from "../content/site.es";
+import { COMPANY } from "../content/company";
+import { langFromPath, baseFromLang, t } from "../content/i18n";
+import { ViewTransitions } from "astro:transitions";
+
+type Props = {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+};
+
+const { title, description, ogImage } = Astro.props as Props;
+
+const pageTitle = title ? `${title} — ${site.name}` : site.name;
+const pageDescription = description ?? site.tagline;
+
+// Canonical: production domain + pathname only (no query like ?service=...)
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? site.url);
+const canonical = canonicalUrl.toString();
+
+// OG/Twitter image: always absolute URL
+const ogImg = ogImage ?? site.defaultOg;
+const ogImgAbs = new URL(ogImg, Astro.site ?? site.url).toString();
+
+const waNumber = String(COMPANY.phoneTel).replace(/[^\d]/g, "");
+const waText = encodeURIComponent("Hi! I’d like to request a quote.");
+const waHref = waNumber ? `https://wa.me/${waNumber}?text=${waText}` : null;
+
+const lang = langFromPath(Astro.url.pathname);
+const base = baseFromLang(lang);
+const siteLocal = lang === "es" ? siteEs : site;
+
+const labelContact = t(lang, "Contact", "Contacto");
+const labelLegal = t(lang, "Legal", "Legal");
+const labelPrivacy = t(lang, "Privacy", "Privacidad");
+const labelCookies = t(lang, "Cookies", "Cookies");
+const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="theme-color" content={site.accent} />
+<meta name="robots" content="index,follow" />
+
+<link rel="canonical" href={canonical} />
+
+<!-- Favicons -->
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="/favicon.ico" sizes="any" />
+
+<title>{pageTitle}</title>
+<meta name="description" content={pageDescription} />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:title" content={pageTitle} />
+<meta property="og:description" content={pageDescription} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImgAbs} />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={pageTitle} />
+<meta name="twitter:description" content={pageDescription} />
+<meta name="twitter:image" content={ogImgAbs} />
+
+<ViewTransitions />
+
+    <style is:global>
+      :root{
+        --bg:#f6f7f9;
+        --bg2:#ffffff;
+
+        --text: rgba(15,15,20,1);
+        --muted: rgba(90,90,99,1);
+        --muted2: rgba(120,120,132,1);
+
+        --border: rgba(15,15,20,.10);
+        --border2: rgba(15,15,20,.08);
+
+        --card: rgba(255,255,255,.92);
+        --shadow: 0 18px 48px rgba(10,10,20,.08);
+
+        --radius: 22px;
+        --radius2: 28px;
+
+        --accent: rgb(10,132,255);
+        --accentSoft: rgba(10,132,255,.10);
+        --accentBorder: rgba(10,132,255,.35);
+
+        --container: 1120px;
+
+        /* Typography weights (Windows-friendly) */
+        --w-body: 420;
+        --w-ui: 600;
+      }
+
+      *{ box-sizing:border-box; }
+      html, body{ height:100%; }
+
+      /* Smooth anchor scroll */
+      html{ scroll-behavior:smooth; }
+
+      /* Page transitions (video demo polish) */
+      ::view-transition-old(root),
+      ::view-transition-new(root){
+        animation-duration: 220ms;
+        animation-timing-function: ease;
+      }
+
+      @media (prefers-reduced-motion: reduce){
+        html{ scroll-behavior:auto; }
+        ::view-transition-old(root),
+        ::view-transition-new(root){
+          animation-duration: 1ms;
+        }
+      }
+
+      body{
+        margin:0;
+        color: var(--text);
+        background:
+          radial-gradient(1200px 700px at 20% -10%, rgba(10,132,255,.08), transparent 55%),
+          radial-gradient(900px 600px at 80% 0%, rgba(0,0,0,.04), transparent 60%),
+          linear-gradient(180deg, var(--bg), var(--bg2));
+        font-family: ui-sans-serif, system-ui, -apple-system, "SF Pro Display", "SF Pro Text", Inter, Segoe UI, Roboto, Arial, sans-serif;
+        letter-spacing: .08px;
+        font-weight: var(--w-body);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+      }
+
+      /* Keep form controls consistent */
+      button, input, select, textarea{ font: inherit; }
+
+      img{ max-width:100%; display:block; }
+      a{ color: inherit; text-decoration:none; }
+      a:focus-visible{ outline: 2px solid rgba(10,132,255,.45); outline-offset: 2px; border-radius: 10px; }
+
+      .container{
+        width: min(var(--container), 92vw);
+        margin-inline: auto;
+      }
+
+      .hr{ height:1px; background: var(--border2); }
+
+      .card{
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+
+  /* FIX: cards stay readable over page glow */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+      /* Buttons used across Hero + pages */
+      .btn,
+      a.primary, button.primary,
+      a.secondary, button.secondary{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        gap:10px;
+        padding: 12px 16px;
+        border-radius: 999px;
+        font-weight: var(--w-ui);
+        letter-spacing: .008em;
+        cursor: pointer;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        transition: transform .12s ease, background .12s ease, border-color .12s ease, box-shadow .12s ease, opacity .12s ease;
+      }
+
+      .btn{ border:1px solid var(--border2); background: rgba(255,255,255,.65); }
+      .btn:hover{ transform: translateY(-1px); box-shadow: 0 12px 28px rgba(10,10,20,.10); }
+
+      .btn.primary,
+      a.primary, button.primary{
+        border: 1px solid var(--accentBorder);
+        background: var(--accentSoft);
+      }
+
+      .btn.secondary,
+      a.secondary, button.secondary{
+        border: 1px solid var(--border2);
+        background: rgba(255,255,255,.55);
+      }
+
+      /* IMPORTANT: Override Header CTA weight (Header.astro uses .cta with 800) */
+      header.hdr .right a.cta{
+        font-weight: var(--w-ui);
+        letter-spacing: .008em;
+      }
+
+      @media (prefers-reduced-motion: reduce){
+        .btn, a.primary, button.primary, a.secondary, button.secondary{ transition:none; }
+      }
+
+      /* Footer */
+      .ft{
+  border-top: 0;
+  margin-top: 56px;
+
+  /* створюємо “buffer” для fade, щоб текст не потрапляв у напівпрозору зону */
+  padding: 88px 0 40px;
+
+  color: var(--muted);
+  font-size: 13px;
+
+  /* фон прибираємо з самого футера — fade робимо через ::before */
+  background: transparent;
+  position: relative;
+  z-index: 1;
+}
+
+.ft:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+
+  /* Fade всередині футера: гасить glow без “смуги” */
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,.72) 34%,
+    rgba(255,255,255,.94) 60%,
+    rgba(255,255,255,.985) 100%
+  );
+}
+
+.ft > .container{
+  position: relative;
+  z-index: 2;
+}
+
+      .ft .grid{
+  display:grid;
+  /* 2nd column is an intentional spacer (premium gutter) */
+  grid-template-columns: 1.2fr 0.5fr 1fr 1fr;
+  gap: 16px;
+  align-items:start;
+}
+
+/* Move Contact and Legal into columns 3 and 4 (skip spacer column) */
+.ft .grid > :nth-child(2){ grid-column: 3; }
+.ft .grid > :nth-child(3){ grid-column: 4; justify-self: end; }
+
+      .ft .k{
+        font-size: 12px;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+        color: var(--muted2);
+        margin-bottom: 8px;
+      }
+      .ft a{ color: var(--text); opacity: .72; }
+      .ft a:hover{ opacity: 1; }
+
+/* Footer social icons */
+.ft .social{
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  align-items: center;
+}
+
+.ft .ico{
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255,255,255,.55);
+  border: 1px solid var(--border2);
+  color: var(--text);
+
+  opacity: .72;
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease, border-color .12s ease, opacity .12s ease;
+}
+
+.ft .ico:hover{
+  opacity: 1;
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(10,10,20,.10);
+  border-color: rgba(10,132,255,.28);
+  background: rgba(10,132,255,.06);
+}
+
+.ft .ico svg{ width: 16px; height: 16px; }
+
+@media (prefers-reduced-motion: reduce){
+  .ft .ico{ transition: none; }
+}
+
+.ftBottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+}
+
+.ftCredit{
+  color: var(--muted);
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.ftCredit a{
+  color: var(--text);
+  opacity: .72;
+}
+.ftCredit a:hover{ opacity: 1; }
+
+      @media (max-width: 980px){
+  .ft .grid{ grid-template-columns: 1fr; }
+  .ft .grid > :nth-child(2),
+  .ft .grid > :nth-child(3){
+    grid-column: auto;
+    justify-self: start;
+  }
+  .ftBottom{
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .ftCredit{ white-space: normal; }
+}
+
+    </style>
+  </head>
+
+  <body>
+    <Header active={Astro.url.pathname} />
+
+    <main class="main">
+      <slot />
+    </main>
+
+    <footer class="ft">
+      <div class="container">
+        <div class="grid">
+          <div>
+  <div class="k">{site.name}</div>
+  <div>{COMPANY.blurb}</div>
+</div>
+
+          <div>
+  <div class="k">{labelContact}</div>
+
+  <div><a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a></div>
+  <div style="margin-top:6px;"><a href={`tel:${COMPANY.phoneTel}`}>{COMPANY.phoneDisplay}</a></div>
+  <div style="margin-top:6px;">{COMPANY.hours}</div>
+  <div style="margin-top:6px;">{siteLocal.contact.serviceArea}</div>
+
+  <div class="social" aria-label="Contact links">
+    <a class="ico" href={`mailto:${COMPANY.email}`} aria-label="Email" title="Email">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4 7.5A2.5 2.5 0 0 1 6.5 5h11A2.5 2.5 0 0 1 20 7.5v9A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5v-9Z" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M6.5 7.2 12 11l5.5-3.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+
+    <a class="ico" href={COMPANY.facebookUrl} target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M14 8.5V7.2c0-.9.6-1.2 1.2-1.2H17V3h-2.2C12.6 3 11 4.6 11 7v1.5H9v3h2V21h3v-9.5h2.5l.5-3H14Z" fill="currentColor"/>
+      </svg>
+    </a>
+
+    <a class="ico" href={COMPANY.linkedinUrl} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M6.7 6.9a1.9 1.9 0 1 1 0-3.8 1.9 1.9 0 0 1 0 3.8Z" fill="currentColor"/>
+        <path d="M5.2 20.5V9.2h3v11.3h-3Z" fill="currentColor"/>
+        <path d="M10.3 20.5V9.2h2.9v1.5c.4-.9 1.6-1.8 3.2-1.8 3 0 3.6 2 3.6 4.6v7h-3v-6.2c0-1.5 0-3-1.8-3s-2.1 1.4-2.1 2.9v6.3h-2.8Z" fill="currentColor"/>
+      </svg>
+    </a>
+
+    {waHref ? (
+      <a class="ico" href={waHref} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" title="WhatsApp">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M19.11 17.62c-.27-.14-1.62-.8-1.87-.9-.25-.09-.44-.14-.62.14-.18.27-.71.9-.87 1.09-.16.18-.32.2-.59.07-.27-.14-1.15-.42-2.2-1.35-.82-.73-1.37-1.64-1.53-1.91-.16-.27-.02-.42.12-.55.12-.12.27-.32.41-.48.14-.16.18-.27.27-.46.09-.18.05-.34-.02-.48-.07-.14-.62-1.5-.85-2.05-.22-.53-.45-.46-.62-.46l-.53-.01c-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.29 0 1.34.98 2.64 1.12 2.82.14.18 1.94 2.96 4.7 4.15.66.28 1.17.45 1.57.57.66.21 1.26.18 1.73.11.53-.08 1.62-.66 1.85-1.3.23-.64.23-1.18.16-1.3-.07-.11-.25-.18-.52-.32zM16.04 4.67c-6.24 0-11.31 5.02-11.31 11.19 0 2 .54 3.96 1.56 5.67L4.5 27.33l5.98-1.57a11.34 11.34 0 0 0 5.56 1.45c6.24 0 11.31-5.02 11.31-11.19S22.28 4.67 16.04 4.67zm0 20.6c-1.85 0-3.66-.49-5.25-1.42l-.38-.22-3.55.93.95-3.43-.25-.36a9.23 9.23 0 0 1-1.49-5.02c0-5.08 4.18-9.21 9.33-9.21 5.15 0 9.33 4.13 9.33 9.21 0 5.08-4.18 9.21-9.33 9.21z"
+          />
+        </svg>
+      </a>
+    ) : null}
+  </div>
+</div>
+
+          <div>
+            <div class="k">{labelLegal}</div>
+            <div><a href={`${base}/legal/privacy`}>{labelPrivacy}</a></div>
+            <div style="margin-top:6px;"><a href={`${base}/legal/cookies`}>{labelCookies}</a></div>
+          </div>
+        </div>
+
+        <div class="hr" style="margin:18px 0;"></div>
+        <div class="ftBottom">
+          <div>© {new Date().getFullYear()} {site.name}. All rights reserved.</div>
+
+          <div class="ftCredit">
+            {creditLabel} —
+            <a href="https://www.brenychstudio.com" target="_blank" rel="noopener noreferrer">brenychstudio</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script type="module">
+      import { navigate } from "astro:transitions/client";
+
+      // Marked links only (data-vt="1") -> force view-transition navigate()
+      document.addEventListener("click", (e) => {
+        const a = e.target?.closest?.('a[data-vt="1"]');
+        if (!a) return;
+
+        if (e.defaultPrevented) return;
+        if (e.button !== 0) return;
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        if (a.target && a.target !== "_self") return;
+
+        const href = a.getAttribute("href");
+        if (!href) return;
+
+        if (href.startsWith("http") || href.startsWith("mailto:") || href.startsWith("tel:")) return;
+
+        e.preventDefault();
+        navigate(href);
+      });
+
+      // Scroll restore after swaps:
+      // - with hash: scroll to hash (smooth)
+      // - without hash: jump to top (instant)
+      function restoreScroll() {
+        const hash = window.location.hash;
+
+        if (hash) {
+          const el = document.querySelector(hash);
+          if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+          return;
+        }
+
+        const html = document.documentElement;
+        const prev = html.style.scrollBehavior;
+        html.style.scrollBehavior = "auto";
+        window.scrollTo({ top: 0, left: 0 });
+        html.style.scrollBehavior = prev;
+      }
+
+      document.addEventListener("astro:page-load", restoreScroll);
+      document.addEventListener("astro:after-swap", restoreScroll);
+    </script>
+
+    <WhatsAppFab />
+  </body>
+</html>

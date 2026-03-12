@@ -1,0 +1,35 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Section from "../../../components/Section.astro";
+import { COMPANY } from "../../../content/company";
+---
+
+<BaseLayout title="Privacidad" description="Notas sobre privacidad y tratamiento de datos.">
+  <Section eyebrow="Legal" title="Privacidad">
+    <div class="card box">
+      <p class="p">
+        Recopilamos la información que envías mediante el formulario de solicitud únicamente para responder a tu consulta y coordinar el trabajo (alcance, acceso, calendario). No vendemos datos personales.
+      </p>
+
+      <div class="hr" style="margin:16px 0;"></div>
+
+      <p class="p small">
+        Si se utiliza un proveedor de formularios (por ejemplo, Formspree/Basin/Netlify Forms), las solicitudes se procesan a través de dicho proveedor. La retención depende de la comunicación en curso y de necesidades operativas o legales.
+      </p>
+
+      <div class="hr" style="margin:16px 0;"></div>
+
+      <p class="p small">
+        Para consultas o solicitudes de eliminación, contáctanos en:
+        <a class="link" href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>.
+      </p>
+    </div>
+  </Section>
+
+  <style>
+    .box{ padding: 18px; border-radius: var(--radius); }
+    .p{ margin:0; color: var(--muted); line-height: 1.65; font-weight: 420; }
+    .small{ font-size: 13px; }
+    .link{ margin-left: 6px; text-decoration: underline; text-underline-offset: 3px; }
+  </style>
+</BaseLayout>

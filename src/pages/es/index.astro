@@ -1,0 +1,40 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Section from "../../components/Section.astro";
+import HeroBanner from "../../components/HeroBanner.astro";
+import ServicesGrid from "../../components/ServicesGrid.astro";
+import ProcessTimeline from "../../components/ProcessTimeline.astro";
+import TrustStrip from "../../components/TrustStrip.astro";
+
+import { site } from "../../content/site";
+import { siteEs } from "../../content/site.es";
+import { servicesEs } from "../../content/services.es";
+---
+
+<BaseLayout
+  title={`${site.name} — Instalaciones de ingeniería premium`}
+  description="Telecomunicaciones, redes y Wi-Fi, electricidad y domótica (climatización), carga VE, sistemas de alarma + CCTV, audio y cine en casa. Ejecución limpia y documentada."
+>
+  <HeroBanner
+    title="Instalaciones de ingeniería premium — limpias, documentadas y mantenibles."
+    subtitle="Telecomunicaciones, redes y Wi-Fi, electricidad y domótica (climatización), carga VE, sistemas de alarma + CCTV, audio y cine en casa."
+    image="/hero/hero-home-01.png"
+    badge={{ label: "Estudio conceptual", href: "/es/about" }}
+    primaryCta={{ label: "Solicitar presupuesto", href: "/es/contact#quote" }}
+    secondaryCta={{ label: "Ver servicios", href: "/es/services" }}
+  />
+
+  <div class="container"><div class="hr"></div></div>
+
+  <Section eyebrow="Servicios" title="Áreas enfocadas en fiabilidad">
+    <ServicesGrid services={servicesEs} />
+  </Section>
+
+  <Section eyebrow="Proceso" title="Un flujo claro" note="Visita → Propuesta → Instalación → Soporte">
+    <ProcessTimeline steps={siteEs.processSteps} />
+  </Section>
+
+  <Section eyebrow="Confianza" title="Compromisos claros">
+    <TrustStrip badges={siteEs.trustBadges} />
+  </Section>
+</BaseLayout>

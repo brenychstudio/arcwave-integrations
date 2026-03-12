@@ -1,0 +1,109 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import HeroBanner from "../../components/HeroBanner.astro";
+import Section from "../../components/Section.astro";
+import { siteEs } from "../../content/site.es";
+---
+
+<BaseLayout
+  title={`Sobre — ${siteEs.name}`}
+  description="Ejecución orientada a ingeniería. Alcance claro. Sin afirmaciones infladas. Documentación cuando aplique."
+>
+  <HeroBanner
+    title="Sobre"
+    subtitle="Ejecución orientada a ingeniería. Alcance claro. Sin afirmaciones infladas. Declaraciones de cumplimiento solo cuando estén respaldadas por documentación."
+    image="/hero/hero-home-01.png"
+    variant="compact"
+    primaryCta={{ label: "Servicios", href: "/es/services" }}
+    secondaryCta={{ label: "Contacto", href: "/es/contact#quote" }}
+  />
+
+  <div class="container"><div class="hr"></div></div>
+
+  <Section eyebrow="Principios" title="Lo premium es disciplina">
+    <div class="card box">
+      <div class="row">
+        <div class="p">
+          Nos centramos en instalaciones que se mantienen en el tiempo: topología sensata, etiquetado claro, rutas limpias y una entrega que facilita el soporte y cambios futuros.
+        </div>
+      </div>
+
+      <div class="hr" style="margin:14px 0;"></div>
+
+      <div class="row">
+        <div class="p">
+          Las referencias a normas/cumplimiento se incluyen solo cuando aplican al alcance y cuando la documentación correspondiente puede proporcionarse.
+        </div>
+      </div>
+
+      <div class="hr" style="margin:14px 0;"></div>
+
+      <div class="row">
+        <div class="p">
+          Los visuales del sitio son de concepto hasta disponer de fotografía real de proyectos. No mostramos “casos ficticios”.
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <Section eyebrow="Enfoque" title="Cómo trabajamos">
+    <div class="grid3">
+      <div class="card box">
+        <div class="k">Orden</div>
+        <div class="p">Rutas limpias, fijación cuidada, cableado y paneles organizados.</div>
+      </div>
+      <div class="card box">
+        <div class="k">Etiquetado</div>
+        <div class="p">Etiquetas y mapeo práctico para que el soporte sea directo.</div>
+      </div>
+      <div class="card box">
+        <div class="k">Entrega</div>
+        <div class="p">Notas “as-built” y recomendaciones para operación y futuras mejoras.</div>
+      </div>
+    </div>
+  </Section>
+
+  <Section eyebrow="Área" title="Zona de servicio" note="Coordinamos visitas y ventanas de instalación según acceso y normas del edificio.">
+    <div class="card box">
+      <div class="k">Servicio</div>
+      <div class="v">{siteEs.contact.serviceArea}</div>
+
+      <div class="hr" style="margin:14px 0;"></div>
+
+      <div class="p">
+        Para una respuesta más rápida, incluye en tu brief: horario de acceso, ubicación de cuadro/rack, distancias aproximadas y cualquier restricción del edificio.
+      </div>
+    </div>
+  </Section>
+
+  <style>
+    .box{ padding: 18px; border-radius: var(--radius); }
+    .k{
+      font-size: 12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color: var(--muted2);
+      font-weight: 520;
+    }
+    .v{
+      margin-top: 6px;
+      font-weight: 650;
+      letter-spacing: .005em;
+    }
+    .p{
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+      font-weight: 420;
+    }
+    .grid3{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      align-items: stretch;
+    }
+    @media (max-width: 980px){
+      .grid3{ grid-template-columns: 1fr; }
+    }
+  </style>
+</BaseLayout>

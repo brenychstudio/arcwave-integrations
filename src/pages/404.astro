@@ -1,0 +1,15 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import HeroBanner from "../components/HeroBanner.astro";
+import { site } from "../content/site";
+---
+
+<BaseLayout title={`Not found — ${site.name}`} description="This page does not exist.">
+  <HeroBanner
+    title="Page not found"
+    subtitle="The link may be outdated. Use the navigation or return home."
+    image="/macro/macro-metal-01.png"
+    primaryCta={{ label: "Go home", href: "/" }}
+    secondaryCta={{ label: "Services", href: "/services" }}
+  />
+</BaseLayout>

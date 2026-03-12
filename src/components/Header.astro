@@ -1,0 +1,219 @@
+---
+import { site } from "../content/site";
+import { baseFromLang, langFromPath, otherLangHref, t } from "../content/i18n";
+
+const url = Astro.url;
+const path = url.pathname;
+
+const lang = langFromPath(path);
+const base = baseFromLang(lang);
+
+const nav = [
+  { href: `${base}/services`, label: t(lang, "Services", "Servicios") },
+  { href: `${base}/process`, label: t(lang, "Process", "Proceso") },
+  { href: `${base}/about`, label: t(lang, "About", "Sobre") },
+  { href: `${base}/contact`, label: t(lang, "Contact", "Contacto") },
+];
+
+function isActive(href: string) {
+  if (href === "/" || href === "/es") return path === href;
+  return path === href || path.startsWith(href + "/");
+}
+
+const brandHref = base || "/";
+const quoteHref = `${base}/contact#quote`;
+const quoteLabel = t(lang, "Request a quote", "Presupuesto");
+
+const langToggleHref = otherLangHref(url);
+const langToggleLabel = lang === "es" ? "EN" : "ES";
+---
+
+<header class="hdr">
+  <div class="container">
+    <div class="bar">
+      <a class="brand" href={brandHref} data-vt="1" aria-label={`${site.name} home`}>
+        <span class="brandMark" aria-hidden="true"></span>
+        <span class="brandText">{site.name}</span>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <div class="navPill">
+          {nav.map((i) => (
+            <a
+  class={`navLink ${isActive(i.href) ? "isActive" : ""}`}
+  href={i.href}
+  data-vt="1"
+  aria-current={isActive(i.href) ? "page" : undefined}
+>
+              {i.label}
+            </a>
+          ))}
+        </div>
+      </nav>
+
+      <div class="right">
+        <a class="lang" href={langToggleHref} data-vt="1" aria-label="Switch language">
+          {langToggleLabel}
+        </a>
+
+        <a class="cta" href={quoteHref} data-vt="1">
+          {quoteLabel}
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .hdr{
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    padding: 14px 0;
+  }
+
+  .bar{
+    height: 64px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border2, rgba(15,15,20,.08));
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 18px 40px rgba(10,10,20,.08);
+  }
+
+  .brand{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text, #111);
+    white-space: nowrap;
+    flex: 0 0 auto;
+  }
+
+  .brandMark{
+    position: relative;
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(10,132,255,.85);
+    box-shadow:
+      0 0 0 3px rgba(10,132,255,.10),
+      0 10px 22px rgba(10,10,20,.08);
+  }
+
+  .brandText{
+    font-weight: 800;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    font-size: 12px;
+    line-height: 1;
+  }
+
+  .nav{
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .navPill{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px;
+    border-radius: 999px;
+    border: 1px solid rgba(15,15,20,.08);
+    background: rgba(255,255,255,.78);
+  }
+
+  .navLink{
+    font-size: 12px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted, rgba(90,90,99,1));
+    padding: 8px 10px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .navLink:hover{
+    color: var(--text, #111);
+    border-color: rgba(15,15,20,.08);
+    background: rgba(255,255,255,.70);
+  }
+
+  .navLink.isActive{
+    color: var(--text, #111);
+    border-color: rgba(15,15,20,.10);
+    background: rgba(255,255,255,.85);
+  }
+
+  .right{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 0 0 auto;
+    min-width: 0;
+  }
+
+  .lang{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width: 44px;
+    height: 34px;
+    border-radius: 999px;
+    border: 1px solid var(--border2);
+    background: rgba(255,255,255,.65);
+    font-weight: 800;
+    letter-spacing: .10em;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .lang:hover{
+    color: var(--text);
+    border-color: rgba(10,132,255,.22);
+    background: rgba(10,132,255,.06);
+  }
+
+  .cta{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(10,132,255,.35);
+    background: rgba(10,132,255,.10);
+    box-shadow: 0 10px 24px rgba(10,10,20,.06);
+    font-weight: 800;
+    color: var(--text, #111);
+    white-space: nowrap;
+  }
+
+  header.hdr .right a.cta{
+    max-width: 44vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cta:hover{ background: rgba(10,132,255,.14); }
+
+  @media (max-width: 520px){
+    header.hdr .right a.cta{
+      padding: 10px 12px;
+      font-size: 12px;
+    }
+  }
+
+  @media (max-width: 860px){
+    .nav{ display: none; }
+    .bar{ padding: 0 12px; }
+  }
+</style>
