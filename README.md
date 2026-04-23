@@ -1,43 +1,23 @@
-# Astro Starter Kit: Minimal
+# ARCWAVE Integrations
 
-```sh
-npm create astro@latest -- --template minimal
-```
+Premium bilingual engineering website built as a production-minded service platform with structured service architecture, quote/contact flow, multilingual routing, and deploy-ready delivery.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Overview
+ARCWAVE Integrations is a premium EN/ES vertical website for engineering installations.  
+It was built as a production-ready service website with clear service architecture, detailed service pages, quote flow, legal/SEO readiness, and refined front-end presentation.
 
-## 🚀 Project Structure
+## Stack
+- Astro
+- TypeScript
+- Tailwind CSS
+- Multilingual routing
+- SEO / sitemap / robots
+- Cloudflare-ready deployment
 
-Inside of your Astro project, you'll see the following folders and files:
+- ## What it demonstrates
+- Premium multilingual website architecture
+- Service-first content structure
+- Production-minded SEO/deploy readiness
+- Clean commercial UX for quote-driven businesses
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+  
