@@ -90,81 +90,30 @@ const process = [
   },
 ];
 
-const valueCards = [
+const impactStats = [
   {
-    step: "01 / Planning",
-    title: "One partner",
-    text: "Telecom, network, power, security and audio are planned as one scope.",
-    signal: "Unified scope",
-    outcome: "Fewer coordination gaps",
-    points: ["Telecom + network dependencies", "Power and device locations", "Security/audio readiness"],
-    score: "92",
-    scoreLabel: "Scope clarity",
-    accent: "10 132 255",
-    path: "M52 252 C182 88 318 80 454 178 C586 274 694 290 832 90",
-    metrics: [
-      { label: "Layers aligned", value: "5", level: 86 },
-      { label: "Decision points", value: "12", level: 72 },
-      { label: "Quote readiness", value: "High", level: 92 },
-    ],
-    telemetry: [
-      { label: "Signal", value: "88", level: 88 },
-      { label: "Network", value: "94", level: 94 },
-      { label: "Power", value: "81", level: 81 },
-      { label: "Security", value: "76", level: 76 },
-      { label: "Audio", value: "68", level: 68 },
-      { label: "Quote", value: "92", level: 92 },
-    ],
+    value: 124,
+    suffix: "+",
+    label: "completed installations",
+    text: "Homes, offices and service spaces moved from request to working infrastructure.",
   },
   {
-    step: "02 / Handover",
-    title: "Clean handover",
-    text: "Labels, routes, constraints and practical notes keep the system supportable.",
-    signal: "Supportable system",
-    outcome: "Easier maintenance",
-    points: ["Cable routes and labels", "Access notes", "As-built practical context"],
-    score: "86",
-    scoreLabel: "Handover readiness",
-    accent: "35 198 190",
-    path: "M52 214 C178 158 262 230 390 158 C540 74 640 128 832 196",
-    metrics: [
-      { label: "Label coverage", value: "Clear", level: 88 },
-      { label: "Route notes", value: "Mapped", level: 82 },
-      { label: "Support context", value: "Ready", level: 86 },
-    ],
-    telemetry: [
-      { label: "Signal", value: "74", level: 74 },
-      { label: "Network", value: "89", level: 89 },
-      { label: "Power", value: "84", level: 84 },
-      { label: "Security", value: "80", level: 80 },
-      { label: "Audio", value: "71", level: 71 },
-      { label: "Quote", value: "86", level: 86 },
-    ],
+    value: 18,
+    suffix: "",
+    label: "active scopes",
+    text: "Technical requests currently being clarified, quoted or prepared for installation.",
   },
   {
-    step: "03 / Lifecycle",
-    title: "Future-ready",
-    text: "The installation is prepared for upgrades, extensions and new service layers.",
-    signal: "Upgrade path",
-    outcome: "Lower future friction",
-    points: ["Smart-ready wiring", "Expansion zones", "Clean service path"],
-    score: "78",
-    scoreLabel: "Expansion readiness",
-    accent: "205 158 60",
-    path: "M52 278 C168 230 248 132 376 128 C548 122 634 240 832 166",
-    metrics: [
-      { label: "Expansion zones", value: "Open", level: 78 },
-      { label: "Control points", value: "Planned", level: 74 },
-      { label: "Future services", value: "Ready", level: 82 },
-    ],
-    telemetry: [
-      { label: "Signal", value: "68", level: 68 },
-      { label: "Network", value: "76", level: 76 },
-      { label: "Power", value: "90", level: 90 },
-      { label: "Security", value: "72", level: 72 },
-      { label: "Audio", value: "80", level: 80 },
-      { label: "Quote", value: "78", level: 78 },
-    ],
+    value: 360,
+    suffix: "+",
+    label: "technical consultations",
+    text: "Early calls and site conversations that turn vague needs into a clear path.",
+  },
+  {
+    value: 6,
+    suffix: "",
+    label: "connected service layers",
+    text: "Telecom, networks, power, EV, security and audio planned as one system.",
   },
 ];
 
@@ -395,114 +344,31 @@ const {
         </div>
       </div>
 
-      <div class="valueRibbon" data-value-console aria-label="Integration value console">
-        <div class="consolePicker" role="tablist" aria-label="Integration outcomes">
-          <span class="consoleRailLabel">Value model</span>
-          {valueCards.map((item, index) => (
-            <button
-              type="button"
-              class={index === 0 ? "isActive" : ""}
-              data-value-tab
-              data-title={item.title}
-              data-text={item.text}
-              data-signal={item.signal}
-              data-outcome={item.outcome}
-              data-points={item.points.join("|")}
-              data-score={item.score}
-              data-score-label={item.scoreLabel}
-              data-path={item.path}
-              data-accent={item.accent}
-              data-metrics={JSON.stringify(item.metrics)}
-              data-telemetry={JSON.stringify(item.telemetry)}
-              aria-selected={index === 0 ? "true" : "false"}
-            >
-              <span>{item.step}</span>
-              <strong>{item.signal}</strong>
-              <em>{item.outcome}</em>
-            </button>
+      <section id="infrastructure-logic" class="impactStrip" data-impact-strip aria-label="ARCWAVE project impact">
+        <div class="impactStripHead">
+          <span>Delivery signals</span>
+          <p>
+            Installed systems, active scopes and early technical conversations show how
+            ARCWAVE turns scattered infrastructure needs into coordinated delivery.
+          </p>
+        </div>
+
+        <div class="impactLine" aria-hidden="true">
+          <span></span>
+        </div>
+
+        <div class="impactStats">
+          {impactStats.map((item) => (
+            <article class="impactStat" data-impact-stat>
+              <strong>
+                <span data-impact-value data-target={item.value} data-suffix={item.suffix}>0</span>
+              </strong>
+              <h3>{item.label}</h3>
+              <p>{item.text}</p>
+            </article>
           ))}
         </div>
-
-        <div class="consoleScope" aria-label="Diagnostic value diagram">
-          <div class="scopeTopline">
-            <span>Diagnostic model</span>
-            <strong data-console-signal>{valueCards[0].signal}</strong>
-          </div>
-
-          <div class="scopeCanvas">
-            <svg viewBox="0 0 900 360" preserveAspectRatio="none" aria-hidden="true">
-            <defs>
-              <linearGradient id="valueTraceGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="rgb(var(--console-accent) / 0)" />
-                <stop offset="46%" stop-color="rgb(var(--console-accent) / .95)" />
-                <stop offset="100%" stop-color="rgb(var(--console-accent) / 0)" />
-              </linearGradient>
-              <filter id="valueGlow" x="-20%" y="-60%" width="140%" height="220%">
-                <feGaussianBlur stdDeviation="6" result="blur" />
-                <feMerge>
-                  <feMergeNode in="blur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-            </defs>
-
-            <path class="scopeGridLine scopeGridLineA" d="M0 90 H900 M0 180 H900 M0 270 H900" />
-            <path class="scopeGridLine scopeGridLineB" d="M150 0 V360 M300 0 V360 M450 0 V360 M600 0 V360 M750 0 V360" />
-            <path class="scopeBand" d="M50 286 C170 210 280 206 390 240 C520 282 632 254 850 168" />
-            <path class="scopeOrbit" data-scope-orbit d={valueCards[0].path} />
-            <path class="scopeTrace isDrawing" data-scope-trace d={valueCards[0].path} />
-            <g class="scopeStations">
-              <circle cx="158" cy="160" r="5" />
-              <circle cx="382" cy="136" r="5" />
-              <circle cx="612" cy="230" r="5" />
-              <circle cx="760" cy="134" r="5" />
-            </g>
-          </svg>
-            <span class="scopeScan"></span>
-            <span class="scanDot d1"></span>
-            <span class="scanDot d2"></span>
-            <span class="scanDot d3"></span>
-          </div>
-
-          <div class="scopeMetricGrid">
-            {valueCards[0].metrics.map((metric) => (
-              <div class="scopeMetric" data-console-metric style={`--level: ${metric.level}%`}>
-                <span>{metric.label}</span>
-                <strong>{metric.value}</strong>
-                <i aria-hidden="true"></i>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div class="consoleReadout">
-          <div>
-            <span data-console-step>{valueCards[0].step}</span>
-            <h3 data-console-title>{valueCards[0].title}</h3>
-            <p data-console-text>{valueCards[0].text}</p>
-          </div>
-
-          <div class="readoutScore">
-            <strong data-console-score>{valueCards[0].score}</strong>
-            <span data-console-score-label>{valueCards[0].scoreLabel}</span>
-            <em data-console-outcome>{valueCards[0].outcome}</em>
-          </div>
-
-          <ul class="consolePoints" data-console-points>
-            {valueCards[0].points.map((point) => <li>{point}</li>)}
-          </ul>
-        </div>
-
-        <div class="consoleTelemetry" aria-label="Infrastructure telemetry">
-          {valueCards[0].telemetry.map((item) => (
-            <div class="telemetryCell" data-telemetry-cell style={`--level: ${item.level}%`}>
-              <span>{item.label}</span>
-              <strong>{item.value}</strong>
-              <i aria-hidden="true"></i>
-            </div>
-          ))}
-        </div>
-      </div>
+      </section>
     </div>
   </section>
 
@@ -952,126 +818,75 @@ const {
       updateProgress();
     }
 
-    function initValueConsole() {
-      const consoleEl = document.querySelector("[data-value-console]");
-      if (!consoleEl || consoleEl.getAttribute("data-value-console-ready") === "true") return;
+    function initImpactStrip() {
+      const strip = document.querySelector("[data-impact-strip]");
+      if (!strip || strip.getAttribute("data-impact-ready") === "true") return;
 
-      consoleEl.setAttribute("data-value-console-ready", "true");
+      strip.setAttribute("data-impact-ready", "true");
 
-      const tabs = [...consoleEl.querySelectorAll("[data-value-tab]")];
-      const titleEl = consoleEl.querySelector("[data-console-title]");
-      const textEl = consoleEl.querySelector("[data-console-text]");
-      const stepEl = consoleEl.querySelector("[data-console-step]");
-      const signalEl = consoleEl.querySelector("[data-console-signal]");
-      const outcomeEl = consoleEl.querySelector("[data-console-outcome]");
-      const pointsEl = consoleEl.querySelector("[data-console-points]");
-      const traceEl = consoleEl.querySelector("[data-scope-trace]");
-      const orbitEl = consoleEl.querySelector("[data-scope-orbit]");
-      const scoreEl = consoleEl.querySelector("[data-console-score]");
-      const scoreLabelEl = consoleEl.querySelector("[data-console-score-label]");
-      const metricEls = [...consoleEl.querySelectorAll("[data-console-metric]")];
-      const telemetryEls = [...consoleEl.querySelectorAll("[data-telemetry-cell]")];
+      const stats = [...strip.querySelectorAll("[data-impact-stat]")];
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      let typingTimer = 0;
-      let autoTimer = 0;
-      let activeIndex = 0;
-
-      function parseDatasetList(value) {
-        try {
-          return JSON.parse(value || "[]");
-        } catch {
-          return [];
-        }
+      function formatNumber(value) {
+        return new Intl.NumberFormat("en-US").format(Math.round(value));
       }
 
-      function setMetricCards(items) {
-        metricEls.forEach((metric, index) => {
-          const item = items[index];
-          if (!item) return;
+      function animateValue(target) {
+        const valueEl = target.querySelector("[data-impact-value]");
+        if (!valueEl) return;
 
-          metric.querySelector("span").textContent = item.label || "";
-          metric.querySelector("strong").textContent = item.value || "";
-          metric.style.setProperty("--level", `${Number(item.level || 0)}%`);
-        });
-      }
+        const finalValue = Number(valueEl.getAttribute("data-target") || "0");
+        const suffix = valueEl.getAttribute("data-suffix") || "";
 
-      function setTelemetry(items) {
-        telemetryEls.forEach((cell, index) => {
-          const item = items[index];
-          if (!item) return;
-
-          cell.querySelector("span").textContent = item.label || "";
-          cell.querySelector("strong").textContent = item.value || "";
-          cell.style.setProperty("--level", `${Number(item.level || 0)}%`);
-        });
-      }
-
-      function setText(target, value) {
-        window.clearInterval(typingTimer);
-        target.textContent = value;
-        target.classList.remove("isUpdating");
-        target.getBoundingClientRect();
-        target.classList.add("isUpdating");
-      }
-
-      function activate(index, userIntent = false) {
-        const tab = tabs[index];
-        if (!tab) return;
-
-        activeIndex = index;
-
-        tabs.forEach((item, itemIndex) => {
-          const isActive = itemIndex === index;
-          item.classList.toggle("isActive", isActive);
-          item.setAttribute("aria-selected", String(isActive));
-        });
-
-        consoleEl.setAttribute("data-console-active", String(index + 1));
-        consoleEl.style.setProperty("--console-accent", tab.dataset.accent || "10 132 255");
-
-        if (stepEl) stepEl.textContent = tab.querySelector("span")?.textContent || "";
-        if (titleEl) titleEl.textContent = tab.dataset.title || "";
-        if (signalEl) signalEl.textContent = tab.dataset.signal || "";
-        if (outcomeEl) outcomeEl.textContent = tab.dataset.outcome || "";
-        if (scoreEl) scoreEl.textContent = tab.dataset.score || "";
-        if (scoreLabelEl) scoreLabelEl.textContent = tab.dataset.scoreLabel || "";
-        if (textEl) setText(textEl, tab.dataset.text || "");
-        setMetricCards(parseDatasetList(tab.dataset.metrics));
-        setTelemetry(parseDatasetList(tab.dataset.telemetry));
-
-        if (pointsEl) {
-          pointsEl.innerHTML = "";
-          (tab.dataset.points || "")
-            .split("|")
-            .filter(Boolean)
-            .forEach((point) => {
-              const li = document.createElement("li");
-              li.textContent = point;
-              pointsEl.append(li);
-            });
+        if (prefersReducedMotion) {
+          valueEl.textContent = `${formatNumber(finalValue)}${suffix}`;
+          target.classList.add("isCounted");
+          return;
         }
 
-        if (traceEl) {
-          if (tab.dataset.path) traceEl.setAttribute("d", tab.dataset.path);
-          if (orbitEl && tab.dataset.path) orbitEl.setAttribute("d", tab.dataset.path);
-          traceEl.classList.remove("isDrawing");
-          traceEl.getBoundingClientRect();
-          traceEl.classList.add("isDrawing");
+        const duration = 1250 + finalValue * 2;
+        const startedAt = performance.now();
+
+        function tick(now) {
+          const progress = Math.min(1, (now - startedAt) / duration);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          valueEl.textContent = `${formatNumber(finalValue * eased)}${suffix}`;
+
+          if (progress < 1) {
+            window.requestAnimationFrame(tick);
+          } else {
+            valueEl.textContent = `${formatNumber(finalValue)}${suffix}`;
+            target.classList.add("isCounted");
+          }
         }
 
-        if (userIntent) {
-          window.clearInterval(autoTimer);
-          autoTimer = window.setInterval(() => activate((activeIndex + 1) % tabs.length), 5200);
-        }
+        window.requestAnimationFrame(tick);
       }
 
-      tabs.forEach((tab, index) => {
-        tab.addEventListener("click", () => activate(index, true));
-        tab.addEventListener("mouseenter", () => activate(index, true));
+      stats.forEach((stat, index) => {
+        stat.style.setProperty("--impact-index", String(index));
       });
 
-      autoTimer = window.setInterval(() => activate((activeIndex + 1) % tabs.length), 5200);
-      activate(0);
+      function runSequence() {
+        if (strip.getAttribute("data-impact-animated") === "true") return;
+        strip.setAttribute("data-impact-animated", "true");
+
+        stats.forEach((stat, index) => {
+          const delay = prefersReducedMotion ? 0 : index * 140;
+          window.setTimeout(() => animateValue(stat), delay);
+        });
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          runSequence();
+          observer.disconnect();
+        },
+        { threshold: 0.24, rootMargin: "0px 0px -8% 0px" }
+      );
+
+      observer.observe(strip);
     }
 
     function initHomeV2Motion() {
@@ -1084,7 +899,7 @@ const {
         [
           ".systemSection .sectionHead",
           ".systemMap",
-          ".valueRibbon",
+          ".impactStrip",
           ".valueCard",
           ".pathSection .sectionHead",
           ".pathStage",
@@ -1170,13 +985,13 @@ const {
     }
 
     initHomeV2FieldFocus();
-    initValueConsole();
+    initImpactStrip();
     initQuoteInterface();
     initPageNavigation();
     initHomeV2Motion();
     document.addEventListener("astro:page-load", () => {
       initHomeV2FieldFocus();
-      initValueConsole();
+      initImpactStrip();
       initQuoteInterface();
       initPageNavigation();
       initHomeV2Motion();
@@ -1501,14 +1316,14 @@ const {
     }
 
     .homeV2[data-motion-ready="true"] .systemMap.motionReveal,
-    .homeV2[data-motion-ready="true"] .valueRibbon.motionReveal,
+    .homeV2[data-motion-ready="true"] .impactStrip.motionReveal,
     .homeV2[data-motion-ready="true"] .pathStage.motionReveal{
       transform: translate3d(0, 64px, 0) scale(.975);
       transform-origin:center top;
     }
 
     .homeV2[data-motion-ready="true"] .systemMap.motionReveal.isVisible,
-    .homeV2[data-motion-ready="true"] .valueRibbon.motionReveal.isVisible,
+    .homeV2[data-motion-ready="true"] .impactStrip.motionReveal.isVisible,
     .homeV2[data-motion-ready="true"] .pathStage.motionReveal.isVisible{
       transform: translate3d(0, 0, 0) scale(1);
     }
@@ -2445,12 +2260,6 @@ const {
       .flowLine,
       .mapBeacons span,
       .route:after,
-      .scopeTrace,
-      .scanDot,
-      .scopeScan,
-      .scopeStations circle,
-      .scopeMetric i:after,
-      .telemetryCell i:after,
       .atmoField,
       .atmoSignals{
         animation:none;
@@ -2627,6 +2436,1054 @@ const {
     .n6:hover,
     .n6:focus-visible,
     .n6.isActive{ transform: translateX(-50%) translateY(-2px); }
+
+    .impactStrip{
+      position:relative;
+      margin-top: clamp(24px, 3.4vw, 54px);
+      padding: clamp(24px, 3vw, 44px) 0 clamp(28px, 3.4vw, 52px);
+      scroll-margin-top: 96px;
+    }
+
+    .impactStrip:before{
+      content:"";
+      position:absolute;
+      left:0;
+      right:0;
+      top:0;
+      height:1px;
+      background: linear-gradient(90deg, transparent, rgba(30,44,60,.12), transparent);
+    }
+
+    .impactStripHead{
+      display:grid;
+      grid-template-columns: minmax(220px, .42fr) minmax(0, .58fr);
+      gap: clamp(22px, 4vw, 80px);
+      align-items:end;
+      margin-bottom: clamp(24px, 3vw, 44px);
+    }
+
+    .impactStripHead span{
+      color: rgba(10,132,255,.72);
+      font-size: 11px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      font-weight: 780;
+    }
+
+    .impactStripHead p{
+      max-width: 62ch;
+      margin:0;
+      color: rgba(15,15,20,.58);
+      font-size: 15px;
+      line-height:1.62;
+    }
+
+    .impactLine{
+      position:relative;
+      height: 1px;
+      margin-bottom: clamp(18px, 2vw, 30px);
+      overflow:hidden;
+      background: rgba(30,44,60,.08);
+    }
+
+    .impactLine span{
+      position:absolute;
+      inset:0 auto 0 0;
+      width: 0%;
+      background: linear-gradient(90deg, rgba(10,132,255,.88), rgba(39,182,173,.52), rgba(207,163,90,.34), transparent);
+      transition: width 1.4s cubic-bezier(.16, 1, .3, 1);
+    }
+
+    .impactStrip:has(.impactStat.isCounted) .impactLine span{
+      width:100%;
+    }
+
+    .impactStats{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: clamp(24px, 3vw, 58px);
+      padding-inline: clamp(0px, 1vw, 18px);
+    }
+
+    .impactStat{
+      position:relative;
+      min-width:0;
+      width:100%;
+      max-width: 270px;
+      padding-top: 18px;
+    }
+
+    .impactStat:nth-child(2),
+    .impactStat:nth-child(3){
+      justify-self:center;
+    }
+
+    .impactStat:nth-child(4){
+      justify-self:end;
+    }
+
+    .impactStat:before{
+      content:"";
+      position:absolute;
+      left:0;
+      top:-24px;
+      width: 9px;
+      height: 9px;
+      border-radius:999px;
+      background: rgba(10,132,255,.86);
+      box-shadow:
+        0 0 0 8px rgba(10,132,255,.08),
+        0 0 28px rgba(10,132,255,.20);
+      opacity:.55;
+      transform: scale(.84);
+      transition: opacity .42s ease, transform .42s ease, background .42s ease;
+      transition-delay: calc(var(--impact-index, 0) * 80ms);
+    }
+
+    .impactStat:nth-child(2):before{
+      background: rgba(39,182,173,.84);
+      box-shadow:
+        0 0 0 8px rgba(39,182,173,.08),
+        0 0 28px rgba(39,182,173,.18);
+    }
+
+    .impactStat:nth-child(3):before{
+      background: rgba(207,163,90,.84);
+      box-shadow:
+        0 0 0 8px rgba(207,163,90,.08),
+        0 0 28px rgba(207,163,90,.18);
+    }
+
+    .impactStat:nth-child(4):before{
+      background: rgba(119,143,208,.84);
+      box-shadow:
+        0 0 0 8px rgba(119,143,208,.08),
+        0 0 28px rgba(119,143,208,.18);
+    }
+
+    .impactStat.isCounted:before{
+      opacity:1;
+      transform: scale(1);
+    }
+
+    .impactStat strong{
+      display:block;
+      overflow:hidden;
+      color: rgba(15,15,20,.94);
+      font-size: clamp(48px, 5.7vw, 104px);
+      line-height:.82;
+      letter-spacing:0;
+      font-weight: 820;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .impactStat h3{
+      max-width: 13ch;
+      margin: 16px 0 0;
+      color: rgba(15,15,20,.76);
+      font-size: clamp(17px, 1.25vw, 22px);
+      line-height:1.05;
+      letter-spacing:0;
+    }
+
+    .impactStat p{
+      max-width: 28ch;
+      margin: 12px 0 0;
+      color: rgba(15,15,20,.54);
+      font-size: 13px;
+      line-height:1.52;
+      opacity:0;
+      transform: translateY(10px);
+      transition:
+        opacity .52s cubic-bezier(.16, 1, .3, 1),
+        transform .52s cubic-bezier(.16, 1, .3, 1);
+      transition-delay: calc(160ms + var(--impact-index, 0) * 90ms);
+    }
+
+    .impactStat.isCounted p{
+      opacity:1;
+      transform: translateY(0);
+    }
+
+    .preflightAnchor{
+      scroll-margin-top: 96px;
+    }
+
+    :global(.preflightScene){
+      --preflight-accent: 45 141 255;
+      position:relative;
+      display:grid;
+      grid-template-columns: minmax(132px, .15fr) minmax(0, 1fr) minmax(380px, .34fr);
+      grid-template-rows: minmax(560px, auto) auto;
+      min-height: 690px;
+      margin-top: clamp(18px, 2rem, 32px);
+      overflow:hidden;
+      border-radius: 32px;
+      border: 1px solid rgba(30,44,60,.11);
+      background:
+        linear-gradient(rgba(30,44,60,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(30,44,60,.04) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255,255,255,.86), rgba(243,248,252,.68));
+      background-size: 44px 44px, 44px 44px, auto;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.92),
+        inset 0 -1px 0 rgba(30,44,60,.045),
+        0 44px 130px rgba(12,20,32,.10);
+      isolation:isolate;
+    }
+
+    :global(.preflightScene:before),
+    :global(.preflightScene:after){
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:1;
+      pointer-events:none;
+    }
+
+    :global(.preflightScene:before){
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.84) 0%, rgba(255,255,255,.18) 34%, rgba(250,253,255,.62) 100%),
+        linear-gradient(126deg, transparent 0 31%, rgba(30,44,60,.06) 31.08%, transparent 31.22%),
+        radial-gradient(760px 340px at 58% 45%, rgb(var(--preflight-accent) / .105), transparent 70%);
+      opacity:.96;
+    }
+
+    :global(.preflightScene:after){
+      top:auto;
+      height: 34%;
+      background:
+        linear-gradient(180deg, transparent, rgba(255,255,255,.70)),
+        linear-gradient(90deg, rgba(30,44,60,.07), transparent 24%, transparent 78%, rgba(30,44,60,.05));
+    }
+
+    :global(.preflightRail),
+    :global(.preflightWorkspace),
+    :global(.preflightBrief),
+    :global(.preflightChecks){
+      position:relative;
+      z-index:2;
+      min-width:0;
+    }
+
+    :global(.preflightRail){
+      grid-row: 1 / 3;
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+      padding: 22px 14px;
+      border-right: 1px solid rgba(30,44,60,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.66), rgba(245,249,252,.40));
+      box-shadow: inset -1px 0 0 rgba(255,255,255,.55);
+      backdrop-filter: blur(18px) saturate(1.08);
+      -webkit-backdrop-filter: blur(18px) saturate(1.08);
+    }
+
+    :global(.preflightRailLabel),
+    :global(.preflightRail button span),
+    :global(.preflightTopline span),
+    :global(.preflightBrief > div > span),
+    :global(.preflightBrief dt),
+    :global(.preflightChecks span){
+      color: rgb(var(--preflight-accent) / .76);
+      font-size: 10.5px;
+      letter-spacing:0;
+      text-transform:uppercase;
+      font-weight: 780;
+    }
+
+    :global(.preflightRailLabel){
+      width:100%;
+      min-height: 116px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color: rgba(96,100,112,.62);
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+    }
+
+    :global(.preflightRail button){
+      position:relative;
+      display:grid;
+      gap: 7px;
+      min-height: 92px;
+      padding: 13px 10px 13px 14px;
+      border: 1px solid rgba(30,44,60,.045);
+      border-radius: 18px;
+      background: rgba(255,255,255,.18);
+      color: rgba(15,15,20,.64);
+      text-align:left;
+      cursor:pointer;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.52);
+      transition: color .2s ease, background .2s ease, border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+    }
+
+    :global(.preflightRail button:before){
+      content:"";
+      position:absolute;
+      left: 0;
+      top: 15px;
+      bottom: 15px;
+      width: 2px;
+      border-radius:999px;
+      background: rgba(15,15,20,.08);
+      transition: background .2s ease, box-shadow .2s ease, transform .2s ease;
+    }
+
+    :global(.preflightRail button:after){
+      content:"";
+      position:absolute;
+      right: 10px;
+      top: 12px;
+      width: 6px;
+      height: 6px;
+      border-radius:999px;
+      background: rgba(15,15,20,.16);
+      box-shadow: 0 0 0 5px rgba(15,15,20,.035);
+      transition: background .2s ease, box-shadow .2s ease;
+    }
+
+    :global(.preflightRail button:hover),
+    :global(.preflightRail button:focus-visible),
+    :global(.preflightRail button.isActive){
+      color: rgba(15,15,20,.92);
+      background:
+        linear-gradient(135deg, rgb(var(--preflight-accent) / .10), rgba(255,255,255,.52) 44%, rgba(255,255,255,.26)),
+        rgba(255,255,255,.54);
+      border-color: rgb(var(--preflight-accent) / .16);
+      outline:none;
+      transform: translateX(1px);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.72),
+        0 14px 36px rgba(12,20,32,.055);
+    }
+
+    :global(.preflightRail button.isActive:before){
+      background: rgb(var(--preflight-accent) / .82);
+      box-shadow: 0 0 22px rgb(var(--preflight-accent) / .30);
+      transform: scaleY(1.18);
+    }
+
+    :global(.preflightRail button.isActive:after){
+      background: rgb(var(--preflight-accent) / .88);
+      box-shadow:
+        0 0 0 7px rgb(var(--preflight-accent) / .10),
+        0 0 26px rgb(var(--preflight-accent) / .28);
+    }
+
+    :global(.preflightRail button strong){
+      max-width: 13ch;
+      color: rgba(15,15,20,.72);
+      font-size: 12px;
+      line-height:1.22;
+      letter-spacing:0;
+    }
+
+    :global(.preflightWorkspace){
+      min-height: 560px;
+      overflow:hidden;
+      border-right: 1px solid rgba(30,44,60,.10);
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.30), transparent 28%, rgba(255,255,255,.18)),
+        radial-gradient(560px 320px at 58% 40%, rgb(var(--preflight-accent) / .07), transparent 68%);
+    }
+
+    :global(.preflightCanvas),
+    :global(.preflightCanvas canvas){
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+    }
+
+    :global(.preflightTopline){
+      position:absolute;
+      left: clamp(18px, 2rem, 34px);
+      right: clamp(18px, 2rem, 34px);
+      top: clamp(18px, 2rem, 34px);
+      z-index:4;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 18px;
+      min-height: 44px;
+      padding: 0 16px;
+      border: 1px solid rgba(30,44,60,.075);
+      border-radius: 18px;
+      background: rgba(255,255,255,.55);
+      backdrop-filter: blur(16px) saturate(1.05);
+      -webkit-backdrop-filter: blur(16px) saturate(1.05);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.72);
+    }
+
+    :global(.preflightTopline strong){
+      color: rgba(30,44,60,.64);
+      font-size: 12px;
+      font-weight: 720;
+      line-height:1.35;
+      text-align:right;
+    }
+
+    :global(.preflightPlan){
+      position:absolute;
+      inset: 30px 24px 44px;
+      z-index:2;
+      width: calc(100% - 48px);
+      height: calc(100% - 74px);
+      overflow:visible;
+    }
+
+    :global(.planBoundary){
+      fill: rgba(255,255,255,.22);
+      stroke: rgba(30,44,60,.10);
+      stroke-width: 1.4;
+    }
+
+    :global(.planRoom){
+      fill: rgba(255,255,255,.28);
+      stroke: rgba(30,44,60,.10);
+      stroke-width: 1.15;
+    }
+
+    :global(.planRoomLabel){
+      fill: rgba(30,44,60,.34);
+      font-size: 12px;
+      font-weight: 760;
+      letter-spacing:0;
+      text-transform:uppercase;
+    }
+
+    :global(.planRoute){
+      fill:none;
+      stroke-width: 5.4;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+      stroke-dasharray: 16 18;
+      filter: url(#preflightGlow);
+      opacity:.72;
+      animation: preflightRoute 4.8s linear infinite;
+      animation-delay: var(--route-delay, 0s);
+    }
+
+    :global(.planNodeAura){
+      opacity:.14;
+      animation: preflightNode 3.6s ease-in-out infinite;
+    }
+
+    :global(.planNodeCore){
+      stroke: rgba(255,255,255,.92);
+      stroke-width: 2.2;
+    }
+
+    :global(.preflightPins){
+      position:absolute;
+      inset: 30px 24px 44px;
+      z-index:5;
+      pointer-events:none;
+    }
+
+    :global(.preflightPins span){
+      position:absolute;
+      display:grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      grid-template-rows: auto auto;
+      column-gap: 8px;
+      align-items:center;
+      min-width: 138px;
+      max-width: 190px;
+      padding: 9px 11px;
+      border: 1px solid rgba(30,44,60,.08);
+      border-radius: 15px;
+      background: rgba(255,255,255,.66);
+      color: rgba(15,15,20,.68);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.78),
+        0 16px 40px rgba(12,20,32,.058);
+      backdrop-filter: blur(14px) saturate(1.06);
+      -webkit-backdrop-filter: blur(14px) saturate(1.06);
+      transform: translate(-50%, -50%);
+    }
+
+    :global(.preflightPins i){
+      grid-row: 1 / 3;
+      width: 8px;
+      height: 8px;
+      border-radius:999px;
+      background: var(--pin-color);
+      box-shadow:
+        0 0 0 6px color-mix(in srgb, var(--pin-color) 13%, transparent),
+        0 0 22px color-mix(in srgb, var(--pin-color) 28%, transparent);
+    }
+
+    :global(.preflightPins strong){
+      overflow:hidden;
+      color: rgba(15,15,20,.78);
+      font-size: 12px;
+      line-height:1.15;
+      letter-spacing:0;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    :global(.preflightPins em){
+      overflow:hidden;
+      color: rgba(30,44,60,.50);
+      font-size: 10.5px;
+      font-style:normal;
+      line-height:1.25;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    :global(.preflightLegend){
+      position:absolute;
+      left: clamp(18px, 2rem, 34px);
+      right: clamp(18px, 2rem, 34px);
+      bottom: clamp(18px, 2rem, 34px);
+      z-index:4;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      min-height: 44px;
+      padding: 0 14px;
+      overflow:hidden;
+      border: 1px solid rgba(30,44,60,.075);
+      border-radius: 18px;
+      background: rgba(255,255,255,.58);
+      backdrop-filter: blur(16px) saturate(1.05);
+      -webkit-backdrop-filter: blur(16px) saturate(1.05);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.74);
+    }
+
+    :global(.preflightLegend span){
+      color: rgba(30,44,60,.66);
+      font-size: 11px;
+      font-weight: 730;
+      line-height:1.2;
+      white-space:nowrap;
+    }
+
+    :global(.preflightLegend i){
+      flex: 0 0 34px;
+      height:1px;
+      background: linear-gradient(90deg, rgb(var(--preflight-accent) / .52), transparent);
+    }
+
+    :global(.preflightBrief){
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap: 26px;
+      padding: clamp(28px, 2.4rem, 40px);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.58), rgba(255,255,255,.32));
+      backdrop-filter: blur(18px) saturate(1.06);
+      -webkit-backdrop-filter: blur(18px) saturate(1.06);
+    }
+
+    :global(.preflightBrief h3){
+      max-width: 9.5em;
+      margin: 56px 0 0;
+      color: rgba(15,15,20,.94);
+      font-size: clamp(34px, 2.75rem, 46px);
+      line-height:.96;
+      letter-spacing:0;
+    }
+
+    :global(.preflightBrief p){
+      max-width: 48ch;
+      margin: 20px 0 0;
+      color: rgba(15,15,20,.62);
+      font-size: 15px;
+      line-height:1.62;
+    }
+
+    :global(.preflightBrief dl){
+      display:grid;
+      gap: 1px;
+      overflow:hidden;
+      margin:0;
+      border: 1px solid rgba(30,44,60,.075);
+      border-radius: 20px;
+      background: rgba(30,44,60,.06);
+    }
+
+    :global(.preflightBrief dl div){
+      display:grid;
+      grid-template-columns: 92px minmax(0, 1fr);
+      gap: 14px;
+      padding: 14px;
+      background: rgba(255,255,255,.60);
+    }
+
+    :global(.preflightBrief dd){
+      margin:0;
+      color: rgba(30,44,60,.70);
+      font-size: 13px;
+      font-weight: 700;
+      line-height:1.42;
+    }
+
+    :global(.preflightChecks){
+      grid-column: 2 / 4;
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      border-top: 1px solid rgba(30,44,60,.075);
+      background: rgba(30,44,60,.055);
+    }
+
+    :global(.preflightChecks div){
+      min-width:0;
+      min-height: 112px;
+      padding: 18px;
+      background: rgba(255,255,255,.46);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    :global(.preflightChecks strong){
+      display:block;
+      max-width: 22ch;
+      margin-top: 18px;
+      color: rgba(30,44,60,.76);
+      font-size: 15px;
+      line-height:1.25;
+      letter-spacing:0;
+    }
+
+    @keyframes preflightRoute{
+      to{ stroke-dashoffset: -136; }
+    }
+
+    @keyframes preflightNode{
+      0%,100%{ opacity:.10; transform: scale(.92); }
+      48%{ opacity:.22; transform: scale(1.16); }
+    }
+
+    .logicAnchor{
+      scroll-margin-top: 96px;
+    }
+
+    :global(.logicScene){
+      --logic-accent: 45 141 255;
+      position:relative;
+      display:grid;
+      grid-template-columns: minmax(132px, .15fr) minmax(0, 1fr) minmax(380px, .34fr);
+      grid-template-rows: minmax(520px, auto) auto;
+      min-height: 650px;
+      margin-top: clamp(18px, 2rem, 32px);
+      overflow:hidden;
+      border-radius: 32px;
+      border: 1px solid rgba(30,44,60,.11);
+      background:
+        linear-gradient(rgba(30,44,60,.042) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(30,44,60,.042) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255,255,255,.84), rgba(243,248,252,.66));
+      background-size: 44px 44px, 44px 44px, auto;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.92),
+        inset 0 -1px 0 rgba(30,44,60,.045),
+        0 44px 130px rgba(12,20,32,.10);
+      isolation:isolate;
+    }
+
+    :global(.logicScene:before),
+    :global(.logicScene:after){
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:1;
+      pointer-events:none;
+    }
+
+    :global(.logicScene:before){
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.82) 0%, rgba(255,255,255,.18) 34%, rgba(250,253,255,.62) 100%),
+        linear-gradient(126deg, transparent 0 31%, rgba(30,44,60,.06) 31.08%, transparent 31.22%),
+        linear-gradient(18deg, transparent 0 67%, rgb(var(--logic-accent) / .08) 67.08%, transparent 67.28%),
+        radial-gradient(760px 340px at 58% 45%, rgb(var(--logic-accent) / .105), transparent 70%);
+      opacity:.96;
+    }
+
+    :global(.logicScene:after){
+      top:auto;
+      height: 36%;
+      background:
+        linear-gradient(180deg, transparent, rgba(255,255,255,.68)),
+        linear-gradient(90deg, rgba(30,44,60,.07), transparent 24%, transparent 78%, rgba(30,44,60,.05));
+    }
+
+    :global(.logicRail),
+    :global(.logicViewport),
+    :global(.logicReadout),
+    :global(.logicClarified){
+      position:relative;
+      z-index:2;
+      min-width:0;
+    }
+
+    :global(.logicRail){
+      grid-row: 1 / 3;
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+      padding: 22px 14px;
+      border-right: 1px solid rgba(30,44,60,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.64), rgba(245,249,252,.38));
+      box-shadow: inset -1px 0 0 rgba(255,255,255,.55);
+      backdrop-filter: blur(18px) saturate(1.08);
+      -webkit-backdrop-filter: blur(18px) saturate(1.08);
+    }
+
+    :global(.logicRailLabel),
+    :global(.logicRail button span),
+    :global(.logicSceneHeader span),
+    :global(.logicReadout > div > span),
+    :global(.logicReadout dt),
+    :global(.logicClarified span){
+      color: rgb(var(--logic-accent) / .74);
+      font-size: 10.5px;
+      letter-spacing:0;
+      text-transform:uppercase;
+      font-weight: 780;
+    }
+
+    :global(.logicRailLabel){
+      width:100%;
+      min-height: 116px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color: rgba(96,100,112,.62);
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+    }
+
+    :global(.logicRail button){
+      position:relative;
+      display:grid;
+      gap: 7px;
+      min-height: 96px;
+      padding: 13px 10px 13px 14px;
+      border: 1px solid rgba(30,44,60,.045);
+      border-radius: 18px;
+      background: rgba(255,255,255,.18);
+      color: rgba(15,15,20,.64);
+      text-align:left;
+      cursor:pointer;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.52);
+      transition: color .2s ease, background .2s ease, border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+    }
+
+    :global(.logicRail button:before){
+      content:"";
+      position:absolute;
+      left: 0;
+      top: 15px;
+      bottom: 15px;
+      width: 2px;
+      border-radius:999px;
+      background: rgba(15,15,20,.08);
+      transition: background .2s ease, box-shadow .2s ease, transform .2s ease;
+    }
+
+    :global(.logicRail button:after){
+      content:"";
+      position:absolute;
+      right: 10px;
+      top: 12px;
+      width: 6px;
+      height: 6px;
+      border-radius:999px;
+      background: rgba(15,15,20,.16);
+      box-shadow: 0 0 0 5px rgba(15,15,20,.035);
+      transition: background .2s ease, box-shadow .2s ease;
+    }
+
+    :global(.logicRail button:hover),
+    :global(.logicRail button:focus-visible),
+    :global(.logicRail button.isActive){
+      color: rgba(15,15,20,.92);
+      background:
+        linear-gradient(135deg, rgb(var(--logic-accent) / .10), rgba(255,255,255,.52) 44%, rgba(255,255,255,.26)),
+        rgba(255,255,255,.54);
+      border-color: rgb(var(--logic-accent) / .16);
+      outline:none;
+      transform: translateX(1px);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.72),
+        0 14px 36px rgba(12,20,32,.055);
+    }
+
+    :global(.logicRail button.isActive:before){
+      background: rgb(var(--logic-accent) / .82);
+      box-shadow: 0 0 22px rgb(var(--logic-accent) / .30);
+      transform: scaleY(1.18);
+    }
+
+    :global(.logicRail button.isActive:after){
+      background: rgb(var(--logic-accent) / .88);
+      box-shadow:
+        0 0 0 7px rgb(var(--logic-accent) / .10),
+        0 0 26px rgb(var(--logic-accent) / .28);
+    }
+
+    :global(.logicRail button strong){
+      max-width: 12ch;
+      font-size: 13px;
+      line-height:1.12;
+      letter-spacing:0;
+    }
+
+    :global(.logicRail button em){
+      max-width: 14ch;
+      color: rgba(15,15,20,.48);
+      font-size: 11px;
+      font-style:normal;
+      line-height:1.3;
+    }
+
+    :global(.logicViewport){
+      min-height: 520px;
+      overflow:hidden;
+      border-right: 1px solid rgba(30,44,60,.10);
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.30), transparent 28%, rgba(255,255,255,.18)),
+        radial-gradient(560px 320px at 58% 40%, rgb(var(--logic-accent) / .07), transparent 68%);
+    }
+
+    :global(.logicCanvas),
+    :global(.logicCanvas canvas){
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+    }
+
+    :global(.logicSceneHeader){
+      position:absolute;
+      left: clamp(18px, 2rem, 34px);
+      right: clamp(18px, 2rem, 34px);
+      top: clamp(18px, 2rem, 34px);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 18px;
+      min-height: 44px;
+      padding: 0 16px;
+      border: 1px solid rgba(30,44,60,.075);
+      border-radius: 18px;
+      background: rgba(255,255,255,.50);
+      backdrop-filter: blur(16px) saturate(1.05);
+      -webkit-backdrop-filter: blur(16px) saturate(1.05);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.72);
+    }
+
+    :global(.logicSceneHeader strong){
+      max-width: 54ch;
+      color: rgba(30,44,60,.64);
+      font-size: 12px;
+      font-weight: 720;
+      line-height:1.35;
+      text-align:right;
+    }
+
+    :global(.logicLabels){
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+    }
+
+    :global(.logicLabel){
+      position:absolute;
+      display:grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      grid-template-rows: auto auto;
+      column-gap: 8px;
+      align-items:center;
+      min-width: 132px;
+      max-width: 190px;
+      padding: 9px 11px;
+      border: 1px solid rgba(30,44,60,.08);
+      border-radius: 15px;
+      background: rgba(255,255,255,.58);
+      color: rgba(15,15,20,.60);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.72),
+        0 16px 40px rgba(12,20,32,.055);
+      backdrop-filter: blur(14px) saturate(1.06);
+      -webkit-backdrop-filter: blur(14px) saturate(1.06);
+      transform: translate(-50%, -50%);
+      opacity:.58;
+      transition: opacity .24s ease, border-color .24s ease, transform .24s ease, box-shadow .24s ease;
+    }
+
+    :global(.logicLabel i){
+      grid-row: 1 / 3;
+      width: 8px;
+      height: 8px;
+      border-radius:999px;
+      background: var(--node-color);
+      box-shadow:
+        0 0 0 6px color-mix(in srgb, var(--node-color) 13%, transparent),
+        0 0 22px color-mix(in srgb, var(--node-color) 28%, transparent);
+    }
+
+    :global(.logicLabel strong){
+      overflow:hidden;
+      color: rgba(15,15,20,.76);
+      font-size: 12px;
+      line-height:1.15;
+      letter-spacing:0;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    :global(.logicLabel em){
+      overflow:hidden;
+      color: rgba(30,44,60,.50);
+      font-size: 10.5px;
+      font-style:normal;
+      line-height:1.25;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    :global(.logicLabel.isSupport),
+    :global(.logicLabel.isActive){
+      opacity:1;
+    }
+
+    :global(.logicLabel.isActive){
+      border-color: rgb(var(--logic-accent) / .18);
+      transform: translate(-50%, -50%) translateY(-2px);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.82),
+        0 20px 52px rgba(12,20,32,.075),
+        0 0 34px rgb(var(--logic-accent) / .08);
+    }
+
+    :global(.logicSequence){
+      position:absolute;
+      left: clamp(18px, 2rem, 34px);
+      right: clamp(18px, 2rem, 34px);
+      bottom: clamp(18px, 2rem, 34px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      min-height: 44px;
+      padding: 0 14px;
+      overflow:hidden;
+      border: 1px solid rgba(30,44,60,.075);
+      border-radius: 18px;
+      background: rgba(255,255,255,.56);
+      backdrop-filter: blur(16px) saturate(1.05);
+      -webkit-backdrop-filter: blur(16px) saturate(1.05);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.74);
+    }
+
+    :global(.logicSequence span){
+      flex: 0 1 auto;
+      min-width:0;
+      color: rgba(30,44,60,.68);
+      font-size: 11px;
+      font-weight: 730;
+      line-height:1.2;
+      white-space:nowrap;
+    }
+
+    :global(.logicSequence i){
+      flex: 0 0 30px;
+      height:1px;
+      background: linear-gradient(90deg, rgb(var(--logic-accent) / .52), transparent);
+    }
+
+    :global(.logicReadout){
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap: 26px;
+      padding: clamp(28px, 2.4rem, 40px);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.56), rgba(255,255,255,.30));
+      backdrop-filter: blur(18px) saturate(1.06);
+      -webkit-backdrop-filter: blur(18px) saturate(1.06);
+    }
+
+    :global(.logicReadout h3){
+      max-width: 10em;
+      margin: 56px 0 0;
+      color: rgba(15,15,20,.94);
+      font-size: clamp(34px, 2.75rem, 46px);
+      line-height:.96;
+      letter-spacing:0;
+    }
+
+    :global(.logicReadout p){
+      max-width: 48ch;
+      margin: 22px 0 0;
+      color: rgba(15,15,20,.62);
+      font-size: 15px;
+      line-height:1.62;
+    }
+
+    :global(.logicReadout dl){
+      display:grid;
+      gap: 1px;
+      overflow:hidden;
+      margin:0;
+      border: 1px solid rgba(30,44,60,.075);
+      border-radius: 20px;
+      background: rgba(30,44,60,.06);
+    }
+
+    :global(.logicReadout dl div){
+      display:grid;
+      grid-template-columns: 96px minmax(0, 1fr);
+      gap: 14px;
+      padding: 14px;
+      background: rgba(255,255,255,.58);
+    }
+
+    :global(.logicReadout dd){
+      margin:0;
+      color: rgba(30,44,60,.70);
+      font-size: 13px;
+      font-weight: 700;
+      line-height:1.42;
+    }
+
+    :global(.logicClarified){
+      grid-column: 2 / 4;
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      border-top: 1px solid rgba(30,44,60,.075);
+      background: rgba(30,44,60,.055);
+    }
+
+    :global(.logicClarified div){
+      min-width:0;
+      min-height: 112px;
+      padding: 18px;
+      background: rgba(255,255,255,.45);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    :global(.logicClarified strong){
+      display:block;
+      max-width: 22ch;
+      margin-top: 18px;
+      color: rgba(30,44,60,.76);
+      font-size: 15px;
+      line-height:1.25;
+      letter-spacing:0;
+    }
 
     .valueRibbon{
       --console-accent: 10 132 255;
@@ -3079,7 +3936,336 @@ const {
       margin-top: 8px;
       color: rgba(15,15,20,.80);
       font-size: 18px;
-      letter-spacing:-.02em;
+      letter-spacing:0;
+    }
+
+    .valueRibbon{
+      grid-template-columns: minmax(132px, .14fr) minmax(0, 1fr) minmax(330px, .34fr);
+      border-color: rgba(30,44,60,.12);
+      background:
+        radial-gradient(860px 460px at 46% 42%, rgb(var(--console-accent) / .12), transparent 67%),
+        linear-gradient(rgba(30,44,60,.042) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(30,44,60,.042) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255,255,255,.82), rgba(241,247,252,.66));
+      background-size: auto, 44px 44px, 44px 44px, auto;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.92),
+        inset 0 -1px 0 rgba(30,44,60,.04),
+        0 44px 130px rgba(12,20,32,.10);
+    }
+
+    .valueRibbon:before{
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.82) 0%, rgba(255,255,255,.22) 32%, rgba(250,253,255,.62) 100%),
+        linear-gradient(124deg, transparent 0 32%, rgba(30,44,60,.065) 32.08%, transparent 32.22%),
+        linear-gradient(20deg, transparent 0 64%, rgb(var(--console-accent) / .10) 64.08%, transparent 64.28%),
+        radial-gradient(720px 320px at 72% 18%, rgb(var(--console-accent) / .105), transparent 70%);
+      opacity:.96;
+    }
+
+    .valueRibbon:after{
+      height: 34%;
+      background:
+        linear-gradient(180deg, transparent, rgba(255,255,255,.66)),
+        linear-gradient(90deg, rgba(30,44,60,.075), transparent 22%, transparent 78%, rgba(30,44,60,.055));
+    }
+
+    .consolePicker{
+      border-right-color: rgba(30,44,60,.11);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.66), rgba(245,249,252,.38));
+      box-shadow: inset -1px 0 0 rgba(255,255,255,.55);
+    }
+
+    .consolePicker button{
+      border: 1px solid rgba(30,44,60,.045);
+      background: rgba(255,255,255,.18);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.52);
+    }
+
+    .consolePicker button:hover,
+    .consolePicker button:focus-visible,
+    .consolePicker button.isActive{
+      background:
+        linear-gradient(135deg, rgb(var(--console-accent) / .10), rgba(255,255,255,.52) 44%, rgba(255,255,255,.26)),
+        rgba(255,255,255,.54);
+      border-color: rgb(var(--console-accent) / .16);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.72),
+        0 14px 36px rgba(12,20,32,.055);
+    }
+
+    .consolePicker strong,
+    .consoleReadout h3,
+    .readoutScore strong{
+      letter-spacing:0;
+    }
+
+    .consoleScope{
+      border-right-color: rgba(30,44,60,.10);
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.28), transparent 28%, rgba(255,255,255,.18)),
+        radial-gradient(520px 300px at 54% 36%, rgb(var(--console-accent) / .07), transparent 68%);
+    }
+
+    .scopeTopline{
+      padding-bottom: 2px;
+    }
+
+    .scopeTopline strong{
+      color: rgba(30,44,60,.72);
+      font-weight: 760;
+    }
+
+    .scopeTopline em{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      margin-left:auto;
+      color: rgba(30,44,60,.58);
+      font-size: 11px;
+      font-style:normal;
+      font-weight: 760;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+
+    .scopeTopline em i{
+      width: 7px;
+      height: 7px;
+      border-radius:999px;
+      background: rgb(var(--console-accent) / .84);
+      box-shadow:
+        0 0 0 6px rgb(var(--console-accent) / .075),
+        0 0 22px rgb(var(--console-accent) / .22);
+      animation: stationPulse 2.8s ease-in-out infinite;
+    }
+
+    .scopeCanvas{
+      min-height: 312px;
+      border: 1px solid rgba(30,44,60,.075);
+      border-radius: 24px;
+      background:
+        linear-gradient(rgba(30,44,60,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(30,44,60,.03) 1px, transparent 1px),
+        linear-gradient(rgba(10,132,255,.026) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(10,132,255,.026) 1px, transparent 1px),
+        radial-gradient(560px 260px at 58% 42%, rgb(var(--console-accent) / .075), transparent 68%),
+        rgba(255,255,255,.30);
+      background-size: 42px 42px, 42px 42px, 168px 168px, 168px 168px, auto, auto;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.72),
+        inset 0 0 0 1px rgba(255,255,255,.34);
+      mask-image:none;
+    }
+
+    .scopeCanvas:before,
+    .scopeCanvas:after{
+      content:"";
+      position:absolute;
+      pointer-events:none;
+      z-index:2;
+    }
+
+    .scopeCanvas:before{
+      inset:0;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.86), transparent 12%, transparent 88%, rgba(255,255,255,.78)),
+        linear-gradient(180deg, rgba(255,255,255,.68), transparent 18%, transparent 82%, rgba(255,255,255,.56));
+    }
+
+    .scopeCanvas:after{
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(30,44,60,.12), transparent);
+      opacity:.72;
+    }
+
+    .consoleScope svg{
+      inset: 0;
+      height:100%;
+      z-index:1;
+    }
+
+    .scopePlot{
+      fill: rgba(255,255,255,.12);
+      stroke: rgba(30,44,60,.055);
+      stroke-width: 1;
+    }
+
+    .scopeGridLine{
+      stroke: rgba(30,44,60,.052);
+    }
+
+    .scopeStageGates path{
+      fill:none;
+      stroke: url(#valueGateGradient);
+      stroke-width: 1;
+      stroke-dasharray: 4 10;
+    }
+
+    .scopeDependencyLanes path{
+      fill:none;
+      stroke: rgba(30,44,60,.105);
+      stroke-width: 1.15;
+      stroke-dasharray: 10 14;
+      animation: laneDrift 11s linear infinite;
+    }
+
+    .scopeDependencyLanes path:nth-child(2){
+      animation-duration: 13s;
+      animation-direction: reverse;
+    }
+
+    .scopeDependencyLanes path:nth-child(3){
+      animation-duration: 15s;
+    }
+
+    .scopeRiskBand{
+      fill:none;
+      stroke: url(#valueRiskGradient);
+      stroke-width: 34;
+      stroke-linecap:round;
+      opacity:.52;
+    }
+
+    .scopeBand{
+      stroke: rgba(30,44,60,.13);
+      stroke-width: 1.1;
+      stroke-dasharray: 12 18;
+    }
+
+    .scopeOrbit{
+      stroke: rgb(var(--console-accent) / .13);
+      stroke-width: 11;
+      opacity:.64;
+      filter: blur(3px);
+    }
+
+    .scopeTraceSoft{
+      fill:none;
+      stroke: url(#valueTraceCore);
+      stroke-width: 1.15;
+      stroke-linecap:round;
+      opacity:.55;
+    }
+
+    .scopeTrace{
+      stroke-width: 3.2;
+      filter: url(#valueGlow);
+    }
+
+    .scopeDataNodes circle{
+      fill: rgba(30,44,60,.28);
+      stroke: rgba(255,255,255,.82);
+      stroke-width: 1.4;
+      animation: dataNodePulse 4.6s ease-in-out infinite;
+    }
+
+    .scopeDataNodes circle:nth-child(2){ animation-delay:-.7s; }
+    .scopeDataNodes circle:nth-child(3){ animation-delay:-1.4s; }
+    .scopeDataNodes circle:nth-child(4){ animation-delay:-2.1s; }
+    .scopeDataNodes circle:nth-child(5){ animation-delay:-2.8s; }
+    .scopeDataNodes circle:nth-child(6){ animation-delay:-3.5s; }
+
+    .scopeLabels text{
+      fill: rgba(30,44,60,.38);
+      font-size: 9px;
+      font-weight: 760;
+      letter-spacing: 2px;
+      text-transform:uppercase;
+    }
+
+    .scopeHudCard{
+      position:absolute;
+      z-index:4;
+      display:grid;
+      gap: 6px;
+      min-width: 138px;
+      padding: 12px 13px;
+      border: 1px solid rgba(30,44,60,.08);
+      border-radius: 16px;
+      background: rgba(255,255,255,.58);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.74),
+        0 18px 42px rgba(12,20,32,.06);
+      backdrop-filter: blur(14px) saturate(1.08);
+      -webkit-backdrop-filter: blur(14px) saturate(1.08);
+    }
+
+    .scopeHudCardA{
+      left: 22px;
+      top: 20px;
+    }
+
+    .scopeHudCardB{
+      right: 22px;
+      bottom: 22px;
+    }
+
+    .scopeHudCard span{
+      color: rgba(30,44,60,.46);
+      font-size: 9.5px;
+      font-weight: 780;
+      text-transform:uppercase;
+    }
+
+    .scopeHudCard strong{
+      color: rgba(30,44,60,.78);
+      font-size: 13px;
+      line-height:1;
+    }
+
+    .scopeHudCard i{
+      position:relative;
+      display:block;
+      height: 2px;
+      overflow:hidden;
+      border-radius:999px;
+      background: rgba(30,44,60,.075);
+    }
+
+    .scopeHudCard i:after{
+      content:"";
+      position:absolute;
+      inset:0 auto 0 0;
+      width: 72%;
+      border-radius:inherit;
+      background: linear-gradient(90deg, rgb(var(--console-accent) / .35), rgb(var(--console-accent) / .92));
+      animation: hudMeter 4.4s ease-in-out infinite;
+    }
+
+    .scopePacketRail{
+      position:absolute;
+      left: 13%;
+      right: 13%;
+      bottom: 18px;
+      z-index:4;
+      height: 1px;
+      background: rgba(30,44,60,.075);
+      overflow:hidden;
+    }
+
+    .scopePacketRail span{
+      position:absolute;
+      top:0;
+      width: 16%;
+      height:100%;
+      border-radius:999px;
+      background: linear-gradient(90deg, transparent, rgb(var(--console-accent) / .9), transparent);
+      animation: packetRun 3.8s linear infinite;
+    }
+
+    .scopePacketRail span:nth-child(2){
+      animation-delay:-1.25s;
+      width: 11%;
+    }
+
+    .scopePacketRail span:nth-child(3){
+      animation-delay:-2.5s;
+      width: 8%;
     }
 
     @keyframes traceDraw{
@@ -3110,6 +4296,26 @@ const {
     @keyframes pointIn{
       from{ opacity:0; transform: translateY(5px); }
       to{ opacity:1; transform: translateY(0); }
+    }
+
+    @keyframes laneDrift{
+      to{ stroke-dashoffset: -96; }
+    }
+
+    @keyframes dataNodePulse{
+      0%,100%{ opacity:.38; transform: scale(.92); }
+      46%{ opacity:.88; transform: scale(1.16); }
+    }
+
+    @keyframes hudMeter{
+      0%,100%{ width: 54%; opacity:.68; }
+      48%{ width: 88%; opacity:1; }
+    }
+
+    @keyframes packetRun{
+      from{ transform: translateX(-120%); opacity:0; }
+      12%,82%{ opacity:1; }
+      to{ transform: translateX(720%); opacity:0; }
     }
 
     .valueSection,
@@ -4342,6 +5548,123 @@ const {
         display:none;
       }
 
+      .impactStripHead{
+        grid-template-columns: 1fr;
+      }
+
+      .impactStats{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        row-gap: 44px;
+        padding-inline:0;
+      }
+
+      .impactStat,
+      .impactStat:nth-child(2),
+      .impactStat:nth-child(3),
+      .impactStat:nth-child(4){
+        justify-self:start;
+      }
+
+      :global(.preflightScene){
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        min-height:auto;
+        border-radius: 28px;
+      }
+
+      :global(.preflightRail){
+        grid-row:auto;
+        flex-direction:row;
+        gap: 8px;
+        padding: 12px;
+        overflow-x:auto;
+        border-right:0;
+        border-bottom: 1px solid rgba(30,44,60,.08);
+      }
+
+      :global(.preflightRailLabel){
+        width:auto;
+        min-height:0;
+        padding: 0 10px;
+        writing-mode: initial;
+        transform:none;
+        white-space:nowrap;
+      }
+
+      :global(.preflightRail button){
+        flex: 0 0 184px;
+        min-height: 78px;
+      }
+
+      :global(.preflightWorkspace){
+        min-height: 560px;
+        border-right:0;
+        border-bottom: 1px solid rgba(30,44,60,.075);
+      }
+
+      :global(.preflightBrief){
+        border-bottom: 1px solid rgba(30,44,60,.075);
+      }
+
+      :global(.preflightBrief h3){
+        margin-top: 34px;
+      }
+
+      :global(.preflightChecks){
+        grid-column:1;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      :global(.logicScene){
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        min-height:auto;
+        border-radius: 28px;
+      }
+
+      :global(.logicRail){
+        grid-row:auto;
+        flex-direction:row;
+        gap: 8px;
+        padding: 12px;
+        overflow-x:auto;
+        border-right:0;
+        border-bottom: 1px solid rgba(30,44,60,.08);
+      }
+
+      :global(.logicRailLabel){
+        width:auto;
+        min-height:0;
+        padding: 0 10px;
+        writing-mode: initial;
+        transform:none;
+        white-space:nowrap;
+      }
+
+      :global(.logicRail button){
+        flex: 0 0 184px;
+        min-height: 82px;
+      }
+
+      :global(.logicViewport){
+        min-height: 520px;
+        border-right:0;
+        border-bottom: 1px solid rgba(30,44,60,.075);
+      }
+
+      :global(.logicReadout){
+        border-bottom: 1px solid rgba(30,44,60,.075);
+      }
+
+      :global(.logicReadout h3){
+        margin-top: 34px;
+      }
+
+      :global(.logicClarified){
+        grid-column:1;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
       .valueRibbon{
         grid-template-columns: 1fr;
         grid-template-rows: auto;
@@ -4376,6 +5699,24 @@ const {
       .consoleScope{
         border-right:0;
         border-bottom: 1px solid rgba(15,15,20,.065);
+      }
+
+      .scopeTopline{
+        align-items:flex-start;
+        flex-wrap:wrap;
+      }
+
+      .scopeTopline em{
+        margin-left:0;
+      }
+
+      .scopeHudCard{
+        transform: scale(.92);
+        transform-origin: top left;
+      }
+
+      .scopeHudCardB{
+        transform-origin: bottom right;
       }
 
       .consoleReadout{
@@ -4612,6 +5953,206 @@ const {
         margin-top: 46px;
       }
 
+      .impactStrip{
+        margin-top: 28px;
+        padding: 24px 0 34px;
+      }
+
+      .impactStats{
+        grid-template-columns: 1fr;
+        row-gap: 38px;
+      }
+
+      .impactStat{
+        padding-top: 12px;
+      }
+
+      .impactStat strong{
+        font-size: clamp(54px, 18vw, 82px);
+      }
+
+      .impactStat h3,
+      .impactStat p{
+        max-width: 30ch;
+      }
+
+      :global(.preflightScene){
+        border-radius: 26px;
+      }
+
+      :global(.preflightRail){
+        padding: 10px;
+      }
+
+      :global(.preflightRail button){
+        flex-basis: 154px;
+        min-height: 70px;
+      }
+
+      :global(.preflightWorkspace){
+        min-height: 430px;
+      }
+
+      :global(.preflightTopline){
+        left: 14px;
+        right: 14px;
+        top: 14px;
+        display:grid;
+        align-items:start;
+        min-height: auto;
+        padding: 12px;
+      }
+
+      :global(.preflightTopline strong){
+        max-width:100%;
+        text-align:left;
+      }
+
+      :global(.preflightPlan){
+        inset: 18px 4px 20px;
+        width: calc(100% - 8px);
+        height: calc(100% - 38px);
+      }
+
+      :global(.preflightPins){
+        inset: 18px 4px 20px;
+      }
+
+      :global(.preflightPins span){
+        min-width: 104px;
+        max-width: 132px;
+        padding: 8px 9px;
+      }
+
+      :global(.preflightPins em){
+        display:none;
+      }
+
+      :global(.preflightPins strong){
+        font-size: 11px;
+      }
+
+      :global(.preflightLegend){
+        display:none;
+      }
+
+      :global(.preflightBrief){
+        padding: 22px;
+      }
+
+      :global(.preflightBrief h3){
+        margin-top: 24px;
+        font-size: clamp(34px, 2.8rem, 42px);
+      }
+
+      :global(.preflightBrief dl div){
+        grid-template-columns: 1fr;
+        gap: 7px;
+      }
+
+      :global(.preflightChecks){
+        grid-template-columns: 1fr;
+      }
+
+      :global(.preflightChecks div){
+        min-height: 92px;
+        padding: 16px;
+      }
+
+      :global(.preflightChecks strong){
+        max-width: 26ch;
+        margin-top: 12px;
+      }
+
+      :global(.logicScene){
+        border-radius: 26px;
+      }
+
+      :global(.logicRail){
+        padding: 10px;
+      }
+
+      :global(.logicRail button){
+        flex-basis: 156px;
+        min-height: 74px;
+      }
+
+      :global(.logicRail button em){
+        display:none;
+      }
+
+      :global(.logicViewport){
+        min-height: 430px;
+      }
+
+      :global(.logicSceneHeader){
+        left: 14px;
+        right: 14px;
+        top: 14px;
+        display:grid;
+        align-items:start;
+        min-height: auto;
+        padding: 12px;
+      }
+
+      :global(.logicSceneHeader strong){
+        max-width:100%;
+        text-align:left;
+      }
+
+      :global(.logicLabel){
+        min-width: 112px;
+        max-width: 138px;
+        padding: 8px 9px;
+      }
+
+      :global(.logicLabel em){
+        display:none;
+      }
+
+      :global(.logicLabel strong){
+        font-size: 11px;
+      }
+
+      :global(.logicLabel--entry){ left: 18% !important; }
+      :global(.logicLabel--telecom){ left: 24% !important; }
+      :global(.logicLabel--power){ left: 65% !important; }
+      :global(.logicLabel--security){ left: 70% !important; }
+      :global(.logicLabel--audio){ left: 48% !important; top: 82% !important; }
+      :global(.logicLabel--quote){ left: 84% !important; }
+
+      :global(.logicSequence){
+        display:none;
+      }
+
+      :global(.logicReadout){
+        padding: 22px;
+      }
+
+      :global(.logicReadout h3){
+        margin-top: 24px;
+        font-size: clamp(34px, 2.8rem, 42px);
+      }
+
+      :global(.logicReadout dl div){
+        grid-template-columns: 1fr;
+        gap: 7px;
+      }
+
+      :global(.logicClarified){
+        grid-template-columns: 1fr;
+      }
+
+      :global(.logicClarified div){
+        min-height: 92px;
+        padding: 16px;
+      }
+
+      :global(.logicClarified strong){
+        max-width: 26ch;
+        margin-top: 12px;
+      }
+
       .valueRibbon{
         border-radius: 26px;
       }
@@ -4635,11 +6176,24 @@ const {
 
       .scopeCanvas{
         min-height: 260px;
+        border-radius: 20px;
       }
 
       .scopeMetricGrid{
         grid-template-columns: 1fr;
         gap: 12px;
+      }
+
+      .scopeTopline em,
+      .scopeHudCard,
+      .scopeLabels{
+        display:none;
+      }
+
+      .scopePacketRail{
+        left: 22px;
+        right: 22px;
+        bottom: 14px;
       }
 
       .consoleReadout{
@@ -4670,8 +6224,17 @@ const {
       .pathSection .sectionHead h2,
       .featuredSection .sectionHead h2,
       .proofCopy h2,
+      .quoteFlowCopy h2,
       .ctaCard h2{
         font-size: clamp(38px, 12vw, 58px);
+        line-height:.95;
+        letter-spacing:-.044em;
+      }
+
+      .quoteFlowCopy h2{
+        font-size: clamp(40px, 11vw, 52px);
+        line-height:.98;
+        max-width: 8.8em;
       }
 
       .pathStage{
