@@ -1,33 +1,324 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import HeroBanner from "../components/HeroBanner.astro";
-import Section from "../components/Section.astro";
 import { site } from "../content/site";
+import "../styles/interface.css";
+
+const principles = [
+  {
+    index: "01 / Clarity",
+    title: "Make the invisible readable.",
+    text: "Topology, routes, labels and constraints are treated as part of the service, not as afterthoughts.",
+  },
+  {
+    index: "02 / Discipline",
+    title: "Premium is mostly execution.",
+    text: "Clean routing, sensible placement, testing and documentation create the feeling of quality months later.",
+  },
+  {
+    index: "03 / Trust",
+    title: "No inflated claims.",
+    text: "Compliance and standards references are used only when they apply to the scope and can be documented.",
+  },
+];
+
+const operatingSignals = [
+  "Service paths are mapped as connected systems.",
+  "Scope and constraints are clarified before commitment.",
+  "Handover is designed for support, upgrades and future work.",
+  "Quote flow turns unclear requests into a practical brief.",
+];
 ---
-<BaseLayout title={`About — ${site.name}`} description="Engineering-first approach, clean installs, documentation, and realistic claims.">
-  <HeroBanner
-    title="About"
-    subtitle="Engineering-first execution. Clear scope. No inflated claims. Compliance statements only when supported by documentation."
-    image="/macro/macro-pcb-01.png"
-    primaryCta={{ label: "Services", href: "/services" }}
-    secondaryCta={{ label: "Contact", href: "/contact" }}
-  />
-  <Section title="Principles" note="Premium outcome is mostly discipline: routing, labeling, testing, documentation.">
-    <div class="card box">
-      <p>
-        We focus on installations that remain maintainable: sensible topology, clear labeling, tidy routing, and a handover
-        that makes future work easier.
-      </p>
-      <div class="hr" style="margin:16px 0;"></div>
-      <p>
-        Compliance/standards references are included only when applicable to the scope and when documentation can be provided.
-      </p>
-      <div class="hr" style="margin:16px 0;"></div>
-      <p class="small">Concept visuals on this site are illustrative until real project photography is available.</p>
-    </div>
-  </Section>
+
+<BaseLayout
+  title={`About - ${site.name}`}
+  description="ARCWAVE is a premium engineering integration concept for invisible infrastructure: telecom, networks, electricity, EV charging, security and audio as one supportable system."
+>
+  <div class="interfacePage aboutPage">
+    <section class="interfaceHero">
+      <div class="interfaceHeroCopy motionIn">
+        <div class="interfaceEyebrow">About ARCWAVE</div>
+        <h1 class="interfaceTitle">Invisible systems, made trustworthy.</h1>
+        <p class="interfaceLead">
+          ARCWAVE is built around a simple commercial idea: the systems that make
+          modern spaces work should be planned, installed and explained as one
+          connected technical layer.
+        </p>
+        <div class="interfaceActions">
+          <a class="primary" href="/services" data-vt="1">Explore services</a>
+          <a class="secondary" href="/contact#quote" data-vt="1">Request a quote</a>
+        </div>
+        <div class="interfaceFormula" aria-label="Company formula">
+          <span>signal</span><i></i><span>system</span><i></i><span>clarity</span><i></i><span>trust</span>
+        </div>
+      </div>
+
+      <div class="interfacePanel aboutHeroPanel motionIn" aria-label="ARCWAVE positioning">
+        <img src="/macro/macro-pcb-01.png" alt="" loading="eager" decoding="async" />
+        <div class="aboutSignalCard">
+          <span class="interfaceIndex">Positioning</span>
+          <strong>Connected Infrastructure OS</strong>
+          <p>
+            Telecom, networks, power, charging, security and audio framed as one
+            premium service interface.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="interfaceSection aboutPrincipleSection">
+      <div class="interfaceSectionHead">
+        <div>
+          <div class="interfaceEyebrow">Operating principle</div>
+          <p>
+            ARCWAVE is not presented as a generic installer. The site positions the
+            company as a technical partner that turns hidden infrastructure into a
+            clear, supportable system.
+          </p>
+        </div>
+        <h2>Engineering clarity before visual noise.</h2>
+      </div>
+
+      <div class="detailPathGrid">
+        {principles.map((item) => (
+          <article class="interfaceCard detailTile">
+            <span class="interfaceIndex">{item.index}</span>
+            <div>
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="interfaceSection aboutProofSection">
+      <div class="interfaceSectionHead">
+        <div>
+          <div class="interfaceEyebrow">Proof through clarity</div>
+          <p>
+            Trust is built when technical work can be understood before it is
+            installed, handed over and supported.
+          </p>
+        </div>
+        <h2>Trust comes from a readable system.</h2>
+      </div>
+
+      <div class="deliverableGrid">
+        <ul class="deliverableList">
+          {operatingSignals.map((item) => <li>{item}</li>)}
+        </ul>
+
+        <aside class="interfaceCard factsPanel">
+          <span class="interfaceIndex">Service context</span>
+          <dl>
+            <div>
+              <dt>Area</dt>
+              <dd>{site.contact.serviceArea}</dd>
+            </div>
+            <div>
+              <dt>Core</dt>
+              <dd>Telecom, networks, power, security, audio</dd>
+            </div>
+            <div>
+              <dt>Method</dt>
+              <dd>Signal -> system -> service path -> quote</dd>
+            </div>
+            <div>
+              <dt>Output</dt>
+              <dd>Clear technical request and supportable handover</dd>
+            </div>
+          </dl>
+        </aside>
+      </div>
+    </section>
+
+    <section class="interfaceSection aboutRulesSection">
+      <div class="interfaceMetrics">
+        <article class="interfaceMetric">
+          <span class="interfaceIndex">01 / Scope</span>
+          <strong>Define what can be known.</strong>
+          <p>Site access, routing, materials, panels, racks and constraints are part of the early conversation.</p>
+        </article>
+        <article class="interfaceMetric">
+          <span class="interfaceIndex">02 / Install</span>
+          <strong>Build for the person who supports it later.</strong>
+          <p>Readable topology, labels and notes turn installation work into a system that can be maintained.</p>
+        </article>
+        <article class="interfaceMetric">
+          <span class="interfaceIndex">03 / Growth</span>
+          <strong>Leave room for the next layer.</strong>
+          <p>Power, data, security and control decisions should make upgrades easier, not harder.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="interfaceSection aboutCtaSection">
+      <div class="interfacePanel interfaceCta">
+        <div>
+          <div class="interfaceEyebrow">Technical request</div>
+          <h2>Start with the system your space needs.</h2>
+          <p>
+            Select a service path, describe the constraints and turn the need into
+            a quote-ready technical brief.
+          </p>
+        </div>
+        <a class="primary" href="/contact#quote" data-vt="1">Request a quote</a>
+      </div>
+    </section>
+  </div>
 
   <style>
-    .box{ padding: 18px; border-radius: var(--radius); }
+    .aboutPage .interfaceHero{
+      min-height:auto;
+      padding: clamp(39px, 5.6vw, 78px) 0 clamp(35px, 4.7vw, 67px);
+    }
+
+    .aboutPage .interfaceSection{
+      padding: clamp(52px, 6vw, 96px) 0;
+    }
+
+    .aboutPage .interfaceHero + .interfaceSection{
+      padding-top: clamp(34px, 4.2vw, 68px);
+    }
+
+    .aboutPage .interfaceSectionHead{
+      gap: clamp(28px, 5vw, 88px);
+      margin-bottom: clamp(22px, 3vw, 38px);
+    }
+
+    .aboutHeroPanel{
+      min-height: clamp(500px, 38vw, 620px);
+      display:flex;
+      align-items:flex-end;
+      padding: clamp(22px, 2.8vw, 44px);
+    }
+
+    .aboutHeroPanel img{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      opacity:.42;
+      filter: grayscale(.08) contrast(1.03);
+    }
+
+    .aboutSignalCard{
+      position:relative;
+      z-index:2;
+      max-width: 520px;
+      padding: clamp(22px, 2.6vw, 40px);
+      border-radius: 28px;
+      border: 1px solid rgba(10,132,255,.12);
+      background: rgba(255,255,255,.68);
+      box-shadow: 0 24px 74px rgba(10,10,20,.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .aboutSignalCard strong{
+      display:block;
+      margin-top: 12px;
+      max-width: 9em;
+      font-size: clamp(38px, 4vw, 68px);
+      line-height:.92;
+      letter-spacing:-.06em;
+    }
+
+    .aboutSignalCard p{
+      margin-top: 18px;
+      color: rgba(15,15,20,.62);
+      line-height:1.62;
+    }
+
+    .aboutPrincipleSection .detailTile{
+      min-height: clamp(230px, 18vw, 280px);
+    }
+
+    .aboutProofSection{
+      padding-top: clamp(42px, 5vw, 78px);
+      padding-bottom: clamp(40px, 4.8vw, 76px);
+    }
+
+    .aboutProofSection .deliverableGrid{
+      grid-template-columns: minmax(0, 1fr) minmax(300px, .56fr);
+      gap: clamp(16px, 2vw, 26px);
+    }
+
+    .aboutProofSection .deliverableList li{
+      min-height: 82px;
+      padding: 16px 18px 16px 42px;
+    }
+
+    .aboutProofSection .factsPanel{
+      padding: clamp(18px, 2vw, 28px);
+    }
+
+    .aboutRulesSection{
+      padding-top: clamp(26px, 3.4vw, 54px);
+      padding-bottom: clamp(34px, 4.2vw, 64px);
+    }
+
+    .aboutRulesSection .interfaceMetric{
+      min-height: clamp(190px, 16vw, 240px);
+      padding: clamp(20px, 2.4vw, 34px);
+    }
+
+    .aboutCtaSection{
+      padding-top: clamp(18px, 2.8vw, 40px);
+      padding-bottom: clamp(52px, 6vw, 92px);
+    }
+
+    .aboutPage .interfaceCta{
+      min-height: clamp(260px, 24vw, 330px);
+    }
+
+    .aboutPage .interfaceCta:after{
+      display:none;
+    }
+
+    @media (max-width: 1180px){
+      .aboutHeroPanel{ min-height: 500px; }
+
+      .aboutProofSection .deliverableGrid{
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px){
+      .aboutPage .interfaceHero{
+        padding-top: 32px;
+        padding-bottom: 32px;
+      }
+
+      .aboutPage .interfaceSection{
+        padding: 36px 0;
+      }
+
+      .aboutPage .interfaceHero + .interfaceSection{
+        padding-top: 28px;
+      }
+
+      .aboutHeroPanel{
+        min-height: 380px;
+      }
+
+      .aboutPrincipleSection .detailTile,
+      .aboutRulesSection .interfaceMetric{
+        min-height: auto;
+      }
+
+      .aboutProofSection .deliverableList li{
+        min-height: auto;
+      }
+
+      .aboutPage .interfaceCta{
+        min-height: auto;
+      }
+
+      .aboutPage .interfaceCta:after{
+        display:none;
+      }
+    }
   </style>
 </BaseLayout>

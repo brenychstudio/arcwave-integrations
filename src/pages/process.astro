@@ -1,138 +1,1127 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import HeroBanner from "../components/HeroBanner.astro";
-import Section from "../components/Section.astro";
-import ProcessTimeline from "../components/ProcessTimeline.astro";
-import TrustStrip from "../components/TrustStrip.astro";
 import { site } from "../content/site";
+import "../styles/interface.css";
+
+const process = [
+  {
+    index: "01",
+    title: "Signal",
+    text: "The request starts as a need: coverage, power, charging, security, control or audio.",
+    details: ["Service category", "Space type", "Main pain point"],
+    state: "Captured",
+    input: "Need / issue",
+    output: "Initial technical signal",
+  },
+  {
+    index: "02",
+    title: "System",
+    text: "ARCWAVE maps the need as part of one technical layer, not an isolated task.",
+    details: ["Network + power dependencies", "Security / comfort layers", "Access points"],
+    state: "Mapped",
+    input: "Service mix",
+    output: "System view",
+  },
+  {
+    index: "03",
+    title: "Service path",
+    text: "Scope, materials, routes, access and timing become clear enough to quote.",
+    details: ["Routes and distances", "Panel / rack locations", "Building constraints"],
+    state: "Clarified",
+    input: "Site constraints",
+    output: "Install path",
+  },
+  {
+    index: "04",
+    title: "Proof",
+    text: "Technical clarity replaces generic claims: notes, labels, diagrams and support context.",
+    details: ["Labels and notes", "Expected outcome", "Support-ready handover"],
+    state: "Verified",
+    input: "Technical plan",
+    output: "Clarity pack",
+  },
+  {
+    index: "05",
+    title: "Quote",
+    text: "The customer receives a practical response based on the space, constraints and desired outcome.",
+    details: ["Selected service", "Space notes", "Next response"],
+    state: "Ready",
+    input: "Confirmed scope",
+    output: "Quote brief",
+  },
+];
+
+const heroStages = [
+  { index: "01", title: "Need", meta: "Captured", input: "Request", output: "Signal" },
+  { index: "02", title: "System", meta: "Mapped", input: "Service mix", output: "Layer view" },
+  { index: "03", title: "Limits", meta: "Checked", input: "Site reality", output: "Constraints" },
+  { index: "04", title: "Install", meta: "Routed", input: "Routes", output: "Work path" },
+  { index: "05", title: "Quote", meta: "Ready", input: "Scope", output: "Quote path" },
+];
+
+const proofRail = [
+  "Need captured",
+  "Dependencies mapped",
+  "Quote path clarified",
+  "Support context documented",
+];
+
+const briefItems = ["Service", "Space", "Constraints", "Next response"];
 ---
 
-<BaseLayout title={`Process — ${site.name}`} description="Survey → Proposal → Installation → Support. Clear scope and handover.">
-  <HeroBanner
-    title="Process"
-    subtitle="A simple workflow optimized for clarity, speed, and supportability."
-    image="/macro/macro-metal-01.png"
-    primaryCta={{ label: "Request a quote", href: "/contact#quote" }}
-    secondaryCta={{ label: "Services", href: "/services" }}
-  />
-
-  <div class="container"><div class="hr"></div></div>
-
-  <Section eyebrow="Trust" title="Straightforward commitments" note="No vague promises — only what we can document and support.">
-    <TrustStrip badges={site.trustBadges} />
-  </Section>
-
-  <Section eyebrow="Steps" title="A clear workflow" note="Survey → Proposal → Installation → Support">
-    <div class="grid">
-      <div class="main">
-        <ProcessTimeline steps={site.processSteps} />
+<BaseLayout
+  title={`Process - ${site.name}`}
+  description="Signal, system, service path, proof and quote. A commercial process for supportable technical installations."
+>
+  <div class="interfacePage processPage">
+    <section class="interfaceHero">
+      <div class="interfaceHeroCopy motionIn">
+        <div class="interfaceEyebrow">Technical service journey</div>
+        <h1 class="interfaceTitle">From signal to installed system.</h1>
+        <p class="interfaceLead">
+          ARCWAVE turns technical requests into mapped dependencies, clear scope,
+          clean installation paths and support-ready handover.
+        </p>
+        <div class="processProofRail" aria-label="Process outcomes">
+          {proofRail.map((item) => <span>{item}</span>)}
+        </div>
+        <div class="interfaceActions">
+          <a class="primary" href="/contact#quote" data-vt="1">Request a quote</a>
+          <a class="secondary" href="/services" data-vt="1">Explore services</a>
+        </div>
+        <div class="interfaceFormula" aria-label="Process formula">
+          <span>signal</span><i></i><span>system</span><i></i><span>service path</span><i></i><span>proof</span><i></i><span>quote</span>
+        </div>
       </div>
 
-      <aside class="side">
-        <div class="card pad">
-          <div class="k">Deliverables</div>
-          <ul class="list">
-            <li>Scope + constraints summary</li>
-            <li>Bill of materials (as needed)</li>
-            <li>Labeled installation + basic testing</li>
-            <li>Handover notes for supportability</li>
-          </ul>
+      <div class="interfacePanel processHeroPanel motionIn" aria-label="Request-to-quote diagnostic panel">
+        <div class="diagnosticRail" aria-hidden="true">
+          <span>Request signal</span>
+          <i></i>
+          <span>Mapped system</span>
+          <i></i>
+          <span>Quote-ready path</span>
         </div>
-
-        <div class="card pad">
-          <div class="k">Typical timing</div>
-
-          <div class="meta">
-            <div class="row"><span class="l">Survey</span><span class="r">1–3 days</span></div>
-            <div class="row"><span class="l">Proposal</span><span class="r">2–5 days</span></div>
-            <div class="row"><span class="l">Installation</span><span class="r">by scope</span></div>
-            <div class="row"><span class="l">Support</span><span class="r">follow-up</span></div>
+        <div class="diagnosticPathLine" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="diagnosticStageGrid">
+          {heroStages.map((item, index) => (
+            <div class={`diagnosticStage ${index === 2 ? "isActive" : ""}`.trim()}>
+              <div>
+                <span>{item.index}</span>
+                <strong>{item.title}</strong>
+                <p>{item.meta}</p>
+              </div>
+              <dl>
+                <div>
+                  <dt>Input</dt>
+                  <dd>{item.input}</dd>
+                </div>
+                <div>
+                  <dt>Output</dt>
+                  <dd>{item.output}</dd>
+                </div>
+              </dl>
+            </div>
+          ))}
+        </div>
+        <div class="diagnosticSummary">
+          <div>
+            <span>Live request summary</span>
+            <strong>Need -&gt; quote path</strong>
           </div>
-
-          <div class="tip">Varies by site access, materials availability, and permits.</div>
+          <dl>
+            <div><dt>Input</dt><dd>Need</dd></div>
+            <div><dt>Mapped</dt><dd>Network + power + access</dd></div>
+            <div><dt>Output</dt><dd>Quote path</dd></div>
+          </dl>
         </div>
-      </aside>
-    </div>
+      </div>
+    </section>
 
-    <style>
-      .grid{
-        display:grid;
-        grid-template-columns: 1.6fr .9fr;
-        gap: 16px;
-        margin-top: 18px;
+    <section class="interfaceSection processJourneySection">
+      <div class="interfaceSectionHead">
+        <div>
+          <div class="interfaceEyebrow">Service journey</div>
+          <p>
+            The path is designed to make invisible installation work easier to buy:
+            fewer assumptions, clearer decisions and better handover.
+          </p>
+        </div>
+        <h2>A technical path that stays understandable.</h2>
+      </div>
+
+      <div class="interfaceTopology">
+        <div class="processLane" aria-label="Request diagnostic lane">
+          {process.map((item) => (
+            <article class="interfaceCard pathStep">
+              <div class="pathStepHead">
+                <span class="interfaceIndex">{item.index} / {item.title}</span>
+                <h3>{item.title}</h3>
+              </div>
+              <div class="pathStepIO">
+                <div>
+                  <span>Input</span>
+                  <strong>{item.input}</strong>
+                </div>
+                <div>
+                  <span>Output</span>
+                  <strong>{item.output}</strong>
+                </div>
+              </div>
+              <p>{item.text}</p>
+              <ul>
+                {item.details.map((detail) => <li>{detail}</li>)}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="interfaceSection processClaritySection">
+      <div class="interfaceSectionHead">
+        <div>
+          <div class="interfaceEyebrow">Delivery clarity</div>
+          <p>
+            This is what makes the process commercially credible: the customer
+            understands what will be checked, installed and handed over.
+          </p>
+        </div>
+        <h2>What ARCWAVE clarifies before work starts.</h2>
+      </div>
+
+      <div class="interfaceMetrics">
+        <article class="interfaceMetric">
+          <span class="proofDot" aria-hidden="true"></span>
+          <span class="interfaceIndex">01 / Scope</span>
+          <strong>Constraints before commitment.</strong>
+          <p>Access, distances, existing wiring, power and provider handoff are clarified early.</p>
+        </article>
+        <article class="interfaceMetric">
+          <span class="proofDot" aria-hidden="true"></span>
+          <span class="interfaceIndex">02 / Install</span>
+          <strong>Clean work that can be read later.</strong>
+          <p>Routes, labels, terminations and practical decisions are treated as part of the service.</p>
+        </article>
+        <article class="interfaceMetric">
+          <span class="proofDot" aria-hidden="true"></span>
+          <span class="interfaceIndex">03 / Handover</span>
+          <strong>A system, not a mystery.</strong>
+          <p>Notes and support context make the installation easier to maintain or upgrade.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="interfaceSection processCtaSection">
+      <div class="interfacePanel interfaceCta">
+        <div>
+          <div class="interfaceEyebrow">Next step</div>
+          <h2>Turn your space into a technical brief.</h2>
+          <p>
+            Select the service path, describe the space and constraints, and ARCWAVE
+            will turn the request into a clearer quote path.
+          </p>
+        </div>
+        <div class="briefCard" aria-label="Quote brief inputs">
+          <span>Quote brief</span>
+          {briefItems.map((item) => (
+            <div>
+              <strong>{item}</strong>
+              <i></i>
+            </div>
+          ))}
+        </div>
+        <a class="primary" href="/contact#quote" data-vt="1">Request a quote</a>
+      </div>
+    </section>
+  </div>
+
+  <style>
+    .processPage{
+      --interface-container: min(100% - clamp(28px, 5vw, 92px), 1640px);
+    }
+
+    .processPage .interfaceHero{
+      min-height:auto;
+      grid-template-columns: minmax(380px, .76fr) minmax(0, 1.06fr);
+      gap: clamp(30px, 4.8vw, 78px);
+      align-items:center;
+      padding: clamp(42px, 6vw, 82px) 0 clamp(40px, 5vw, 72px);
+    }
+
+    .processPage .interfaceTitle{
+      max-width: 7.8em;
+      font-size: clamp(56px, 7.1vw, 116px);
+    }
+
+    .processProofRail{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 8px;
+      margin-top: 22px;
+      max-width: 58ch;
+    }
+
+    .processProofRail span{
+      display:inline-flex;
+      align-items:center;
+      min-height: 30px;
+      padding: 0 10px;
+      border-radius:999px;
+      border: 1px solid rgba(15,15,20,.075);
+      background: rgba(255,255,255,.62);
+      color: rgba(15,15,20,.62);
+      font-size: 11px;
+      font-weight:760;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
+    }
+
+    .processPage .interfaceSection{
+      padding: clamp(46px, 5.4vw, 88px) 0;
+    }
+
+    .processPage .interfaceHero + .interfaceSection{
+      padding-top: clamp(24px, 3.4vw, 46px);
+    }
+
+    .processPage .interfaceSectionHead{
+      margin-bottom: clamp(22px, 3.2vw, 42px);
+    }
+
+    .processPage .interfaceSectionHead h2{
+      font-size: clamp(44px, 6vw, 94px);
+    }
+
+    .processHeroPanel{
+      min-height: clamp(470px, 42vw, 590px);
+      display:grid;
+      grid-template-rows: auto 1fr auto;
+      gap: clamp(16px, 2vw, 26px);
+      padding: clamp(18px, 2.4vw, 34px);
+      border-color: rgba(10,132,255,.13);
+    }
+
+    .processHeroPanel:before{
+      inset: 12% 6%;
+      border-color: rgba(10,132,255,.15);
+      transform: rotate(-7deg);
+    }
+
+    .processHeroPanel:after{
+      top: 47%;
+      height: 1px;
+      opacity:.72;
+      transform: rotate(-5deg);
+    }
+
+    .processDiagnosticTop,
+    .processDiagnosticFooter{
+      position:relative;
+      z-index:3;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 18px;
+    }
+
+    .processDiagnosticTop span,
+    .processDiagnosticFooter span{
+      color: var(--muted2);
+      font-size: 10px;
+      font-weight:760;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+
+    .processDiagnosticTop strong{
+      color: rgba(15,15,20,.58);
+      font-size: 12px;
+      font-weight:760;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .processDependencyLine{
+      position:absolute;
+      left: clamp(28px, 4vw, 58px);
+      right: clamp(28px, 4vw, 58px);
+      top: 51%;
+      z-index:1;
+      display:grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      align-items:center;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(10,132,255,.34), rgba(35,198,190,.20), transparent);
+      pointer-events:none;
+    }
+
+    .processDependencyLine span{
+      justify-self:center;
+      width: 9px;
+      height: 9px;
+      border-radius:999px;
+      background: rgba(10,132,255,.62);
+      box-shadow:
+        0 0 0 7px rgba(10,132,255,.08),
+        0 12px 28px rgba(10,132,255,.16);
+    }
+
+    .processDependencyLine span:nth-child(3){
+      background: rgba(35,198,190,.66);
+      box-shadow:
+        0 0 0 8px rgba(35,198,190,.08),
+        0 12px 30px rgba(35,198,190,.15);
+    }
+
+    .processDependencyLine span:nth-child(5){
+      background: rgba(205,158,60,.62);
+      box-shadow:
+        0 0 0 7px rgba(205,158,60,.09),
+        0 12px 28px rgba(205,158,60,.12);
+    }
+
+    .processDiagnosticGrid{
+      position:relative;
+      z-index:2;
+      display:grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: clamp(8px, 1vw, 14px);
+      align-items:stretch;
+    }
+
+    .processNode{
+      position:relative;
+      min-height: 270px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      padding: clamp(14px, 1.4vw, 20px);
+      border-radius: 22px;
+      border: 1px solid rgba(15,15,20,.075);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.68));
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.9),
+        0 18px 60px rgba(10,10,20,.08);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .processNode:nth-child(2){
+      transform: translateY(28px);
+    }
+
+    .processNode:nth-child(3){
+      transform: translateY(-22px);
+      border-color: rgba(10,132,255,.18);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.72));
+    }
+
+    .processNode:nth-child(4){
+      transform: translateY(18px);
+    }
+
+    .processNode:nth-child(5){
+      transform: translateY(42px);
+    }
+
+    .processNode span{
+      color: rgba(10,132,255,.78);
+      font-size: 11px;
+      letter-spacing:.16em;
+      font-weight:760;
+    }
+
+    .processNode strong{
+      display:block;
+      margin-top: 26px;
+      font-size: clamp(19px, 1.7vw, 30px);
+      line-height:.96;
+      letter-spacing:-.04em;
+    }
+
+    .processNode p{
+      width:fit-content;
+      margin: 10px 0 0;
+      padding: 5px 8px;
+      border-radius:999px;
+      border: 1px solid rgba(10,132,255,.12);
+      background: rgba(10,132,255,.055);
+      color: rgba(10,132,255,.72);
+      font-size: 10px;
+      font-weight:760;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+
+    .processNode dl{
+      margin: 22px 0 0;
+      display:grid;
+      gap: 1px;
+      overflow:hidden;
+      border-radius: 14px;
+      border: 1px solid rgba(15,15,20,.06);
+      background: rgba(15,15,20,.05);
+    }
+
+    .processNode dl div{
+      display:grid;
+      gap: 3px;
+      padding: 9px;
+      background: rgba(255,255,255,.56);
+    }
+
+    .processNode dt{
+      color: var(--muted2);
+      font-size: 9px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-weight:760;
+    }
+
+    .processNode dd{
+      margin:0;
+      color: rgba(15,15,20,.70);
+      font-size: 12px;
+      font-weight:720;
+      line-height:1.25;
+    }
+
+    .processDiagnosticFooter{
+      padding: 12px 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(15,15,20,.065);
+      background: rgba(255,255,255,.56);
+    }
+
+    .diagnosticRail{
+      position:relative;
+      z-index:4;
+      display:grid;
+      grid-template-columns: auto minmax(24px, 1fr) auto minmax(24px, 1fr) auto;
+      align-items:center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(15,15,20,.065);
+      background: rgba(255,255,255,.60);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.82);
+    }
+
+    .diagnosticRail span,
+    .diagnosticSummary > div > span,
+    .briefCard > span{
+      color: var(--muted2);
+      font-size: 10px;
+      font-weight:760;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+
+    .diagnosticRail i{
+      height:1px;
+      background: linear-gradient(90deg, rgba(10,132,255,.40), rgba(35,198,190,.18));
+    }
+
+    .diagnosticPathLine{
+      position:absolute;
+      left: clamp(34px, 4vw, 64px);
+      right: clamp(34px, 4vw, 64px);
+      top: 48%;
+      z-index:1;
+      display:grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      align-items:center;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(10,132,255,.42), rgba(35,198,190,.18), transparent);
+      pointer-events:none;
+    }
+
+    .diagnosticPathLine span{
+      justify-self:center;
+      width: 8px;
+      height: 8px;
+      border-radius:999px;
+      background: rgba(10,132,255,.54);
+      box-shadow: 0 0 0 7px rgba(10,132,255,.07);
+    }
+
+    .diagnosticPathLine span:nth-child(3){
+      width: 10px;
+      height: 10px;
+      background: rgba(35,198,190,.64);
+      box-shadow: 0 0 0 9px rgba(35,198,190,.075), 0 12px 28px rgba(35,198,190,.16);
+    }
+
+    .diagnosticStageGrid{
+      position:relative;
+      z-index:3;
+      display:grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: clamp(8px, 1vw, 14px);
+      align-items:center;
+    }
+
+    .diagnosticStage{
+      min-height: clamp(220px, 22vw, 310px);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      padding: clamp(14px, 1.45vw, 20px);
+      border-radius: 20px;
+      border: 1px solid rgba(15,15,20,.08);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.70));
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.9),
+        0 18px 58px rgba(10,10,20,.075);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .diagnosticStage:nth-child(2),
+    .diagnosticStage:nth-child(4){
+      transform: translateY(18px);
+    }
+
+    .diagnosticStage:nth-child(5){
+      transform: translateY(28px);
+    }
+
+    .diagnosticStage.isActive{
+      min-height: clamp(250px, 25vw, 340px);
+      border-color: rgba(10,132,255,.28);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.76));
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.94),
+        0 22px 70px rgba(10,132,255,.10),
+        0 18px 62px rgba(10,10,20,.08);
+    }
+
+    .diagnosticStage span{
+      color: rgba(10,132,255,.80);
+      font-size: 11px;
+      letter-spacing:.16em;
+      font-weight:760;
+    }
+
+    .diagnosticStage strong{
+      display:block;
+      margin-top: 24px;
+      font-size: clamp(20px, 1.62vw, 30px);
+      line-height:.98;
+      letter-spacing:-.04em;
+    }
+
+    .diagnosticStage p{
+      width:fit-content;
+      margin: 10px 0 0;
+      padding: 5px 8px;
+      border-radius:999px;
+      border: 1px solid rgba(10,132,255,.14);
+      background: rgba(10,132,255,.065);
+      color: rgba(10,132,255,.72);
+      font-size: 10px;
+      font-weight:760;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+
+    .diagnosticStage dl,
+    .diagnosticSummary dl{
+      margin: 20px 0 0;
+      display:grid;
+      gap: 1px;
+      overflow:hidden;
+      border-radius: 14px;
+      border: 1px solid rgba(15,15,20,.065);
+      background: rgba(15,15,20,.055);
+    }
+
+    .diagnosticStage dl div,
+    .diagnosticSummary dl div{
+      display:grid;
+      gap: 3px;
+      padding: 10px;
+      background: rgba(255,255,255,.60);
+    }
+
+    .diagnosticStage dt,
+    .diagnosticSummary dt{
+      color: var(--muted2);
+      font-size: 9px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-weight:760;
+    }
+
+    .diagnosticStage dd,
+    .diagnosticSummary dd{
+      margin:0;
+      color: rgba(15,15,20,.72);
+      font-size: 13px;
+      font-weight:720;
+      line-height:1.3;
+    }
+
+    .diagnosticSummary{
+      position:relative;
+      z-index:4;
+      display:grid;
+      grid-template-columns: minmax(170px, .52fr) minmax(0, 1fr);
+      gap: 14px;
+      align-items:stretch;
+      padding: 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(10,132,255,.12);
+      background:
+        linear-gradient(135deg, rgba(10,132,255,.06), transparent 48%),
+        rgba(255,255,255,.64);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.84);
+    }
+
+    .diagnosticSummary > div > strong{
+      display:block;
+      margin-top: 8px;
+      font-size: 20px;
+      line-height:1;
+      letter-spacing:-.03em;
+    }
+
+    .diagnosticSummary dl{
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin:0;
+    }
+
+    .processPage .processGrid{
+      gap: clamp(12px, 1.2vw, 18px);
+      padding: clamp(14px, 1.8vw, 24px);
+    }
+
+    .processLane{
+      position:relative;
+      z-index:2;
+      display:grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 1px;
+      padding: clamp(14px, 1.8vw, 24px);
+      border-radius: inherit;
+      background: rgba(15,15,20,.055);
+    }
+
+    .processLane:before{
+      content:"";
+      position:absolute;
+      left: clamp(28px, 4vw, 58px);
+      right: clamp(28px, 4vw, 58px);
+      top: 50%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(10,132,255,.36), rgba(35,198,190,.18), transparent);
+      pointer-events:none;
+      z-index:1;
+    }
+
+    .processPage .pathStep,
+    .processPage .pathStep:nth-child(even),
+    .processPage .pathStep:nth-child(odd){
+      position:relative;
+      z-index:2;
+      min-height: clamp(330px, 25vw, 390px);
+      display:grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 16px;
+      border-radius: 22px;
+      padding: clamp(20px, 2vw, 30px);
+      border-color: rgba(15,15,20,.09);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.70));
+    }
+
+    .pathStep:before{
+      content:"";
+      position:absolute;
+      top: clamp(20px, 2vw, 30px);
+      right: clamp(20px, 2vw, 30px);
+      width: 8px;
+      height: 8px;
+      border-radius:999px;
+      background: rgba(10,132,255,.34);
+      box-shadow: 0 0 0 7px rgba(10,132,255,.06);
+    }
+
+    .pathStepHead{
+      display:grid;
+      gap: 22px;
+    }
+
+    .processPage .pathStep h3{
+      font-size: clamp(25px, 2.2vw, 38px);
+    }
+
+    .pathStepIO{
+      display:grid;
+      gap: 1px;
+      overflow:hidden;
+      border-radius: 16px;
+      border: 1px solid rgba(15,15,20,.065);
+      background: rgba(15,15,20,.055);
+    }
+
+    .pathStepIO div{
+      display:grid;
+      gap: 4px;
+      padding: 11px;
+      background: rgba(255,255,255,.58);
+    }
+
+    .pathStepIO span{
+      color: var(--muted2);
+      font-size: 9px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-weight:760;
+    }
+
+    .pathStepIO strong{
+      color: rgba(15,15,20,.72);
+      font-size: 13px;
+      line-height:1.25;
+    }
+
+    .processPage .pathStep p{
+      font-size: 15px;
+    }
+
+    .processPage .pathStep ul{
+      align-self:end;
+      margin: 0;
+      padding:0;
+      list-style:none;
+      display:grid;
+      gap: 8px;
+    }
+
+    .processPage .pathStep li{
+      position:relative;
+      padding-left: 14px;
+      color: rgba(15,15,20,.56);
+      font-size: 13px;
+      line-height:1.35;
+    }
+
+    .processPage .pathStep li:before{
+      content:"";
+      position:absolute;
+      left:0;
+      top:.55em;
+      width: 5px;
+      height: 5px;
+      border-radius:999px;
+      background: rgba(10,132,255,.46);
+    }
+
+    .processPage .interfaceMetrics{
+      border-radius: 28px;
+      border-color: rgba(15,15,20,.095);
+      box-shadow: 0 34px 100px rgba(10,10,20,.085);
+    }
+
+    .processPage .interfaceMetric{
+      position:relative;
+      min-height: clamp(240px, 20vw, 300px);
+      border-color: rgba(15,15,20,.09);
+      background:
+        linear-gradient(rgba(10,132,255,.038) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(10,132,255,.038) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255,255,255,.52), rgba(255,255,255,.38));
+      background-size: 48px 48px, 48px 48px, auto;
+    }
+
+    .proofDot{
+      position:absolute;
+      top: clamp(22px, 2vw, 34px);
+      right: clamp(22px, 2vw, 34px);
+      width: 9px;
+      height: 9px;
+      border-radius:999px;
+      background: rgba(10,132,255,.36);
+      box-shadow: 0 0 0 8px rgba(10,132,255,.065);
+    }
+
+    .processPage .processClaritySection{
+      padding-bottom: clamp(24px, 3.2vw, 46px);
+    }
+
+    .processPage .processCtaSection{
+      padding-top: clamp(16px, 2.4vw, 34px);
+      padding-bottom: clamp(52px, 6vw, 94px);
+    }
+
+    .processPage .interfaceCta{
+      min-height: clamp(280px, 26vw, 340px);
+      display:grid;
+      grid-template-columns: minmax(0, 1fr) minmax(220px, .34fr) auto;
+      align-items:flex-end;
+      border-color: rgba(10,132,255,.12);
+    }
+
+    .processPage .interfaceCta:before{
+      inset: 14% 10%;
+      opacity:.8;
+    }
+
+    .processPage .interfaceCta:after{
+      top:auto;
+      bottom: 14%;
+      height: 1px;
+      opacity:.32;
+    }
+
+    .processPage .interfaceCta h2,
+    .processPage .interfaceCta p,
+    .processPage .interfaceCta .interfaceEyebrow{
+      position:relative;
+      z-index:2;
+    }
+
+    .processPage .interfaceCta .primary{
+      position:relative;
+      z-index:2;
+      white-space:nowrap;
+    }
+
+    .briefCard{
+      position:relative;
+      z-index:2;
+      min-width: 220px;
+      padding: 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(15,15,20,.075);
+      background: rgba(255,255,255,.64);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.82),
+        0 18px 54px rgba(10,10,20,.065);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .briefCard > div{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+      margin-top: 11px;
+      padding-top: 11px;
+      border-top: 1px solid rgba(15,15,20,.065);
+    }
+
+    .briefCard strong{
+      color: rgba(15,15,20,.72);
+      font-size: 13px;
+      line-height:1.2;
+    }
+
+    .briefCard i{
+      width: 8px;
+      height: 8px;
+      border-radius:999px;
+      background: rgba(10,132,255,.42);
+      box-shadow: 0 0 0 6px rgba(10,132,255,.055);
+      flex: 0 0 auto;
+    }
+
+    @media (max-width: 1180px){
+      .processPage .interfaceHero{
+        grid-template-columns: 1fr;
+      }
+
+      .processHeroPanel{
+        min-height:auto;
+      }
+
+      .diagnosticStageGrid{
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .diagnosticPathLine{
+        display:none;
+      }
+
+      .diagnosticStage,
+      .diagnosticStage:nth-child(2),
+      .diagnosticStage:nth-child(4),
+      .diagnosticStage:nth-child(5),
+      .diagnosticStage.isActive{
+        min-height: 230px;
+        transform:none;
+      }
+
+      .diagnosticSummary{
+        grid-template-columns: 1fr;
+      }
+
+      .processLane{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .processPage .interfaceCta{
+        grid-template-columns: 1fr;
         align-items:start;
       }
-      .pad{ padding: 16px; }
-      .k{
-        font-size: 12px;
-        letter-spacing: .16em;
-        text-transform: uppercase;
-        color: var(--muted2);
-        margin-bottom: 10px;
-      }
-      .list{
-        margin: 0;
-        padding-left: 18px;
-        color: var(--muted);
-        font-size: 13px;
-        line-height: 1.55;
-      }
-      .list li{ margin: 8px 0; }
 
-      .meta{ display:grid; gap: 10px; }
-      .meta .row{
-        display:flex;
-        justify-content: space-between;
-        gap: 12px;
-        padding: 10px 12px;
-        border-radius: 14px;
-        border: 1px solid var(--border2);
-        background: rgba(255,255,255,.55);
-      }
-      .meta .l{ font-weight: 800; font-size: 13px; }
-      .meta .r{ color: var(--muted); font-size: 13px; font-weight: 700; }
-
-      .tip{
-        margin-top: 12px;
-        font-size: 12px;
-        color: var(--muted);
-        line-height: 1.45;
+      .briefCard{
+        width: min(100%, 420px);
       }
 
-      @media (max-width: 980px){
-        .grid{ grid-template-columns: 1fr; }
+      .processDiagnosticGrid{
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
-    </style>
-  </Section>
 
-  <Section eyebrow="Next" title="Ready to start?" note="Send a short brief — we’ll confirm scope and constraints on a quick call.">
-    <div class="card cta">
-      <div class="left">
-        <div class="t">Request a quote</div>
-        <div class="n">Short form. We reply within 1–2 business days.</div>
-      </div>
-      <div class="right">
-        <a class="btn primary" href="/contact#quote" data-vt="1">Request a quote</a>
-        <a class="btn" href="/services" data-vt="1">Browse services</a>
-      </div>
-    </div>
+      .processDependencyLine{
+        display:none;
+      }
 
-    <style>
-      .cta{
-        padding: 18px;
-        display:flex;
-        align-items:center;
-        justify-content: space-between;
-        gap: 14px;
+      .processNode,
+      .processNode:nth-child(2),
+      .processNode:nth-child(3),
+      .processNode:nth-child(4),
+      .processNode:nth-child(5){
+        min-height: 230px;
+        transform:none;
       }
-      .t{ font-weight: 900; letter-spacing: -.01em; }
-      .n{ margin-top: 6px; color: var(--muted); font-size: 13px; line-height: 1.45; }
-      .right{ display:flex; gap: 10px; align-items:center; }
-      @media (max-width: 720px){
-        .cta{ flex-direction: column; align-items: stretch; }
-        .right{ flex-direction: column; align-items: stretch; }
-        .right .btn{ width: 100%; }
+    }
+
+    @media (max-width: 760px){
+      .processPage{
+        --interface-container: min(100% - 28px, 100%);
       }
-    </style>
-  </Section>
+
+      .processPage .interfaceHero{
+        padding-top: 32px;
+        padding-bottom: 30px;
+      }
+
+      .processPage .interfaceTitle{
+        max-width: 6.2em;
+        font-size: clamp(38px, 11.8vw, 52px);
+      }
+
+      .processProofRail{
+        margin-top: 18px;
+      }
+
+      .processPage .interfaceFormula{
+        gap: 8px;
+        font-size: 10px;
+      }
+
+      .processPage .interfaceFormula i{
+        width: 24px;
+      }
+
+      .processPage .interfaceActions{
+        display:grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .processPage .interfaceActions .primary,
+      .processPage .interfaceActions .secondary{
+        width:100%;
+      }
+
+      .processPage .interfaceSection{
+        padding: 36px 0;
+      }
+
+      .processPage .interfaceHero + .interfaceSection{
+        padding-top: 26px;
+      }
+
+      .processHeroPanel{
+        padding: 14px;
+      }
+
+      .diagnosticRail{
+        grid-template-columns: 1fr;
+        gap: 7px;
+      }
+
+      .diagnosticRail i{
+        display:none;
+      }
+
+      .diagnosticStageGrid,
+      .processLane{
+        grid-template-columns: 1fr;
+      }
+
+      .diagnosticStage,
+      .diagnosticStage:nth-child(2),
+      .diagnosticStage:nth-child(4),
+      .diagnosticStage:nth-child(5),
+      .diagnosticStage.isActive{
+        min-height: 190px;
+      }
+
+      .diagnosticSummary dl{
+        grid-template-columns: 1fr;
+      }
+
+      .processDiagnosticTop,
+      .processDiagnosticFooter{
+        align-items:flex-start;
+        flex-direction:column;
+        gap: 8px;
+      }
+
+      .processDiagnosticTop strong{
+        line-height:1.35;
+      }
+
+      .processDiagnosticGrid{
+        grid-template-columns: 1fr;
+      }
+
+      .processNode,
+      .processNode:nth-child(2),
+      .processNode:nth-child(3),
+      .processNode:nth-child(4),
+      .processNode:nth-child(5){
+        min-height: 190px;
+      }
+
+      .processNode strong{
+        margin-top: 18px;
+      }
+
+      .processPage .pathStep,
+      .processPage .pathStep:nth-child(even),
+      .processPage .pathStep:nth-child(odd){
+        min-height: 250px;
+      }
+
+      .processPage .interfaceCta{
+        min-height: auto;
+        grid-template-columns: 1fr;
+        align-items:start;
+      }
+
+      .processPage .interfaceCta:after{
+        bottom: 80px;
+        opacity:.28;
+      }
+
+      .briefCard{
+        width:100%;
+        min-width:0;
+      }
+    }
+  </style>
 </BaseLayout>

@@ -11,9 +11,10 @@ type Props = {
   title?: string;
   description?: string;
   ogImage?: string;
+  noindex?: boolean;
 };
 
-const { title, description, ogImage } = Astro.props as Props;
+const { title, description, ogImage, noindex = false } = Astro.props as Props;
 
 const pageTitle = title ? `${title} — ${site.name}` : site.name;
 const pageDescription = description ?? site.tagline;
@@ -36,8 +37,16 @@ const siteLocal = lang === "es" ? siteEs : site;
 
 const labelContact = t(lang, "Contact", "Contacto");
 const labelLegal = t(lang, "Legal", "Legal");
+const labelHome = t(lang, "Home", "Inicio");
+const labelServices = t(lang, "Services", "Servicios");
+const labelProcess = t(lang, "Process", "Proceso");
+const labelAbout = t(lang, "About", "Sobre");
 const labelPrivacy = t(lang, "Privacy", "Privacidad");
 const labelCookies = t(lang, "Cookies", "Cookies");
+const labelSystem = t(lang, "System", "Sistema");
+const labelAvailability = t(lang, "Barcelona & nearby", "Barcelona y alrededores");
+const labelBrief = t(lang, "Technical brief", "Brief tecnico");
+const labelQuote = t(lang, "Request a quote", "Presupuesto");
 const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
 ---
 
@@ -47,7 +56,7 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <meta name="theme-color" content={site.accent} />
-<meta name="robots" content="index,follow" />
+<meta name="robots" content={noindex ? "noindex,nofollow" : "index,follow"} />
 
 <link rel="canonical" href={canonical} />
 
@@ -98,7 +107,7 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
         --accentBorder: rgba(10,132,255,.35);
 
         --container: 1120px;
-
+        --site-header-space: 104px;
         /* Typography weights (Windows-friendly) */
         --w-body: 420;
         --w-ui: 600;
@@ -108,7 +117,10 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
       html, body{ height:100%; }
 
       /* Smooth anchor scroll */
-      html{ scroll-behavior:smooth; }
+      html{
+        scroll-behavior:smooth;
+        scroll-padding-top: var(--site-header-space);
+      }
 
       /* Page transitions (video demo polish) */
       ::view-transition-old(root),
@@ -138,6 +150,11 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
+      }
+
+      .main{
+        min-height: 100svh;
+        padding-top: var(--site-header-space);
       }
 
       /* Keep form controls consistent */
@@ -206,6 +223,12 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
 
       @media (prefers-reduced-motion: reduce){
         .btn, a.primary, button.primary, a.secondary, button.secondary{ transition:none; }
+      }
+
+      @media (max-width: 520px){
+        :root{
+          --site-header-space: 92px;
+        }
       }
 
       /* Footer */
@@ -339,6 +362,734 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
   .ftCredit{ white-space: normal; }
 }
 
+      .ft{
+        position:relative;
+        z-index:1;
+        margin-top: 64px;
+        padding: 112px 0 42px;
+        color: var(--muted);
+        font-size: 13px;
+        overflow:hidden;
+      }
+
+      .ft:before{
+        content:"";
+        position:absolute;
+        inset:0;
+        pointer-events:none;
+        background:
+          linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.82) 28%, rgba(255,255,255,.97) 62%, rgba(255,255,255,.995) 100%),
+          radial-gradient(980px 520px at 72% 8%, rgba(10,132,255,.12), transparent 62%),
+          radial-gradient(620px 360px at 18% 34%, rgba(180,145,80,.052), transparent 64%);
+      }
+
+      .ft:after{
+        content:"";
+        position:absolute;
+        left:0;
+        right:0;
+        top: 96px;
+        height: 1px;
+        pointer-events:none;
+        background: linear-gradient(90deg, transparent, rgba(10,132,255,.22), rgba(15,15,20,.055), transparent);
+      }
+
+      .ftShell{
+        position:relative;
+        display:grid;
+        grid-template-columns: minmax(280px, 1.08fr) minmax(420px, 1.5fr);
+        gap: 18px;
+        padding: 18px;
+        border-radius: 30px;
+        border: 1px solid rgba(15,15,20,.07);
+        background: linear-gradient(180deg, rgba(255,255,255,.76), rgba(255,255,255,.52));
+        box-shadow:
+          inset 0 1px 0 rgba(255,255,255,.78),
+          0 34px 90px rgba(10,10,20,.075);
+        backdrop-filter: blur(22px) saturate(1.08);
+        -webkit-backdrop-filter: blur(22px) saturate(1.08);
+        overflow:hidden;
+      }
+
+      .ftShell:before{
+        content:"";
+        position:absolute;
+        inset:0;
+        pointer-events:none;
+        background-image:
+          linear-gradient(rgba(10,132,255,.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(10,132,255,.035) 1px, transparent 1px),
+          radial-gradient(circle at 78% 28%, rgba(10,132,255,.105), transparent 34%);
+        background-size: 56px 56px, 56px 56px, auto;
+        mask-image: linear-gradient(90deg, transparent, black 22%, black 100%);
+        opacity:.72;
+      }
+
+      .ftBrandPanel,
+      .ftSystemPanel{
+        position:relative;
+        z-index:1;
+      }
+
+      .ftBrandPanel{
+        min-height: 300px;
+        display:flex;
+        flex-direction:column;
+        justify-content:space-between;
+        gap: 28px;
+        padding: clamp(20px, 2.6vw, 34px);
+      }
+
+      .ftBrand{
+        display:flex;
+        align-items:center;
+        gap: 12px;
+      }
+
+      .ftMark{
+        width: 10px;
+        height: 10px;
+        border-radius:999px;
+        background: rgba(10,132,255,.88);
+        box-shadow:
+          0 0 0 5px rgba(10,132,255,.10),
+          0 0 24px rgba(10,132,255,.35);
+      }
+
+      .ftBrand strong{
+        display:block;
+        color: var(--text);
+        font-size: 13px;
+        line-height:1;
+        letter-spacing:.2em;
+        text-transform:uppercase;
+      }
+
+      .ftBrand span:last-child{
+        display:block;
+        margin-top: 6px;
+        color: var(--muted2);
+        font-size: 10px;
+        line-height:1;
+        letter-spacing:.16em;
+        text-transform:uppercase;
+      }
+
+      .ftBlurb{
+        max-width: 36ch;
+        margin:0;
+        color: rgba(90,90,99,.88);
+        line-height:1.62;
+      }
+
+      .ftStatus{
+        display:flex;
+        flex-wrap:wrap;
+        gap: 8px;
+      }
+
+      .ftStatus span{
+        display:inline-flex;
+        align-items:center;
+        gap: 7px;
+        min-height: 32px;
+        padding: 0 11px;
+        border-radius:999px;
+        border: 1px solid rgba(15,15,20,.07);
+        background: rgba(255,255,255,.62);
+        color: rgba(15,15,20,.68);
+        font-size: 11px;
+        font-weight: 650;
+      }
+
+      .ftStatus span:before{
+        content:"";
+        width: 5px;
+        height: 5px;
+        border-radius:999px;
+        background: rgba(10,132,255,.78);
+        box-shadow: 0 0 0 3px rgba(10,132,255,.09);
+      }
+
+      .ftSystemPanel{
+        display:grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 12px;
+        padding: 8px;
+      }
+
+      .ftColumn{
+        min-height: 284px;
+        padding: 20px;
+        border-radius: 22px;
+        border: 1px solid rgba(15,15,20,.065);
+        background: linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,255,255,.42));
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.76);
+      }
+
+      .ftK{
+        margin: 0 0 16px;
+        color: var(--muted2);
+        font-size: 11px;
+        line-height:1;
+        letter-spacing:.18em;
+        text-transform:uppercase;
+      }
+
+      .ftLinks,
+      .ftContact{
+        display:grid;
+        gap: 10px;
+      }
+
+      .ft a{
+        color: var(--text);
+        opacity:.76;
+        transition: opacity .14s ease, color .14s ease, transform .14s ease;
+      }
+
+      .ft a:hover{
+        opacity:1;
+        color: rgba(10,132,255,1);
+      }
+
+      .ftLinks a{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap: 14px;
+        min-height: 34px;
+        border-bottom: 1px solid rgba(15,15,20,.055);
+        font-weight: 650;
+      }
+
+      .ftLinks a:after{
+        content:"";
+        width: 18px;
+        height: 1px;
+        background: rgba(10,132,255,.32);
+      }
+
+      .ftContact a,
+      .ftContact span{
+        display:block;
+        color: rgba(15,15,20,.72);
+        line-height:1.45;
+      }
+
+      .ftContact small{
+        display:block;
+        margin-bottom: 4px;
+        color: var(--muted2);
+        font-size: 10px;
+        letter-spacing:.14em;
+        text-transform:uppercase;
+      }
+
+      .ftActions{
+        display:flex;
+        flex-wrap:wrap;
+        gap: 9px;
+        margin-top: 18px;
+      }
+
+      .ftAction{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        min-height: 38px;
+        padding: 0 13px;
+        border-radius:999px;
+        border: 1px solid rgba(15,15,20,.075);
+        background: rgba(255,255,255,.62);
+        font-weight: 700;
+      }
+
+      .ftAction.primary{
+        border-color: rgba(10,132,255,.35);
+        background: rgba(10,132,255,.10);
+      }
+
+      .ft .social{
+        display:flex;
+        gap: 9px;
+        margin-top: 18px;
+        align-items:center;
+      }
+
+      .ft .ico{
+        width: 36px;
+        height: 36px;
+        border-radius: 999px;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        background: rgba(255,255,255,.62);
+        border: 1px solid rgba(15,15,20,.07);
+        color: var(--text);
+        opacity:.74;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.75);
+      }
+
+      .ft .ico:hover{
+        opacity:1;
+        transform: translateY(-1px);
+        border-color: rgba(10,132,255,.28);
+        background: rgba(10,132,255,.07);
+        box-shadow: 0 12px 28px rgba(10,10,20,.09);
+      }
+
+      .ft .ico svg{
+        width: 16px;
+        height: 16px;
+      }
+
+      .ftBottom{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap: 14px;
+        padding-top: 18px;
+        color: rgba(90,90,99,.86);
+      }
+
+      @media (max-width: 1040px){
+        .ftShell,
+        .ftSystemPanel{
+          grid-template-columns: 1fr;
+        }
+
+        .ftBrandPanel,
+        .ftColumn{
+          min-height: auto;
+        }
+      }
+
+      @media (max-width: 680px){
+        .ft{
+          margin-top: 44px;
+          padding: 72px 0 34px;
+        }
+
+        .ftShell{
+          border-radius: 24px;
+          padding: 10px;
+        }
+
+        .ftBrandPanel{
+          padding: 18px;
+        }
+
+        .ftColumn{
+          padding: 17px;
+          border-radius: 18px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce){
+        .ft a,
+        .ft .ico{
+          transition:none;
+        }
+      }
+
+      .ft{
+        margin-top: 28px;
+        padding: 46px 0 34px;
+      }
+
+      .ft:before{
+        background:
+          linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.72) 22%, rgba(255,255,255,.96) 72%, rgba(255,255,255,.995) 100%),
+          radial-gradient(900px 360px at 74% 10%, rgba(10,132,255,.085), transparent 64%);
+      }
+
+      .ft:after{
+        top: 38px;
+      }
+
+      .ftShell{
+        max-width: 1040px;
+        margin-inline:auto;
+        grid-template-columns: minmax(300px, .95fr) minmax(520px, 1.6fr);
+        gap: 10px;
+        padding: 10px;
+        border-radius: 22px;
+        background: linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,255,255,.46));
+        box-shadow:
+          inset 0 1px 0 rgba(255,255,255,.78),
+          0 24px 70px rgba(10,10,20,.06);
+      }
+
+      .ftShell:before{
+        background-size: 48px 48px, 48px 48px, auto;
+        opacity:.48;
+      }
+
+      .ftBrandPanel{
+        min-height: 0;
+        padding: 18px 20px;
+        gap: 18px;
+      }
+
+      .ftBlurb{
+        max-width: 34ch;
+        margin-top: 14px;
+        font-size: 12.5px;
+        line-height:1.55;
+      }
+
+      .ftStatus{
+        gap: 7px;
+      }
+
+      .ftStatus span{
+        min-height: 28px;
+        padding: 0 9px;
+        font-size: 10.5px;
+      }
+
+      .ftSystemPanel{
+        grid-template-columns: 1.15fr 1.25fr .95fr;
+        gap: 8px;
+        padding: 0;
+      }
+
+      .ftColumn{
+        min-height: 0;
+        padding: 16px;
+        border-radius: 17px;
+        background: linear-gradient(180deg, rgba(255,255,255,.66), rgba(255,255,255,.34));
+      }
+
+      .ftK{
+        margin-bottom: 13px;
+        font-size: 10.5px;
+      }
+
+      .ftLinks,
+      .ftContact{
+        gap: 8px;
+      }
+
+      .ftLinks a{
+        min-height: 30px;
+        font-size: 12.5px;
+      }
+
+      .ftContact a,
+      .ftContact span{
+        font-size: 12.5px;
+      }
+
+      .ftContact small{
+        margin-bottom: 2px;
+        font-size: 9.5px;
+      }
+
+      .ftActions{
+        margin-top: 14px;
+        gap: 7px;
+      }
+
+      .ftAction{
+        min-height: 34px;
+        padding: 0 11px;
+        font-size: 12.5px;
+      }
+
+      .ft .social{
+        margin-top: 14px;
+      }
+
+      .ft .ico{
+        width: 32px;
+        height: 32px;
+      }
+
+      .ftBottom{
+        max-width: 1040px;
+        margin-inline:auto;
+        padding-top: 14px;
+        font-size: 12.5px;
+      }
+
+      @media (max-width: 1040px){
+        .ftShell{
+          max-width: 720px;
+          grid-template-columns: 1fr;
+        }
+
+        .ftSystemPanel{
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 680px){
+        .ft{
+          margin-top: 20px;
+          padding: 44px 0 30px;
+        }
+
+        .ftShell{
+          padding: 8px;
+          border-radius: 20px;
+        }
+
+        .ftBrandPanel,
+        .ftColumn{
+          padding: 15px;
+        }
+      }
+
+      .ft{
+        margin-top: 0;
+        padding: 32px 0 26px;
+      }
+
+      .ft:before{
+        background:
+          linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.68) 21%, rgba(255,255,255,.96) 70%, rgba(255,255,255,1) 100%),
+          radial-gradient(820px 280px at 77% 8%, rgba(10,132,255,.07), transparent 66%);
+      }
+
+      .ft:after{
+        top: 26px;
+        opacity: .42;
+      }
+
+      .ftShell{
+        width: min(1120px, 100%);
+        max-width: 1120px;
+        margin-inline: auto;
+        display: grid;
+        grid-template-columns: minmax(270px, .92fr) minmax(0, 1.96fr);
+        gap: 0;
+        padding: 0;
+        overflow: visible;
+        border: 0;
+        border-radius: 0;
+        border-top: 1px solid rgba(10,132,255,.18);
+        border-bottom: 1px solid rgba(10,10,20,.075);
+        background: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
+      }
+
+      .ftShell:before{
+        inset: -1px 0;
+        border-radius: 0;
+        background:
+          linear-gradient(rgba(10,132,255,.048) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(10,132,255,.048) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255,255,255,.94) 0%, rgba(255,255,255,.58) 45%, rgba(245,250,255,.82) 100%);
+        background-size: 54px 54px, 54px 54px, auto;
+        opacity: .76;
+      }
+
+      .ftShell > *{
+        position: relative;
+        z-index: 1;
+      }
+
+      .ftBrandPanel{
+        min-height: 0;
+        padding: 24px 30px 22px 0;
+        gap: 18px;
+        border-right: 1px solid rgba(10,10,20,.08);
+      }
+
+      .ftBrand strong{
+        letter-spacing: .16em;
+      }
+
+      .ftBrand span span{
+        font-size: 9px;
+        letter-spacing: .18em;
+      }
+
+      .ftBlurb{
+        max-width: 31ch;
+        margin-top: 16px;
+        font-size: 12px;
+        line-height: 1.62;
+        color: rgba(72,74,84,.76);
+      }
+
+      .ftStatus{
+        gap: 8px;
+      }
+
+      .ftStatus span{
+        min-height: 27px;
+        padding: 0 10px;
+        border-color: rgba(10,132,255,.16);
+        background: rgba(255,255,255,.54);
+        font-size: 10px;
+      }
+
+      .ftSystemPanel{
+        display: grid;
+        grid-template-columns: 1.08fr 1.22fr .92fr;
+        gap: 0;
+        padding: 0;
+      }
+
+      .ftColumn{
+        min-height: 0;
+        padding: 24px 22px 22px;
+        border: 0;
+        border-right: 1px solid rgba(10,10,20,.07);
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      .ftColumn:last-child{
+        border-right: 0;
+        padding-right: 0;
+      }
+
+      .ftK{
+        margin-bottom: 14px;
+        color: rgba(105,108,120,.76);
+        font-size: 10px;
+        letter-spacing: .2em;
+      }
+
+      .ftLinks,
+      .ftContact{
+        gap: 6px;
+      }
+
+      .ftLinks a{
+        min-height: 29px;
+        padding: 0;
+        border-bottom-color: rgba(10,10,20,.055);
+        color: rgba(26,28,35,.82);
+        font-size: 12px;
+      }
+
+      .ftLinks a:hover{
+        color: rgb(10,132,255);
+      }
+
+      .ftLinks a:after{
+        width: 17px;
+      }
+
+      .ftContact small{
+        margin-bottom: 1px;
+        font-size: 9px;
+        letter-spacing: .15em;
+      }
+
+      .ftContact a,
+      .ftContact span{
+        color: rgba(59,62,72,.78);
+        font-size: 12px;
+      }
+
+      .ftActions{
+        margin-top: 14px;
+        gap: 7px;
+      }
+
+      .ftAction{
+        min-height: 32px;
+        padding: 0 11px;
+        border-color: rgba(10,10,20,.07);
+        background: rgba(255,255,255,.5);
+        font-size: 12px;
+      }
+
+      .ftAction.primary{
+        border-color: rgba(10,132,255,.26);
+        background: rgba(10,132,255,.085);
+      }
+
+      .ft .social{
+        margin-top: 14px;
+        gap: 8px;
+      }
+
+      .ft .ico{
+        width: 31px;
+        height: 31px;
+        border-color: rgba(10,10,20,.065);
+        background: rgba(255,255,255,.48);
+        box-shadow: none;
+      }
+
+      .ft .ico:hover{
+        border-color: rgba(10,132,255,.24);
+        background: rgba(10,132,255,.065);
+        box-shadow: 0 10px 24px rgba(10,10,20,.07);
+      }
+
+      .ftBottom{
+        width: min(1120px, 100%);
+        max-width: 1120px;
+        margin-inline: auto;
+        padding-top: 13px;
+        color: rgba(92,94,104,.76);
+        font-size: 12px;
+      }
+
+      @media (max-width: 1040px){
+        .ftShell{
+          width: min(720px, 100%);
+          grid-template-columns: 1fr;
+        }
+
+        .ftBrandPanel{
+          padding: 22px 0;
+          border-right: 0;
+          border-bottom: 1px solid rgba(10,10,20,.075);
+        }
+
+        .ftSystemPanel{
+          grid-template-columns: 1fr;
+        }
+
+        .ftColumn{
+          padding: 20px 0;
+          border-right: 0;
+          border-bottom: 1px solid rgba(10,10,20,.065);
+        }
+
+        .ftColumn:last-child{
+          border-bottom: 0;
+          padding-right: 0;
+        }
+
+        .ftBottom{
+          width: min(720px, 100%);
+        }
+      }
+
+      @media (max-width: 680px){
+        .ft{
+          padding: 30px 0 24px;
+        }
+
+        .ftShell{
+          width: 100%;
+        }
+
+        .ftBrandPanel,
+        .ftColumn{
+          padding-left: 0;
+          padding-right: 0;
+        }
+
+        .ftBottom{
+          align-items: flex-start;
+          flex-direction: column;
+          width: 100%;
+        }
+      }
+
     </style>
   </head>
 
@@ -350,6 +1101,122 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
     </main>
 
     <footer class="ft">
+      <div class="container">
+        <div class="ftShell">
+          <section class="ftBrandPanel" aria-label={site.name}>
+            <div>
+              <div class="ftBrand">
+                <span class="ftMark" aria-hidden="true"></span>
+                <span>
+                  <strong>{site.name}</strong>
+                  <span>{labelSystem}</span>
+                </span>
+              </div>
+
+              <p class="ftBlurb">{COMPANY.blurb}</p>
+            </div>
+
+            <div class="ftStatus" aria-label="Service status">
+              <span>{labelAvailability}</span>
+              <span>{labelBrief}</span>
+            </div>
+          </section>
+
+          <div class="ftSystemPanel">
+            <section class="ftColumn">
+              <h2 class="ftK">{labelSystem}</h2>
+              <nav class="ftLinks" aria-label="Footer navigation">
+                <a href={base || "/"} data-vt="1">{labelHome}</a>
+                <a href={`${base}/services`} data-vt="1">{labelServices}</a>
+                <a href={`${base}/process`} data-vt="1">{labelProcess}</a>
+                <a href={`${base}/about`} data-vt="1">{labelAbout}</a>
+                <a href={`${base}/contact`} data-vt="1">{labelContact}</a>
+              </nav>
+            </section>
+
+            <section class="ftColumn">
+              <h2 class="ftK">{labelContact}</h2>
+              <div class="ftContact">
+                <div>
+                  <small>Email</small>
+                  <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
+                </div>
+                <div>
+                  <small>Phone</small>
+                  <a href={`tel:${COMPANY.phoneTel}`}>{COMPANY.phoneDisplay}</a>
+                </div>
+                <div>
+                  <small>Area</small>
+                  <span>{siteLocal.contact.serviceArea}</span>
+                </div>
+                <div>
+                  <small>Hours</small>
+                  <span>{COMPANY.hours}</span>
+                </div>
+              </div>
+
+              <div class="ftActions">
+                <a class="ftAction primary" href={`${base}/contact#quote`} data-vt="1">{labelQuote}</a>
+                <a class="ftAction" href={`mailto:${COMPANY.email}`}>Email</a>
+              </div>
+            </section>
+
+            <section class="ftColumn">
+              <h2 class="ftK">{labelLegal}</h2>
+              <nav class="ftLinks" aria-label="Legal">
+                <a href={`${base}/legal/privacy`} data-vt="1">{labelPrivacy}</a>
+                <a href={`${base}/legal/cookies`} data-vt="1">{labelCookies}</a>
+              </nav>
+
+              <div class="social" aria-label="Contact links">
+                <a class="ico" href={`mailto:${COMPANY.email}`} aria-label="Email" title="Email">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M4 7.5A2.5 2.5 0 0 1 6.5 5h11A2.5 2.5 0 0 1 20 7.5v9A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5v-9Z" stroke="currentColor" stroke-width="1.6"/>
+                    <path d="M6.5 7.2 12 11l5.5-3.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+
+                <a class="ico" href={COMPANY.facebookUrl} target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M14 8.5V7.2c0-.9.6-1.2 1.2-1.2H17V3h-2.2C12.6 3 11 4.6 11 7v1.5H9v3h2V21h3v-9.5h2.5l.5-3H14Z" fill="currentColor"/>
+                  </svg>
+                </a>
+
+                <a class="ico" href={COMPANY.linkedinUrl} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M6.7 6.9a1.9 1.9 0 1 1 0-3.8 1.9 1.9 0 0 1 0 3.8Z" fill="currentColor"/>
+                    <path d="M5.2 20.5V9.2h3v11.3h-3Z" fill="currentColor"/>
+                    <path d="M10.3 20.5V9.2h2.9v1.5c.4-.9 1.6-1.8 3.2-1.8 3 0 3.6 2 3.6 4.6v7h-3v-6.2c0-1.5 0-3-1.8-3s-2.1 1.4-2.1 2.9v6.3h-2.8Z" fill="currentColor"/>
+                  </svg>
+                </a>
+
+                {waHref ? (
+                  <a class="ico" href={waHref} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" title="WhatsApp">
+                    <svg viewBox="0 0 32 32" aria-hidden="true">
+                      <path
+                        fill="currentColor"
+                        d="M19.11 17.62c-.27-.14-1.62-.8-1.87-.9-.25-.09-.44-.14-.62.14-.18.27-.71.9-.87 1.09-.16.18-.32.2-.59.07-.27-.14-1.15-.42-2.2-1.35-.82-.73-1.37-1.64-1.53-1.91-.16-.27-.02-.42.12-.55.12-.12.27-.32.41-.48.14-.16.18-.27.27-.46.09-.18.05-.34-.02-.48-.07-.14-.62-1.5-.85-2.05-.22-.53-.45-.46-.62-.46l-.53-.01c-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.29 0 1.34.98 2.64 1.12 2.82.14.18 1.94 2.96 4.7 4.15.66.28 1.17.45 1.57.57.66.21 1.26.18 1.73.11.53-.08 1.62-.66 1.85-1.3.23-.64.23-1.18.16-1.3-.07-.11-.25-.18-.52-.32zM16.04 4.67c-6.24 0-11.31 5.02-11.31 11.19 0 2 .54 3.96 1.56 5.67L4.5 27.33l5.98-1.57a11.34 11.34 0 0 0 5.56 1.45c6.24 0 11.31-5.02 11.31-11.19S22.28 4.67 16.04 4.67zm0 20.6c-1.85 0-3.66-.49-5.25-1.42l-.38-.22-3.55.93.95-3.43-.25-.36a9.23 9.23 0 0 1-1.49-5.02c0-5.08 4.18-9.21 9.33-9.21 5.15 0 9.33 4.13 9.33 9.21 0 5.08-4.18 9.21-9.33 9.21z"
+                      />
+                    </svg>
+                  </a>
+                ) : null}
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <div class="ftBottom">
+          <div>&copy; {new Date().getFullYear()} {site.name}. All rights reserved.</div>
+
+          <div class="ftCredit">
+            {creditLabel} -
+            <a href="https://brenychstudio.com/" target="_blank" rel="noopener noreferrer">brenychstudio</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <footer class="ftLegacy" hidden>
       <div class="container">
         <div class="grid">
           <div>

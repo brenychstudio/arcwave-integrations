@@ -2,19 +2,27 @@
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 
+const excludedFromSitemap = [
+  "/privacy",
+  "/cookies",
+  "/es/privacy",
+  "/es/cookies",
+  "/preview/home-old",
+  "/preview/home-v2",
+];
+
 export default defineConfig({
-  // IMPORTANT: update to your actual Cloudflare Pages URL after first deploy
   site: "https://arcwave-integrations.pages.dev",
   integrations: [
     react(),
     sitemap({
-      filter: (page) =>
-        ![
-          "/privacy",
-          "/cookies",
-          "/es/privacy",
-          "/es/cookies",
-        ].includes(page),
+      filter: (page) => {
+        const pathname = page.startsWith("http") ? new URL(page).pathname : page;
+        const normalizedPathname =
+          pathname.endsWith("/") && pathname !== "/" ? pathname.slice(0, -1) : pathname;
+
+        return !excludedFromSitemap.includes(normalizedPathname);
+      },
     }),
   ],
 });

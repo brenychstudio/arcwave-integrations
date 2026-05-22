@@ -1,109 +1,219 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import HeroBanner from "../../components/HeroBanner.astro";
-import Section from "../../components/Section.astro";
 import { siteEs } from "../../content/site.es";
+import "../../styles/interface.css";
+
+const principles = [
+  {
+    index: "01 / Claridad",
+    title: "Hacer visible lo invisible.",
+    text: "Topologia, rutas, etiquetas y limitaciones forman parte del servicio, no son detalles secundarios.",
+  },
+  {
+    index: "02 / Disciplina",
+    title: "Lo premium es ejecucion.",
+    text: "Rutas limpias, ubicacion sensata, pruebas y documentacion crean calidad que se nota meses despues.",
+  },
+  {
+    index: "03 / Confianza",
+    title: "Sin promesas infladas.",
+    text: "Las referencias a normativa y cumplimiento se usan solo cuando aplican al alcance y pueden documentarse.",
+  },
+];
+
+const operatingSignals = [
+  "Las rutas de servicio se mapean como sistemas conectados.",
+  "El alcance y las limitaciones se aclaran antes del compromiso.",
+  "La entrega se disena para soporte, ampliaciones y trabajo futuro.",
+  "Los visuales de concepto se mantienen honestos hasta tener fotografia real de proyectos.",
+];
 ---
 
 <BaseLayout
-  title={`Sobre — ${siteEs.name}`}
-  description="Ejecución orientada a ingeniería. Alcance claro. Sin afirmaciones infladas. Documentación cuando aplique."
+  title={`Sobre - ${siteEs.name}`}
+  description="ARCWAVE es un concepto premium de integracion tecnica para infraestructura invisible: telecomunicaciones, redes, electricidad, carga VE, seguridad y audio como un sistema mantenible."
 >
-  <HeroBanner
-    title="Sobre"
-    subtitle="Ejecución orientada a ingeniería. Alcance claro. Sin afirmaciones infladas. Declaraciones de cumplimiento solo cuando estén respaldadas por documentación."
-    image="/hero/hero-home-01.png"
-    variant="compact"
-    primaryCta={{ label: "Servicios", href: "/es/services" }}
-    secondaryCta={{ label: "Contacto", href: "/es/contact#quote" }}
-  />
-
-  <div class="container"><div class="hr"></div></div>
-
-  <Section eyebrow="Principios" title="Lo premium es disciplina">
-    <div class="card box">
-      <div class="row">
-        <div class="p">
-          Nos centramos en instalaciones que se mantienen en el tiempo: topología sensata, etiquetado claro, rutas limpias y una entrega que facilita el soporte y cambios futuros.
+  <div class="interfacePage">
+    <section class="interfaceHero">
+      <div class="interfaceHeroCopy motionIn">
+        <div class="interfaceEyebrow">Sobre ARCWAVE</div>
+        <h1 class="interfaceTitle">Sistemas invisibles, explicados con claridad.</h1>
+        <p class="interfaceLead">
+          ARCWAVE parte de una idea simple: los sistemas que hacen funcionar los
+          espacios modernos deben planificarse, instalarse y explicarse como una
+          capa tecnica conectada.
+        </p>
+        <div class="interfaceActions">
+          <a class="primary" href="/es/services" data-vt="1">Explorar servicios</a>
+          <a class="secondary" href="/es/contact#quote" data-vt="1">Solicitar presupuesto</a>
+        </div>
+        <div class="interfaceFormula" aria-label="Formula de compania">
+          <span>senal</span><i></i><span>sistema</span><i></i><span>claridad</span><i></i><span>confianza</span>
         </div>
       </div>
 
-      <div class="hr" style="margin:14px 0;"></div>
-
-      <div class="row">
-        <div class="p">
-          Las referencias a normas/cumplimiento se incluyen solo cuando aplican al alcance y cuando la documentación correspondiente puede proporcionarse.
+      <div class="interfacePanel aboutHeroPanel motionIn" aria-label="Posicionamiento ARCWAVE">
+        <img src="/macro/macro-pcb-01.png" alt="" loading="eager" decoding="async" />
+        <div class="aboutSignalCard">
+          <span class="interfaceIndex">Posicionamiento</span>
+          <strong>Connected Infrastructure OS</strong>
+          <p>
+            Telecomunicaciones, redes, energia, carga, seguridad y audio como una
+            interfaz premium de servicio tecnico.
+          </p>
         </div>
       </div>
+    </section>
 
-      <div class="hr" style="margin:14px 0;"></div>
-
-      <div class="row">
-        <div class="p">
-          Los visuales del sitio son de concepto hasta disponer de fotografía real de proyectos. No mostramos “casos ficticios”.
+    <section class="interfaceSection">
+      <div class="interfaceSectionHead">
+        <div>
+          <div class="interfaceEyebrow">Principio operativo</div>
+          <p>
+            ARCWAVE no se presenta como un instalador generico. La marca se plantea
+            como partner tecnico que convierte infraestructura oculta en un sistema claro.
+          </p>
         </div>
+        <h2>Claridad tecnica antes que ruido visual.</h2>
       </div>
-    </div>
-  </Section>
 
-  <Section eyebrow="Enfoque" title="Cómo trabajamos">
-    <div class="grid3">
-      <div class="card box">
-        <div class="k">Orden</div>
-        <div class="p">Rutas limpias, fijación cuidada, cableado y paneles organizados.</div>
+      <div class="detailPathGrid">
+        {principles.map((item) => (
+          <article class="interfaceCard detailTile">
+            <span class="interfaceIndex">{item.index}</span>
+            <div>
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+            </div>
+          </article>
+        ))}
       </div>
-      <div class="card box">
-        <div class="k">Etiquetado</div>
-        <div class="p">Etiquetas y mapeo práctico para que el soporte sea directo.</div>
-      </div>
-      <div class="card box">
-        <div class="k">Entrega</div>
-        <div class="p">Notas “as-built” y recomendaciones para operación y futuras mejoras.</div>
-      </div>
-    </div>
-  </Section>
+    </section>
 
-  <Section eyebrow="Área" title="Zona de servicio" note="Coordinamos visitas y ventanas de instalación según acceso y normas del edificio.">
-    <div class="card box">
-      <div class="k">Servicio</div>
-      <div class="v">{siteEs.contact.serviceArea}</div>
-
-      <div class="hr" style="margin:14px 0;"></div>
-
-      <div class="p">
-        Para una respuesta más rápida, incluye en tu brief: horario de acceso, ubicación de cuadro/rack, distancias aproximadas y cualquier restricción del edificio.
+    <section class="interfaceSection">
+      <div class="interfaceSectionHead">
+        <div>
+          <div class="interfaceEyebrow">Prueba por claridad</div>
+          <p>
+            La confianza no necesita casos ficticios. Puede venir de estructura:
+            rutas de servicio, flujo de presupuesto, bilingue y alcance honesto.
+          </p>
+        </div>
+        <h2>La prueba comercial esta en como se explica el sistema.</h2>
       </div>
-    </div>
-  </Section>
+
+      <div class="deliverableGrid">
+        <ul class="deliverableList">
+          {operatingSignals.map((item) => <li>{item}</li>)}
+        </ul>
+
+        <aside class="interfaceCard factsPanel">
+          <span class="interfaceIndex">Contexto de servicio</span>
+          <dl>
+            <div>
+              <dt>Area</dt>
+              <dd>{siteEs.contact.serviceArea}</dd>
+            </div>
+            <div>
+              <dt>Nucleo</dt>
+              <dd>Telecom, redes, energia, seguridad, audio</dd>
+            </div>
+            <div>
+              <dt>Metodo</dt>
+              <dd>Senal -> sistema -> ruta de servicio -> presupuesto</dd>
+            </div>
+            <div>
+              <dt>Salida</dt>
+              <dd>Solicitud tecnica clara y entrega mantenible</dd>
+            </div>
+          </dl>
+        </aside>
+      </div>
+    </section>
+
+    <section class="interfaceSection">
+      <div class="interfaceMetrics">
+        <article class="interfaceMetric">
+          <span class="interfaceIndex">01 / Alcance</span>
+          <strong>Definir lo que puede saberse.</strong>
+          <p>Acceso, rutas, materiales, cuadros, racks y limitaciones entran pronto en la conversacion.</p>
+        </article>
+        <article class="interfaceMetric">
+          <span class="interfaceIndex">02 / Instalacion</span>
+          <strong>Construir para quien dara soporte despues.</strong>
+          <p>Topologia legible, etiquetas y notas convierten el trabajo en un sistema mantenible.</p>
+        </article>
+        <article class="interfaceMetric">
+          <span class="interfaceIndex">03 / Evolucion</span>
+          <strong>Dejar espacio para la siguiente capa.</strong>
+          <p>Las decisiones de energia, datos, seguridad y control deben facilitar futuras mejoras.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="interfaceSection">
+      <div class="interfacePanel interfaceCta">
+        <div>
+          <div class="interfaceEyebrow">Solicitud tecnica</div>
+          <h2>Empieza por el sistema que necesita tu espacio.</h2>
+          <p>
+            Selecciona una ruta de servicio, describe las limitaciones y convierte
+            la necesidad en un brief tecnico listo para presupuesto.
+          </p>
+        </div>
+        <a class="primary" href="/es/contact#quote" data-vt="1">Solicitar presupuesto</a>
+      </div>
+    </section>
+  </div>
 
   <style>
-    .box{ padding: 18px; border-radius: var(--radius); }
-    .k{
-      font-size: 12px;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      color: var(--muted2);
-      font-weight: 520;
+    .aboutHeroPanel{
+      min-height: 680px;
+      display:flex;
+      align-items:flex-end;
+      padding: clamp(22px, 2.8vw, 44px);
     }
-    .v{
-      margin-top: 6px;
-      font-weight: 650;
-      letter-spacing: .005em;
+
+    .aboutHeroPanel img{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      opacity:.42;
+      filter: grayscale(.08) contrast(1.03);
     }
-    .p{
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.65;
-      font-weight: 420;
+
+    .aboutSignalCard{
+      position:relative;
+      z-index:2;
+      max-width: 520px;
+      padding: clamp(22px, 2.6vw, 40px);
+      border-radius: 28px;
+      border: 1px solid rgba(10,132,255,.12);
+      background: rgba(255,255,255,.68);
+      box-shadow: 0 24px 74px rgba(10,10,20,.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
     }
-    .grid3{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      align-items: stretch;
+
+    .aboutSignalCard strong{
+      display:block;
+      margin-top: 12px;
+      max-width: 9em;
+      font-size: clamp(38px, 4vw, 68px);
+      line-height:.92;
+      letter-spacing:-.06em;
     }
-    @media (max-width: 980px){
-      .grid3{ grid-template-columns: 1fr; }
+
+    .aboutSignalCard p{
+      margin-top: 18px;
+      color: rgba(15,15,20,.62);
+      line-height:1.62;
+    }
+
+    @media (max-width: 1180px){
+      .aboutHeroPanel{ min-height: 520px; }
     }
   </style>
 </BaseLayout>

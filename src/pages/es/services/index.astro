@@ -1,27 +1,401 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import HeroBanner from "../../../components/HeroBanner.astro";
-import Section from "../../../components/Section.astro";
-import ServicesGrid from "../../../components/ServicesGrid.astro";
 import { servicesEs } from "../../../content/services.es";
+import "../../../styles/interface.css";
 
-const title = "Servicios";
-const description = "Seis líneas principales. Alcance claro, instalación limpia y entrega documentada.";
+const title = "Servicios - Connected Infrastructure OS";
+const description =
+  "Telecomunicaciones, redes, electricidad, carga VE, seguridad y audio como una capa tecnica conectada.";
+
+const serviceMeta = {
+  telecom: ["Entrada operador", "Lineas", "Rack"],
+  networks: ["Cobertura Wi-Fi", "AP", "Topologia"],
+  electricity: ["Energia", "Control", "Domotica"],
+  ev: ["Punto de carga", "Protecciones", "Ruta segura"],
+  alarms: ["Perimetro", "CCTV", "Monitorizacion"],
+  audio: ["Campo sonoro", "Zonas", "Cine en casa"],
+};
 ---
 
 <BaseLayout title={title} description={description}>
-  <HeroBanner
-    title={title}
-    subtitle={description}
-    image="/hero/hero-home-01.png"
-    variant="compact"
-    primaryCta={{ label: "Solicitar presupuesto", href: "/es/contact#quote" }}
-    secondaryCta={{ label: "Proceso", href: "/es/process" }}
-  />
+  <div class="interfacePage servicesPage">
+    <section class="interfaceHero">
+      <div class="interfaceHeroCopy motionIn">
+        <div class="interfaceEyebrow">Rutas de servicio conectadas</div>
+        <h1 class="interfaceTitle">Un sistema. Seis rutas tecnicas.</h1>
+        <p class="interfaceLead">
+          ARCWAVE convierte telecomunicaciones, Wi-Fi, electricidad, domotica,
+          carga VE, seguridad y audio en una capa de infraestructura clara y mantenible.
+        </p>
+        <div class="interfaceActions">
+          <a class="primary" href="/es/contact#quote" data-vt="1">Solicitar presupuesto</a>
+          <a class="secondary" href="/es/process" data-vt="1">Ver proceso</a>
+        </div>
+        <div class="interfaceFormula" aria-label="Logica de servicio">
+          <span>necesidad</span><i></i><span>sistema</span><i></i><span>ruta</span><i></i><span>presupuesto</span>
+        </div>
+      </div>
 
-  <div class="container"><div class="hr"></div></div>
+      <div class="interfacePanel catalogHero motionIn" aria-label="Catalogo de infraestructura">
+        <div class="catalogCore">
+          <span>ARCWAVE</span>
+          <strong>Infrastructure OS</strong>
+        </div>
+        {servicesEs.map((service, index) => (
+          <a class={`catalogNode cn${index + 1}`} href={`/es/services/${service.key}`} data-vt="1">
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <strong>{service.title}</strong>
+          </a>
+        ))}
+      </div>
+    </section>
 
-  <Section title="Todos los servicios">
-    <ServicesGrid services={servicesEs} showQuote={true} />
-  </Section>
+    <section class="interfaceSection" id="service-paths">
+      <div class="interfaceSectionHead">
+        <div>
+          <div class="interfaceEyebrow">Topologia de servicios</div>
+          <p>
+            Cada ruta aclara la necesidad, muestra las dependencias tecnicas y
+            acerca la solicitud a un brief listo para responder.
+          </p>
+        </div>
+        <h2>Infraestructura facil de navegar.</h2>
+      </div>
+
+      <div class="interfaceTopology">
+        <div class="servicePathGrid">
+          {servicesEs.map((service, index) => (
+            <a class="interfaceCard servicePathCard" href={`/es/services/${service.key}`} data-vt="1">
+              <div>
+                <span class="interfaceIndex">{String(index + 1).padStart(2, "0")} / Ruta</span>
+                <h3>{service.title}</h3>
+                <p>{service.short}</p>
+              </div>
+              <div class="servicePathBody">
+                <div class="servicePathMeta">
+                  {serviceMeta[service.key].map((item) => <span>{item}</span>)}
+                </div>
+                <p>{service.description}</p>
+                <span class="servicePathCta">Ver ruta de servicio <span aria-hidden="true">→</span></span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="interfaceSection">
+      <div class="interfaceSectionHead">
+        <div>
+          <div class="interfaceEyebrow">Claridad comercial</div>
+          <p>
+            El sitio deja de presentar tareas aisladas y empieza a explicar cada
+            servicio como un sistema con entradas, dependencias y entrega.
+          </p>
+        </div>
+        <h2>De lista de servicios a interfaz de decision.</h2>
+      </div>
+
+      <div class="interfaceMetrics">
+        <article class="interfaceMetric">
+          <span class="interfaceIndex">01 / Senal</span>
+          <strong>Partir de la necesidad real.</strong>
+          <p>Cobertura, energia, seguridad o sonido se convierten en una senal tecnica.</p>
+        </article>
+        <article class="interfaceMetric">
+          <span class="interfaceIndex">02 / Sistema</span>
+          <strong>Mostrar la capa conectada.</strong>
+          <p>Red, energia, seguridad y control aparecen como dependencias visibles.</p>
+        </article>
+        <article class="interfaceMetric">
+          <span class="interfaceIndex">03 / Presupuesto</span>
+          <strong>Llegar a un brief claro.</strong>
+          <p>La ruta termina en alcance, limitaciones y una solicitud que ARCWAVE puede responder.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="servicesFinalCta" aria-label="Iniciar solicitud tecnica">
+      <div>
+        <span>Ruta de presupuesto</span>
+        <h2>Mapea la ruta del sistema antes del presupuesto.</h2>
+      </div>
+      <p>
+        Elige la capa de servicio, describe el espacio y sus limitaciones, y
+        convierte una necesidad abierta en una solicitud tecnica clara.
+      </p>
+      <a class="primary" href="/es/contact#quote" data-vt="1">Iniciar solicitud tecnica</a>
+    </section>
+  </div>
+
+  <style>
+    :global([data-page-nav]){
+      display:none !important;
+    }
+
+    .servicesPage{
+      --interface-container: min(100% - clamp(28px, 5vw, 92px), 1680px);
+    }
+
+    .servicesPage .interfaceHero{
+      min-height: calc(100svh - 188px);
+      padding: clamp(38px, 5.8vw, 88px) 0 clamp(32px, 4.8vw, 72px);
+      gap: clamp(28px, 4.8vw, 82px);
+    }
+
+    .servicesPage .interfaceTitle{
+      font-size: clamp(52px, 7.4vw, 116px);
+    }
+
+    .servicesPage .interfaceSection{
+      padding: clamp(52px, 6vw, 104px) 0;
+    }
+
+    .servicesPage .interfaceHero + .interfaceSection{
+      padding-top: clamp(34px, 4.8vw, 72px);
+    }
+
+    .servicesPage .interfaceSectionHead{
+      margin-bottom: clamp(22px, 3vw, 42px);
+    }
+
+    .servicesPage .interfaceSectionHead h2{
+      font-size: clamp(42px, 5.8vw, 88px);
+    }
+
+    .catalogHero{ min-height: clamp(500px, 52vw, 620px); }
+    .catalogCore{
+      position:absolute;
+      left:50%;
+      top:49%;
+      z-index:3;
+      width: 176px;
+      height: 176px;
+      border-radius:999px;
+      transform: translate(-50%, -50%);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      border: 1px solid rgba(10,132,255,.22);
+      background: rgba(255,255,255,.74);
+      box-shadow: 0 24px 74px rgba(10,10,20,.10);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .catalogCore span,
+    .catalogNode span{
+      color: var(--muted2);
+      font-size: 11px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      font-weight:760;
+    }
+    .catalogCore strong{
+      margin-top: 6px;
+      max-width: 9em;
+      text-align:center;
+      line-height:1;
+      font-size: 22px;
+      letter-spacing:-.035em;
+    }
+    .catalogNode{
+      position:absolute;
+      z-index:4;
+      width: clamp(174px, 14vw, 218px);
+      min-width: 0;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(15,15,20,.075);
+      background: rgba(255,255,255,.72);
+      box-shadow: 0 18px 52px rgba(10,10,20,.08);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .catalogNode:hover{
+      transform: translateY(-2px);
+      border-color: rgba(10,132,255,.25);
+      background: rgba(255,255,255,.88);
+    }
+    .catalogNode strong{
+      display:block;
+      margin-top: 10px;
+      font-size: 18px;
+      line-height: 1.14;
+      letter-spacing:-.02em;
+    }
+    .cn1{ left: 9%; top: 17%; }
+    .cn2{ right: 8%; top: 18%; }
+    .cn3{ left: 7%; bottom: 22%; }
+    .cn4{ right: 7%; bottom: 21%; }
+    .cn5{ left: 50%; top: 8%; transform: translateX(-50%); }
+    .cn5:hover{ transform: translateX(-50%) translateY(-2px); }
+    .cn6{ left: 50%; bottom: 15%; transform: translateX(-50%); }
+    .cn6:hover{ transform: translateX(-50%) translateY(-2px); }
+    @media (max-width: 1180px){ .catalogHero{ min-height: 560px; } }
+
+    .servicesPage .interfaceTopology{
+      border-radius: 30px;
+    }
+
+    .servicesPage .servicePathGrid{
+      gap: clamp(12px, 1.2vw, 18px);
+      padding: clamp(14px, 1.8vw, 26px);
+    }
+
+    .servicesPage .servicePathCard{
+      min-height: clamp(300px, 24vw, 420px);
+      padding: clamp(20px, 2vw, 30px);
+    }
+
+    .servicesPage .servicePathCard p{
+      color: rgba(15,15,20,.68);
+    }
+
+    .servicesPage .servicePathBody > p{
+      display:-webkit-box;
+      -webkit-line-clamp: 5;
+      -webkit-box-orient: vertical;
+      overflow:hidden;
+    }
+
+    .servicesPage .servicePathCard > div:first-child p{
+      color: rgba(15,15,20,.58);
+    }
+
+    .servicePathBody{
+      display:grid;
+      gap: 14px;
+      align-content:end;
+    }
+
+    .servicesPage .servicePathMeta{
+      margin-top: 0;
+    }
+
+    .servicePathCta{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      width: fit-content;
+      margin-top: 2px;
+      color: rgba(10,132,255,.84);
+      font-size: 12px;
+      font-weight: 780;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+
+    .servicePathCta span{
+      transition: transform .18s ease;
+    }
+
+    .servicePathCard:hover .servicePathCta span{
+      transform: translateX(3px);
+    }
+
+    .servicesFinalCta{
+      width: var(--interface-container);
+      margin: clamp(8px, 1.5vw, 22px) auto 0;
+      display:grid;
+      grid-template-columns: minmax(0, .96fr) minmax(280px, .68fr) auto;
+      gap: clamp(20px, 3vw, 56px);
+      align-items:end;
+      padding: clamp(24px, 3.2vw, 48px);
+      border-radius: 30px;
+      border: 1px solid rgba(15,15,20,.075);
+      background:
+        linear-gradient(rgba(10,132,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(10,132,255,.035) 1px, transparent 1px),
+        radial-gradient(820px 360px at 82% 18%, rgba(10,132,255,.14), transparent 66%),
+        rgba(255,255,255,.66);
+      background-size: 52px 52px, 52px 52px, auto, auto;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.84),
+        0 30px 86px rgba(10,10,20,.07);
+    }
+
+    .servicesFinalCta span{
+      color: rgba(10,132,255,.76);
+      font-size: 11px;
+      font-weight: 780;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+    }
+
+    .servicesFinalCta h2{
+      max-width: 9.4em;
+      margin: 10px 0 0;
+      font-size: clamp(36px, 4.4vw, 76px);
+      line-height:.92;
+      letter-spacing:-.056em;
+    }
+
+    .servicesFinalCta p{
+      margin:0;
+      max-width: 48ch;
+      color: rgba(15,15,20,.64);
+      line-height:1.66;
+    }
+
+    .servicesFinalCta .primary{
+      white-space:nowrap;
+      background: rgba(255,255,255,.66);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    @media (max-width: 760px){
+      .servicesPage .interfaceHero{
+        padding-top: 24px;
+        padding-bottom: 36px;
+      }
+
+      .servicesPage .interfaceSection{
+        padding: 46px 0;
+      }
+
+      .servicesPage .interfaceSectionHead{
+        margin-bottom: 22px;
+      }
+
+      .catalogHero{ min-height:auto; display:grid; gap: 12px; padding: 14px; }
+      .catalogCore{
+        position:relative;
+        left:auto;
+        top:auto;
+        transform:none;
+        width:100%;
+        height:auto;
+        min-height: 120px;
+        border-radius: 22px;
+      }
+      .catalogNode,
+      .cn1,.cn2,.cn3,.cn4,.cn5,.cn6,
+      .cn5:hover,.cn6:hover{
+        position:relative;
+        left:auto;
+        right:auto;
+        top:auto;
+        bottom:auto;
+        min-width:0;
+        transform:none;
+      }
+
+      .servicesPage .servicePathCard{
+        min-height: 280px;
+      }
+
+      .servicesFinalCta{
+        grid-template-columns: 1fr;
+        align-items:start;
+        border-radius: 24px;
+      }
+
+      .servicesFinalCta .primary{
+        width:100%;
+      }
+    }
+  </style>
 </BaseLayout>

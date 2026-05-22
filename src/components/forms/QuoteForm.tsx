@@ -301,12 +301,12 @@ export default function QuoteForm({
         </div>
 
         {!isConfiguredEndpoint(endpoint) ? (
-          <div className="muted">Endpoint isn’t configured — submit will create a draft instead (copy or open email).</div>
+          <div className="muted">Concept demo: your request opens as a prepared email draft.</div>
         ) : null}
 
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
           <button className="btn primary" type="submit" disabled={status.kind === "sending"}>
-            {isConfiguredEndpoint(endpoint) ? "Send request" : "Create draft"}
+            {isConfiguredEndpoint(endpoint) ? "Send technical brief" : "Prepare technical brief"}
           </button>
 
           {status.kind === "sent" ? <div className="ok">Sent.</div> : null}
@@ -346,7 +346,16 @@ export default function QuoteForm({
           gap: 12px;
         }
         .field.full{ grid-column: 1 / -1; }
-        .muted{ font-size: 12px; color: var(--muted); }
+        .muted{
+          width:fit-content;
+          padding: 9px 11px;
+          border-radius: 14px;
+          border: 1px solid rgba(15,15,20,.07);
+          background: rgba(255,255,255,.70);
+          font-size: 12px;
+          color: rgba(15,15,20,.60);
+          line-height:1.35;
+        }
         .ok{ font-size: 13px; color: var(--text); }
         .err{ font-size: 13px; color: #b00020; }
         @media (max-width: 780px){

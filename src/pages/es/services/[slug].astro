@@ -1,11 +1,9 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
-import HeroBanner from "../../../components/HeroBanner.astro";
-import Section from "../../../components/Section.astro";
-
 import { siteEs } from "../../../content/site.es";
 import { servicesEs } from "../../../content/services.es";
 import type { Service } from "../../../content/services";
+import "../../../styles/interface.css";
 
 export async function getStaticPaths() {
   return servicesEs.map((s) => ({
@@ -17,156 +15,169 @@ export async function getStaticPaths() {
 const service = (Astro.props as { service?: Service }).service;
 if (!service) return Astro.redirect("/es/services");
 
+const serviceIndex = servicesEs.findIndex((item) => item.key === service.key);
+const serviceNumber = String(serviceIndex + 1).padStart(2, "0");
+const relatedServices = servicesEs.filter((item) => item.key !== service.key).slice(0, 3);
 const quoteHref = `/es/contact?service=${service.key}#quote`;
 const desc = service.description || service.short;
+
+const servicePath = [
+  { index: "01 / Senal", title: "La necesidad se vuelve visible.", text: service.short },
+  {
+    index: "02 / Sistema",
+    title: "Las dependencias se mapean.",
+    text: "Rutas, acceso, energia, red y limitaciones de soporte se aclaran antes de instalar.",
+  },
+  {
+    index: "03 / Entrega",
+    title: "El resultado queda mantenible.",
+    text: "Etiquetas, notas practicas y recomendaciones dejan el sistema legible despues del trabajo.",
+  },
+];
 ---
 
-<BaseLayout title={`${service.title} — ${siteEs.name}`} description={desc}>
-  <HeroBanner
-    title={service.title}
-    subtitle={service.short}
-    image={service.heroImage}
-    primaryCta={{ label: "Solicitar presupuesto", href: quoteHref }}
-    secondaryCta={{ label: "Todos los servicios", href: "/es/services" }}
-  />
-
-  <div class="container"><div class="hr"></div></div>
-
-  <Section eyebrow="Resumen" title="Qué incluye" note="Confirmamos alcance y limitaciones tras revisar tu brief.">
-    <div class="cols">
-      <div class="card box">
-        <div class="prose">
-          <p>{desc}</p>
+<BaseLayout title={`${service.title} - ${siteEs.name}`} description={desc}>
+  <div class="interfacePage">
+    <section class="interfaceHero">
+      <div class="interfaceHeroCopy motionIn">
+        <div class="interfaceEyebrow">{serviceNumber} / Ruta de servicio</div>
+        <h1 class="interfaceTitle">{service.title}</h1>
+        <p class="interfaceLead">{desc}</p>
+        <div class="interfaceActions">
+          <a class="primary" href={quoteHref} data-vt="1">Solicitar presupuesto</a>
+          <a class="secondary" href="/es/services" data-vt="1">Todos los servicios</a>
         </div>
-
-        {service.bullets?.length ? (
-          <>
-            <div class="hr" style="margin:14px 0;"></div>
-            <div class="k">Entregables habituales</div>
-            <ul class="list">
-              {service.bullets.map((b) => (
-                <li class="li">{b}</li>
-              ))}
-            </ul>
-          </>
-        ) : null}
+        <div class="interfaceFormula" aria-label="Ruta de servicio">
+          <span>senal</span><i></i><span>sistema</span><i></i><span>entrega</span><i></i><span>presupuesto</span>
+        </div>
       </div>
 
-      <div class="card box side">
-        <div class="k">Datos rápidos</div>
-        <div class="facts">
-          <div class="fact">
-            <div class="kk">Respuesta</div>
-            <div class="vv">1–2 días laborables</div>
+      <div class="interfacePanel detailHeroPanel motionIn">
+        <img src={service.heroImage} alt="" loading="eager" decoding="async" />
+        <div class="interfacePanelContent">
+          <div>
+            <span class="interfaceIndex">Capa activa</span>
+            <h2>{service.title}</h2>
+            <p>{service.short}</p>
           </div>
-          <div class="fact">
-            <div class="kk">Área de servicio</div>
-            <div class="vv">{siteEs.contact.serviceArea}</div>
-          </div>
-          <div class="fact">
-            <div class="kk">Siguiente paso</div>
-            <div class="vv"><a href={quoteHref}>Solicitar presupuesto</a></div>
-          </div>
+          <div class="detailChip">Barcelona</div>
         </div>
-
-        <div class="hr" style="margin:14px 0;"></div>
-
-        <a class="cta" href={quoteHref}>Solicitar presupuesto →</a>
-        <div class="muted">Preselecciona: {service.title}</div>
       </div>
-    </div>
-  </Section>
+    </section>
 
-  {service.faqs?.length ? (
-    <Section eyebrow="FAQ" title="Preguntas frecuentes">
-      <div class="faq">
-        {service.faqs.map((x) => (
-          <details class="qa">
-            <summary class="q">{x.q}</summary>
-            <div class="a">{x.a}</div>
-          </details>
+    <section class="interfaceSection">
+      <div class="interfaceSectionHead">
+        <div>
+          <div class="interfaceEyebrow">Ruta tecnica</div>
+          <p>
+            Esta pagina presenta {service.title} como una ruta instalable: necesidad,
+            sistema, limitaciones y entrega clara.
+          </p>
+        </div>
+        <h2>De solicitud a sistema mantenible.</h2>
+      </div>
+
+      <div class="detailPathGrid">
+        {servicePath.map((item) => (
+          <article class="interfaceCard detailTile">
+            <span class="interfaceIndex">{item.index}</span>
+            <div>
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+            </div>
+          </article>
         ))}
       </div>
-    </Section>
-  ) : null}
+    </section>
 
-  <Section eyebrow="Siguiente" title="Empezamos con un brief corto" note="Elige servicio, indica limitaciones y te contactamos con preguntas.">
-    <div class="card box ctaBox">
-      <div>
-        <div class="k">Siguiente paso</div>
-        <div class="p">Abrir el formulario con <b>{service.title}</b> preseleccionado.</div>
+    <section class="interfaceSection">
+      <div class="interfaceSectionHead">
+        <div>
+          <div class="interfaceEyebrow">Alcance claro</div>
+          <p>
+            Los entregables se confirman con el sitio real: acceso, rutas,
+            materiales, limitaciones y nivel de soporte esperado.
+          </p>
+        </div>
+        <h2>Que puede incluir este servicio.</h2>
       </div>
-      <a class="cta big" href={quoteHref}>Solicitar presupuesto →</a>
-    </div>
-  </Section>
 
-  <style>
-    .box{ padding: 16px; border-radius: var(--radius); }
-    .cols{ display:grid; grid-template-columns: 1.2fr .8fr; gap: 14px; align-items:start; }
-    .side .facts{ display:grid; gap: 10px; margin-top: 10px; }
-    .fact{ display:grid; gap: 2px; }
+      <div class="deliverableGrid">
+        <ul class="deliverableList">
+          {service.bullets.map((item) => <li>{item}</li>)}
+        </ul>
 
-    .kk,
-    .k{
-      font-size: 12px;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      color: var(--muted2);
-      font-weight: 520;
-    }
+        <aside class="interfaceCard factsPanel">
+          <span class="interfaceIndex">Contexto de presupuesto</span>
+          <dl>
+            <div><dt>Respuesta</dt><dd>1-2 dias laborables</dd></div>
+            <div><dt>Area</dt><dd>{siteEs.contact.serviceArea}</dd></div>
+            <div><dt>Siguiente</dt><dd><a href={quoteHref}>Solicitar presupuesto</a></dd></div>
+            <div><dt>Preseleccion</dt><dd>{service.title}</dd></div>
+          </dl>
+        </aside>
+      </div>
+    </section>
 
-    .vv{
-      font-weight: var(--w-ui, 600);
-      letter-spacing: .005em;
-      line-height: 1.35;
-    }
+    {service.faqs?.length ? (
+      <section class="interfaceSection">
+        <div class="interfaceSectionHead">
+          <div>
+            <div class="interfaceEyebrow">Soporte de decision</div>
+            <p>Respuestas breves para reducir friccion antes de solicitar presupuesto.</p>
+          </div>
+          <h2>Preguntas frecuentes.</h2>
+        </div>
 
-    .p{
-      margin-top: 6px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.55;
-      font-weight: 420;
-    }
+        <div class="faqGrid">
+          {service.faqs.map((item) => (
+            <details class="interfaceCard interfaceFaq">
+              <summary>{item.q}</summary>
+              <div>{item.a}</div>
+            </details>
+          ))}
+        </div>
+      </section>
+    ) : null}
 
-    .muted{ margin-top: 6px; color: var(--muted); font-size: 12px; }
+    <section class="interfaceSection">
+      <div class="interfaceSectionHead">
+        <div>
+          <div class="interfaceEyebrow">Rutas relacionadas</div>
+          <p>Muchas instalaciones conectan mas de una capa tecnica.</p>
+        </div>
+        <h2>Capas de infraestructura cercanas.</h2>
+      </div>
 
-    .prose p{
-      margin:0;
-      color: var(--text);
-      line-height: 1.6;
-      font-weight: 420;
-    }
+      <div class="servicePathGrid interfaceTopology">
+        {relatedServices.map((item, index) => (
+          <a class="interfaceCard servicePathCard" href={`/es/services/${item.key}`} data-vt="1">
+            <div>
+              <span class="interfaceIndex">{String(index + 1).padStart(2, "0")} / Relacionada</span>
+              <h3>{item.title}</h3>
+              <p>{item.short}</p>
+            </div>
+            <div class="servicePathMeta">
+              <span>Capa tecnica</span>
+              <span>Ruta de presupuesto</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
 
-    .list{ list-style:none; padding:0; margin:10px 0 0; display:grid; gap: 10px; }
-    .li{ position:relative; padding-left: 14px; color: var(--text); line-height: 1.5; }
-    .li:before{ content:""; position:absolute; left:0; top:.62em; width:4px; height:4px; border-radius:999px; background: rgba(10,132,255,.45); }
-
-    .faq{ display:grid; gap: 10px; }
-    .qa{ border:1px solid var(--border2); border-radius: 14px; padding: 10px 12px; background: rgba(255,255,255,.55); }
-    .q{ cursor:pointer; font-weight: 650; letter-spacing: -.005em; }
-    .a{ margin-top: 8px; color: var(--muted); line-height: 1.55; font-weight: 420; }
-
-    .ctaBox{ display:flex; align-items:center; justify-content:space-between; gap: 14px; }
-    .cta{
-      display:inline-flex; align-items:center; justify-content:center;
-      padding: 10px 14px; border-radius: 999px;
-      border: 1px solid rgba(10,132,255,.35);
-      background: rgba(10,132,255,.10);
-      font-weight: var(--w-ui, 600);
-      letter-spacing: .008em;
-      text-decoration:none; color: var(--text);
-      box-shadow: 0 10px 24px rgba(10,10,20,.06);
-      white-space: nowrap;
-      transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
-    }
-    .cta:hover{ transform: translateY(-1px); box-shadow: 0 14px 30px rgba(10,10,20,.08); background: rgba(10,132,255,.12); }
-    .cta.big{ padding: 12px 16px; }
-
-    @media (max-width: 980px){
-      .cols{ grid-template-columns: 1fr; }
-      .ctaBox{ flex-direction: column; align-items: stretch; }
-      .cta{ width: 100%; }
-    }
-  </style>
+    <section class="interfaceSection">
+      <div class="interfacePanel interfaceCta">
+        <div>
+          <div class="interfaceEyebrow">Solicitud tecnica</div>
+          <h2>Solicita presupuesto para {service.title}.</h2>
+          <p>
+            Abre el formulario con este servicio seleccionado y anade las limitaciones
+            importantes del sitio: acceso, rutas, cableado existente, plazo y resultado esperado.
+          </p>
+        </div>
+        <a class="primary" href={quoteHref} data-vt="1">Solicitar presupuesto</a>
+      </div>
+    </section>
+  </div>
 </BaseLayout>

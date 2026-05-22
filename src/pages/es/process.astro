@@ -1,106 +1,195 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import HeroBanner from "../../components/HeroBanner.astro";
-import Section from "../../components/Section.astro";
-import ProcessTimeline from "../../components/ProcessTimeline.astro";
 import { siteEs } from "../../content/site.es";
+import "../../styles/interface.css";
+
+const process = [
+  {
+    index: "01",
+    title: "Senal",
+    text: "La solicitud empieza como una necesidad: cobertura, energia, carga, seguridad, control o audio.",
+    details: ["Categoria", "Tipo de espacio", "Problema principal"],
+  },
+  {
+    index: "02",
+    title: "Sistema",
+    text: "ARCWAVE mapea el servicio como parte de una capa tecnica conectada.",
+    details: ["Dependencias", "Rutas", "Limitaciones"],
+  },
+  {
+    index: "03",
+    title: "Ruta",
+    text: "Alcance, materiales, acceso y recorrido quedan claros antes de presupuestar.",
+    details: ["Ruta de instalacion", "Equipos", "Plazo"],
+  },
+  {
+    index: "04",
+    title: "Prueba",
+    text: "La claridad tecnica sustituye las promesas genericas: etiquetas, notas y contexto.",
+    details: ["Pruebas", "Etiquetas", "Entrega"],
+  },
+  {
+    index: "05",
+    title: "Presupuesto",
+    text: "La respuesta se basa en el espacio, las limitaciones y el resultado esperado.",
+    details: ["Alcance", "Siguientes pasos", "Respuesta"],
+  },
+];
 ---
 
 <BaseLayout
-  title={`Proceso — ${siteEs.name}`}
-  description="Un flujo claro: visita, propuesta, instalación, soporte. Alcance y limitaciones definidos desde el inicio."
+  title={`Proceso - ${siteEs.name}`}
+  description="Senal, sistema, ruta de servicio, prueba y presupuesto para instalaciones tecnicas mantenibles."
 >
-  <HeroBanner
-    title="Proceso"
-    subtitle="Un flujo claro: visita, propuesta, instalación, soporte. Definimos alcance y limitaciones desde el inicio para evitar sorpresas."
-    image="/hero/hero-home-01.png"
-    variant="compact"
-    primaryCta={{ label: "Solicitar presupuesto", href: "/es/contact#quote" }}
-    secondaryCta={{ label: "Servicios", href: "/es/services" }}
-  />
-
-  <div class="container"><div class="hr"></div></div>
-
-  <Section eyebrow="Flujo" title="De brief a entrega" note="Diseñado para un resultado limpio y mantenible.">
-    <ProcessTimeline steps={siteEs.processSteps} />
-  </Section>
-
-  <Section eyebrow="Entrega" title="Qué entregamos" note="Lo esencial para operar y mantener el sistema.">
-    <div class="grid3">
-      <div class="card box">
-        <div class="k">Etiquetas</div>
-        <div class="p">Etiquetado claro y rutas ordenadas para un soporte eficiente.</div>
+  <div class="interfacePage">
+    <section class="interfaceHero">
+      <div class="interfaceHeroCopy motionIn">
+        <div class="interfaceEyebrow">Ruta de instalacion</div>
+        <h1 class="interfaceTitle">De necesidad suelta a sistema instalado.</h1>
+        <p class="interfaceLead">
+          El proceso ARCWAVE convierte una solicitud tecnica poco definida en una
+          ruta clara: dependencias, limitaciones, instalacion limpia y entrega mantenible.
+        </p>
+        <div class="interfaceActions">
+          <a class="primary" href="/es/contact#quote" data-vt="1">Solicitar presupuesto</a>
+          <a class="secondary" href="/es/services" data-vt="1">Explorar servicios</a>
+        </div>
+        <div class="interfaceFormula" aria-label="Formula de proceso">
+          <span>senal</span><i></i><span>sistema</span><i></i><span>ruta</span><i></i><span>prueba</span><i></i><span>presupuesto</span>
+        </div>
       </div>
-      <div class="card box">
-        <div class="k">Notas as-built</div>
-        <div class="p">Qué se instaló, dónde y cómo quedó configurado (según alcance).</div>
-      </div>
-      <div class="card box">
-        <div class="k">Recomendaciones</div>
-        <div class="p">Sugerencias prácticas para uso diario y futuras ampliaciones.</div>
-      </div>
-    </div>
-  </Section>
 
-  <Section eyebrow="Inicio" title="Empezamos con un brief corto">
-    <div class="card box ctaBox">
-      <div>
-        <div class="k">Siguiente paso</div>
-        <div class="p">Cuéntanos qué necesitas y cualquier limitación de acceso/horarios.</div>
+      <div class="interfacePanel processHeroPanel motionIn" aria-label="Sistema de proceso">
+        {process.map((item) => (
+          <div class="processNode">
+            <span>{item.index}</span>
+            <strong>{item.title}</strong>
+          </div>
+        ))}
       </div>
-      <a class="cta" href="/es/contact#quote">Solicitar presupuesto →</a>
-    </div>
-  </Section>
+    </section>
+
+    <section class="interfaceSection">
+      <div class="interfaceSectionHead">
+        <div>
+          <div class="interfaceEyebrow">Journey de servicio</div>
+          <p>
+            La ruta ayuda a comprar trabajo tecnico invisible con menos dudas:
+            mejores decisiones, menos supuestos y entrega mas clara.
+          </p>
+        </div>
+        <h2>Una ruta tecnica comprensible.</h2>
+      </div>
+
+      <div class="interfaceTopology">
+        <div class="processGrid">
+          {process.map((item) => (
+            <article class="interfaceCard pathStep">
+              <span class="interfaceIndex">{item.index}</span>
+              <div>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+                <ul>
+                  {item.details.map((detail) => <li>{detail}</li>)}
+                </ul>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="interfaceSection">
+      <div class="interfaceSectionHead">
+        <div>
+          <div class="interfaceEyebrow">Claridad de entrega</div>
+          <p>
+            La confianza viene de lo que se comprueba, se instala y se entrega de
+            forma legible para soporte futuro.
+          </p>
+        </div>
+        <h2>Lo que ARCWAVE hace explicito.</h2>
+      </div>
+
+      <div class="interfaceMetrics">
+        <article class="interfaceMetric">
+          <span class="interfaceIndex">01 / Alcance</span>
+          <strong>Limitaciones antes de comprometerse.</strong>
+          <p>Acceso, distancias, cableado existente, cuadro y entrada de operador se aclaran pronto.</p>
+        </article>
+        <article class="interfaceMetric">
+          <span class="interfaceIndex">02 / Instalacion</span>
+          <strong>Trabajo limpio que se entiende despues.</strong>
+          <p>Rutas, etiquetas, terminaciones y decisiones practicas forman parte del servicio.</p>
+        </article>
+        <article class="interfaceMetric">
+          <span class="interfaceIndex">03 / Entrega</span>
+          <strong>Un sistema, no una caja negra.</strong>
+          <p>Notas y contexto de soporte facilitan mantenimiento y futuras mejoras.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="interfaceSection">
+      <div class="interfacePanel interfaceCta">
+        <div>
+          <div class="interfaceEyebrow">Siguiente paso</div>
+          <h2>Convierte tu espacio en un brief tecnico.</h2>
+          <p>
+            Selecciona la ruta de servicio, describe el espacio y las limitaciones,
+            y ARCWAVE podra responder con mejores preguntas y un presupuesto mas claro.
+          </p>
+        </div>
+        <a class="primary" href="/es/contact#quote" data-vt="1">Solicitar presupuesto</a>
+      </div>
+    </section>
+  </div>
 
   <style>
-    .box{ padding: 18px; border-radius: var(--radius); }
-    .k{
+    .processHeroPanel{
+      min-height: 680px;
+      display:grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      align-items:end;
+      padding: clamp(18px, 2.4vw, 34px);
+    }
+    .processNode{
+      position:relative;
+      z-index:2;
+      min-height: 190px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(15,15,20,.075);
+      background: rgba(255,255,255,.70);
+      box-shadow: 0 18px 60px rgba(10,10,20,.08);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .processNode:nth-child(2),
+    .processNode:nth-child(4){ min-height: 280px; }
+    .processNode:nth-child(3){ min-height: 390px; }
+    .processNode span{
+      color: rgba(10,132,255,.78);
       font-size: 12px;
       letter-spacing:.16em;
-      text-transform:uppercase;
-      color: var(--muted2);
-      font-weight: 520;
+      font-weight:760;
     }
-    .p{
-      margin-top: 6px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.65;
-      font-weight: 420;
+    .processNode strong{
+      font-size: clamp(24px, 2.2vw, 38px);
+      line-height:.96;
+      letter-spacing:-.04em;
     }
-    .grid3{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      align-items: stretch;
+    @media (max-width: 1180px){
+      .processHeroPanel{ min-height:auto; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .processNode,
+      .processNode:nth-child(2),
+      .processNode:nth-child(3),
+      .processNode:nth-child(4){ min-height: 220px; }
     }
-    .ctaBox{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 14px;
-    }
-    .cta{
-      display:inline-flex; align-items:center; justify-content:center;
-      padding: 12px 16px; border-radius: 999px;
-      border: 1px solid rgba(10,132,255,.35);
-      background: rgba(10,132,255,.10);
-      font-weight: 650;
-      letter-spacing: .008em;
-      text-decoration:none; color: var(--text);
-      box-shadow: 0 10px 24px rgba(10,10,20,.06);
-      white-space: nowrap;
-      transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
-    }
-    .cta:hover{
-      transform: translateY(-1px);
-      box-shadow: 0 14px 30px rgba(10,10,20,.08);
-      background: rgba(10,132,255,.12);
-    }
-    @media (max-width: 980px){
-      .grid3{ grid-template-columns: 1fr; }
-      .ctaBox{ flex-direction: column; align-items: stretch; }
-      .cta{ width: 100%; }
-    }
+    @media (max-width: 760px){ .processHeroPanel{ grid-template-columns: 1fr; } }
   </style>
 </BaseLayout>

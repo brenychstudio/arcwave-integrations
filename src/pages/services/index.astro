@@ -1,27 +1,800 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import HeroBanner from "../../components/HeroBanner.astro";
-import Section from "../../components/Section.astro";
-import ServicesGrid from "../../components/ServicesGrid.astro";
 import { services } from "../../content/services";
+import "../../styles/interface.css";
 
-const title = "Services";
-const description = "Six core lines. Clear scope, tidy execution, and documentation-first handover.";
+const title = "Services - Connected Infrastructure OS";
+const description =
+  "Telecom, networks, electricity, EV charging, security and audio service paths planned as one connected infrastructure layer.";
+
+const serviceMeta = {
+  telecom: ["Provider handoff", "Lines", "Rack readiness"],
+  networks: ["Wi-Fi coverage", "AP placement", "Topology"],
+  electricity: ["Power", "Control", "Smart-ready wiring"],
+  ev: ["Charging point", "Protections", "Safe routing"],
+  alarms: ["Perimeter", "CCTV", "Monitoring-ready"],
+  audio: ["Sound field", "Zones", "Home cinema"],
+};
+
+const serviceOutcomes = {
+  telecom: "Signal entry + handoff",
+  networks: "Coverage + stability",
+  electricity: "Power + control readiness",
+  ev: "Safe energy delivery",
+  alarms: "Perimeter + camera logic",
+  audio: "Invisible sound field",
+};
+
+const serviceExcerpts = {
+  telecom:
+    "Telecom-ready infrastructure for reliable handoff: clean terminations, labeling, basic testing and practical notes for future support.",
+  networks:
+    "Stable Wi-Fi and network paths with clean cabling, clear labels, AP placement logic and a tidy handover.",
+  electricity:
+    "Panel organization, circuits and smart-ready wiring prepared for maintainable power, control and climate integration.",
+  ev:
+    "Charging points with clean routing, correct protections, safe placement and handover notes for long-term use.",
+  alarms:
+    "Alarm and CCTV paths with zone mapping, clean device placement and monitoring-ready handover where required.",
+  audio:
+    "Invisible audio infrastructure for multiroom, cinema or venue sound: zones, cabling, placement and control.",
+};
 ---
 
 <BaseLayout title={title} description={description}>
-  <HeroBanner
-    title={title}
-    subtitle={description}
-    image="/hero/hero-home-01.png"
-    variant="compact"
-    primaryCta={{ label: "Request a quote", href: "/contact#quote" }}
-    secondaryCta={{ label: "Process", href: "/process" }}
-  />
+  <div class="interfacePage servicesPage">
+    <section class="interfaceHero">
+      <div class="interfaceHeroCopy motionIn">
+        <div class="interfaceEyebrow">Connected service paths</div>
+        <h1 class="interfaceTitle">One system. Six technical paths.</h1>
+        <p class="interfaceLead">
+          ARCWAVE turns telecom, Wi-Fi, electricity, smart home, EV charging,
+          security and audio into one supportable infrastructure interface for
+          modern spaces.
+        </p>
+        <div class="interfaceActions">
+          <a class="primary" href="/contact#quote" data-vt="1">Request a quote</a>
+          <a class="secondary" href="#service-paths" data-vt="1">Explore service paths</a>
+        </div>
+        <div class="interfaceFormula" aria-label="Service logic">
+          <span>need</span><i></i><span>system</span><i></i><span>service path</span><i></i><span>quote</span>
+        </div>
+      </div>
 
-  <div class="container"><div class="hr"></div></div>
+      <div class="interfacePanel catalogHero motionIn" aria-label="Infrastructure catalog">
+        <svg class="catalogOrbit" viewBox="0 0 760 520" aria-hidden="true">
+          <defs>
+            <linearGradient id="serviceOrbitBlue" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0%" stop-color="rgba(10,132,255,.08)" />
+              <stop offset="48%" stop-color="rgba(10,132,255,.52)" />
+              <stop offset="100%" stop-color="rgba(35,198,190,.16)" />
+            </linearGradient>
+            <linearGradient id="serviceOrbitAmber" x1="0" x2="1" y1="1" y2="0">
+              <stop offset="0%" stop-color="rgba(205,158,60,.08)" />
+              <stop offset="52%" stop-color="rgba(205,158,60,.42)" />
+              <stop offset="100%" stop-color="rgba(10,132,255,.12)" />
+            </linearGradient>
+          </defs>
+          <path class="orbitSoft" d="M98 272 C190 100 510 58 652 218 C754 332 618 468 398 456 C164 444 38 374 98 272Z" />
+          <path class="orbitBlue" d="M44 324 C198 284 328 266 472 236 C566 216 640 198 720 164" />
+          <path class="orbitAmber" d="M84 148 C252 192 412 210 684 346" />
+          <circle class="orbitPulse p1" cx="176" cy="292" r="5" />
+          <circle class="orbitPulse p2" cx="434" cy="244" r="5" />
+          <circle class="orbitPulse p3" cx="612" cy="344" r="5" />
+        </svg>
+        <div class="catalogCore">
+          <span>ARCWAVE</span>
+          <strong>Infrastructure OS</strong>
+        </div>
+        {services.map((service, index) => (
+          <a class={`catalogNode cn${index + 1}`} href={`/services/${service.key}`} data-vt="1">
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <strong>{service.title}</strong>
+          </a>
+        ))}
+        <div class="catalogDiagnostics" aria-hidden="true">
+          <span>Need</span>
+          <span>Dependency map</span>
+          <span>Quote-ready brief</span>
+        </div>
+      </div>
+    </section>
 
-  <Section title="All services">
-    <ServicesGrid services={services} showQuote={true} />
-  </Section>
+    <section class="interfaceSection" id="service-paths">
+      <div class="interfaceSectionHead">
+        <div>
+          <div class="interfaceEyebrow">Service topology</div>
+          <p>
+            Each path has a specific commercial job: clarify the need, expose the
+            technical dependencies, and move the request toward a quote-ready brief.
+          </p>
+        </div>
+        <h2>Infrastructure made navigable.</h2>
+      </div>
+
+      <div class="interfaceTopology">
+        <div class="servicePathGrid">
+          {services.map((service, index) => (
+            <a class="interfaceCard servicePathCard" data-service={service.key} href={`/services/${service.key}`} data-vt="1">
+              <span class="servicePathMotif" aria-hidden="true"></span>
+              <div class="servicePathIntro">
+                <span class="interfaceIndex">{String(index + 1).padStart(2, "0")} / Service path</span>
+                <h3>{service.title}</h3>
+                <p>{serviceOutcomes[service.key]}</p>
+              </div>
+              <div class="servicePathBody">
+                <div class="servicePathMeta">
+                  {serviceMeta[service.key].map((item) => <span>{item}</span>)}
+                </div>
+                <p>{serviceExcerpts[service.key]}</p>
+                <span class="servicePathCta">View service path <span aria-hidden="true">&#8594;</span></span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="interfaceSection commercialSection" id="commercial-clarity">
+      <div class="interfaceSectionHead">
+        <div>
+          <div class="interfaceEyebrow">Commercial clarity</div>
+          <p>
+            The site no longer sells isolated tasks. It frames every request as a
+            supportable technical system with inputs, dependencies and handover.
+          </p>
+        </div>
+        <h2>From service list to decision interface.</h2>
+      </div>
+
+      <div class="interfaceMetrics">
+        <article class="interfaceMetric">
+          <span class="interfaceIndex">01 / Signal</span>
+          <strong>Start from the customer need.</strong>
+          <p>Coverage, power, security or sound becomes a clear technical signal.</p>
+        </article>
+        <article class="interfaceMetric">
+          <span class="interfaceIndex">02 / System</span>
+          <strong>Show the connected layer.</strong>
+          <p>Network, energy, security and control dependencies are visible early.</p>
+        </article>
+        <article class="interfaceMetric">
+          <span class="interfaceIndex">03 / Quote</span>
+          <strong>Move toward a brief.</strong>
+          <p>The path ends in constraints, scope and a practical request ARCWAVE can answer.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="servicesFinalCta" aria-label="Start a technical request">
+      <div>
+        <span>Quote path</span>
+        <h2>Map your service path.</h2>
+      </div>
+      <p>
+        Describe the space, select the system, and turn the need into a clear
+        technical brief before the quote.
+      </p>
+      <a class="primary" href="/contact#quote" data-vt="1">Start technical request <span aria-hidden="true">&#8594;</span></a>
+    </section>
+  </div>
+
+  <style>
+    :global([data-page-nav]){
+      display:none !important;
+    }
+
+    :global(html){
+      scroll-padding-top: clamp(112px, 10vw, 144px);
+    }
+
+    .servicesPage{
+      --interface-container: min(100% - clamp(28px, 5vw, 92px), 1640px);
+    }
+
+    .servicesPage .interfaceHero{
+      min-height: auto;
+      grid-template-columns: minmax(380px, .72fr) minmax(0, 1.04fr);
+      padding: clamp(18px, 2.6vw, 36px) 0 clamp(28px, 3.7vw, 54px);
+      gap: clamp(30px, 4.8vw, 82px);
+      align-items:start;
+    }
+
+    .servicesPage .interfaceHeroCopy{
+      max-width: 700px;
+    }
+
+    .servicesPage .interfaceTitle{
+      max-width: 8.6em;
+      font-size: clamp(56px, 6.8vw, 108px);
+      letter-spacing:-.068em;
+    }
+
+    .servicesPage .interfaceLead{
+      max-width: 54ch;
+      color: rgba(15,15,20,.68);
+    }
+
+    .servicesPage .interfaceSection{
+      padding: clamp(38px, 4.6vw, 76px) 0;
+      scroll-margin-top: clamp(112px, 10vw, 144px);
+    }
+
+    .servicesPage .interfaceHero + .interfaceSection{
+      padding-top: clamp(28px, 3.8vw, 58px);
+    }
+
+    .servicesPage .interfaceSectionHead{
+      margin-bottom: clamp(18px, 2.6vw, 34px);
+      scroll-margin-top: clamp(112px, 10vw, 144px);
+    }
+
+    .servicesPage .interfaceSectionHead h2{
+      font-size: clamp(42px, 5.8vw, 88px);
+    }
+
+    .catalogHero{
+      min-height: clamp(460px, 42vw, 560px);
+      border-color: rgba(10,132,255,.13);
+      background:
+        linear-gradient(rgba(10,132,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(10,132,255,.04) 1px, transparent 1px),
+        radial-gradient(720px 460px at 72% 14%, rgba(10,132,255,.19), transparent 64%),
+        radial-gradient(520px 360px at 16% 92%, rgba(205,158,60,.08), transparent 70%),
+        rgba(255,255,255,.68);
+      background-size: 54px 54px, 54px 54px, auto, auto, auto;
+    }
+
+    .catalogHero:before{
+      inset: 10% 7%;
+      border-color: rgba(10,132,255,.16);
+      transform: rotate(-8deg);
+    }
+
+    .catalogHero:after{
+      top: 55%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(10,132,255,.42), rgba(205,158,60,.22), transparent);
+      transform: rotate(-7deg);
+    }
+
+    .catalogOrbit{
+      position:absolute;
+      inset: 7% 5%;
+      z-index:1;
+      width:90%;
+      height:86%;
+      pointer-events:none;
+      filter: drop-shadow(0 18px 36px rgba(10,132,255,.08));
+    }
+
+    .catalogOrbit path,
+    .catalogOrbit circle{
+      vector-effect: non-scaling-stroke;
+    }
+
+    .orbitSoft{
+      fill:none;
+      stroke: rgba(10,132,255,.16);
+      stroke-width: 1.2;
+    }
+
+    .orbitBlue,
+    .orbitAmber{
+      fill:none;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-dasharray: 680;
+      stroke-dashoffset: 680;
+      animation: serviceTrace 7.2s ease-in-out infinite;
+    }
+
+    .orbitBlue{ stroke: url(#serviceOrbitBlue); }
+    .orbitAmber{
+      stroke: url(#serviceOrbitAmber);
+      animation-delay: 1.1s;
+    }
+
+    .orbitPulse{
+      fill: rgba(10,132,255,.34);
+      transform-origin:center;
+      animation: servicePulse 3.8s ease-in-out infinite;
+    }
+
+    .orbitPulse.p2{
+      fill: rgba(35,198,190,.30);
+      animation-delay: .8s;
+    }
+
+    .orbitPulse.p3{
+      fill: rgba(205,158,60,.34);
+      animation-delay: 1.4s;
+    }
+
+    @keyframes serviceTrace{
+      0%{ stroke-dashoffset: 680; opacity:.18; }
+      35%, 68%{ stroke-dashoffset: 0; opacity:1; }
+      100%{ stroke-dashoffset: -680; opacity:.22; }
+    }
+
+    @keyframes servicePulse{
+      0%,100%{ opacity:.28; transform:scale(.72); }
+      45%{ opacity:.95; transform:scale(1.35); }
+    }
+
+    .catalogCore{
+      position:absolute;
+      left:50%;
+      top:49%;
+      z-index:3;
+      width: 176px;
+      height: 176px;
+      border-radius:999px;
+      transform: translate(-50%, -50%);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      border: 1px solid rgba(10,132,255,.22);
+      background: rgba(255,255,255,.74);
+      box-shadow:
+        inset 0 0 0 8px rgba(10,132,255,.035),
+        0 24px 74px rgba(10,10,20,.10);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .catalogCore span,
+    .catalogNode span{
+      color: var(--muted2);
+      font-size: 11px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      font-weight:760;
+    }
+
+    .catalogCore strong{
+      margin-top: 6px;
+      max-width: 9em;
+      text-align:center;
+      line-height:1;
+      font-size: 22px;
+      letter-spacing:-.035em;
+    }
+
+    .catalogNode{
+      position:absolute;
+      z-index:4;
+      width: clamp(174px, 14vw, 218px);
+      min-width: 0;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(15,15,20,.095);
+      background:
+        linear-gradient(135deg, rgba(10,132,255,.055), transparent 44%),
+        rgba(255,255,255,.76);
+      box-shadow: 0 18px 52px rgba(10,10,20,.08);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+
+    .catalogNode:hover{
+      transform: translateY(-2px);
+      border-color: rgba(10,132,255,.25);
+      background: rgba(255,255,255,.88);
+    }
+
+    .catalogNode strong{
+      display:block;
+      margin-top: 10px;
+      font-size: 18px;
+      line-height: 1.14;
+      letter-spacing:-.02em;
+    }
+
+    .cn1{ left: 9%; top: 17%; }
+    .cn2{ right: 8%; top: 18%; }
+    .cn3{ left: 7%; bottom: 22%; }
+    .cn4{ right: 7%; bottom: 21%; }
+    .cn5{ left: 50%; top: 8%; transform: translateX(-50%); }
+    .cn5:hover{ transform: translateX(-50%) translateY(-2px); }
+    .cn6{ left: 50%; bottom: 15%; transform: translateX(-50%); }
+    .cn6:hover{ transform: translateX(-50%) translateY(-2px); }
+
+    .catalogDiagnostics{
+      position:absolute;
+      left: clamp(16px, 2vw, 28px);
+      right: clamp(16px, 2vw, 28px);
+      bottom: clamp(16px, 2vw, 26px);
+      z-index:5;
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      overflow:hidden;
+      border: 1px solid rgba(15,15,20,.07);
+      border-radius: 18px;
+      background: rgba(15,15,20,.055);
+    }
+
+    .catalogDiagnostics span{
+      min-height: 44px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 0 12px;
+      background: rgba(255,255,255,.62);
+      color: rgba(15,15,20,.48);
+      font-size: 10px;
+      font-weight: 760;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      text-align:center;
+    }
+
+    @media (max-width: 1180px){
+      .catalogHero{
+        min-height: 520px;
+      }
+    }
+
+    .servicesPage .interfaceTopology{
+      border-radius: 30px;
+    }
+
+    .servicesPage .servicePathGrid{
+      gap: clamp(14px, 1.4vw, 22px);
+      padding: clamp(14px, 1.8vw, 28px);
+    }
+
+    .servicesPage .servicePathCard{
+      min-height: clamp(330px, 25vw, 430px);
+      display:grid;
+      grid-template-rows: auto 1fr;
+      overflow:hidden;
+      isolation:isolate;
+      padding: clamp(22px, 2.1vw, 34px);
+      border-color: rgba(15,15,20,.105);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.93), rgba(255,255,255,.72)),
+        radial-gradient(300px 190px at 92% 4%, rgba(10,132,255,.07), transparent 70%),
+        linear-gradient(120deg, rgba(10,132,255,.035), transparent 46%);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.92),
+        0 24px 70px rgba(10,10,20,.065);
+    }
+
+    .servicesPage .servicePathCard p{
+      color: rgba(15,15,20,.66);
+      font-size: 15px;
+    }
+
+    .servicesPage .servicePathBody > p{
+      max-width: 48ch;
+    }
+
+    .servicePathIntro{
+      position:relative;
+      z-index:2;
+      padding-right: clamp(48px, 5vw, 96px);
+    }
+
+    .servicesPage .servicePathCard .servicePathIntro p{
+      margin-top: 16px;
+      color: rgba(15,15,20,.54);
+      font-weight: 720;
+      letter-spacing:-.01em;
+    }
+
+    .servicePathBody{
+      position:relative;
+      z-index:2;
+      display:grid;
+      gap: 13px;
+      align-self:end;
+    }
+
+    .servicesPage .servicePathMeta{
+      margin-top: 0;
+    }
+
+    .servicePathCta{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      width: fit-content;
+      margin-top: 2px;
+      color: rgba(10,132,255,.84);
+      font-size: 12px;
+      font-weight: 780;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+
+    .servicePathCta span{
+      transition: transform .18s ease;
+    }
+
+    .servicePathCard:hover .servicePathCta span{
+      transform: translateX(3px);
+    }
+
+    .servicePathCard:hover .servicePathMotif{
+      opacity:.96;
+      transform: translate3d(0,-2px,0) scale(1.03);
+    }
+
+    .servicePathCard:after{
+      content:"";
+      position:absolute;
+      z-index:2;
+      right: clamp(22px, 2vw, 34px);
+      top: clamp(52px, 4.8vw, 74px);
+      width: 8px;
+      height: 8px;
+      border-radius:999px;
+      background: rgba(10,132,255,.32);
+      box-shadow: 0 0 0 7px rgba(10,132,255,.055);
+      opacity:.36;
+      transition: opacity .18s ease, transform .18s ease, box-shadow .18s ease;
+    }
+
+    .servicePathCard:hover:after{
+      opacity:.9;
+      transform: scale(1.15);
+      box-shadow: 0 0 0 10px rgba(10,132,255,.08), 0 0 28px rgba(10,132,255,.28);
+    }
+
+    .servicePathMotif{
+      position:absolute;
+      z-index:1;
+      inset: 0;
+      opacity:.72;
+      pointer-events:none;
+      transition: opacity .2s ease, transform .2s ease;
+      background:
+        linear-gradient(90deg, transparent 0 15%, rgba(10,132,255,.11) 15.15%, transparent 15.5%),
+        radial-gradient(circle at 82% 20%, rgba(10,132,255,.18) 0 4px, transparent 5px),
+        radial-gradient(320px 180px at 88% 8%, rgba(10,132,255,.105), transparent 68%);
+      mask-image: linear-gradient(135deg, transparent 0 28%, black 56%, black 100%);
+    }
+
+    .servicePathMotif:before,
+    .servicePathMotif:after{
+      content:"";
+      position:absolute;
+      border: 1px solid rgba(10,132,255,.16);
+      pointer-events:none;
+    }
+
+    .servicePathMotif:before{
+      width: 210px;
+      height: 210px;
+      right: -54px;
+      top: -72px;
+      border-radius:999px;
+    }
+
+    .servicePathMotif:after{
+      left: 18px;
+      right: 18px;
+      bottom: 58px;
+      height: 1px;
+      border-width: 1px 0 0;
+      opacity:.72;
+    }
+
+    .servicePathCard[data-service="networks"] .servicePathMotif{
+      background:
+        linear-gradient(34deg, transparent 0 31%, rgba(10,132,255,.12) 31.2%, transparent 31.65%),
+        linear-gradient(146deg, transparent 0 38%, rgba(35,198,190,.12) 38.2%, transparent 38.65%),
+        radial-gradient(circle at 78% 22%, rgba(35,198,190,.20) 0 4px, transparent 5px),
+        radial-gradient(circle at 91% 42%, rgba(10,132,255,.16) 0 3px, transparent 4px);
+    }
+
+    .servicePathCard[data-service="electricity"] .servicePathMotif{
+      background:
+        linear-gradient(112deg, transparent 0 48%, rgba(205,158,60,.20) 48.18%, transparent 48.55%),
+        linear-gradient(90deg, transparent 0 74%, rgba(10,132,255,.12) 74.15%, transparent 74.5%),
+        radial-gradient(circle at 84% 25%, rgba(205,158,60,.24) 0 5px, transparent 6px),
+        radial-gradient(340px 180px at 92% 8%, rgba(205,158,60,.08), transparent 68%);
+    }
+
+    .servicePathCard[data-service="ev"] .servicePathMotif{
+      background:
+        linear-gradient(90deg, transparent 0 42%, rgba(205,158,60,.16) 42.2%, transparent 42.65%),
+        linear-gradient(90deg, transparent 0 56%, rgba(10,132,255,.12) 56.15%, transparent 56.5%),
+        radial-gradient(circle at 83% 22%, rgba(205,158,60,.22) 0 5px, transparent 6px);
+    }
+
+    .servicePathCard[data-service="alarms"] .servicePathMotif{
+      background:
+        radial-gradient(circle at 84% 28%, transparent 0 42px, rgba(10,132,255,.16) 43px, transparent 44px),
+        radial-gradient(circle at 84% 28%, transparent 0 82px, rgba(10,132,255,.10) 83px, transparent 84px),
+        linear-gradient(28deg, transparent 0 48%, rgba(10,132,255,.11) 48.2%, transparent 48.65%);
+    }
+
+    .servicePathCard[data-service="audio"] .servicePathMotif{
+      background:
+        radial-gradient(ellipse at 86% 30%, transparent 0 36px, rgba(35,198,190,.16) 37px, transparent 38px),
+        radial-gradient(ellipse at 86% 30%, transparent 0 78px, rgba(35,198,190,.10) 79px, transparent 80px),
+        radial-gradient(ellipse at 86% 30%, transparent 0 122px, rgba(10,132,255,.08) 123px, transparent 124px);
+    }
+
+    .servicesFinalCta{
+      position:relative;
+      overflow:hidden;
+      width: var(--interface-container);
+      margin: clamp(0px, 1vw, 14px) auto 0;
+      scroll-margin-top: clamp(112px, 10vw, 144px);
+      display:grid;
+      grid-template-columns: minmax(0, .86fr) minmax(280px, .74fr) auto;
+      gap: clamp(18px, 2.8vw, 52px);
+      align-items:center;
+      padding: clamp(22px, 2.7vw, 40px);
+      border-radius: 30px;
+      border: 1px solid rgba(10,132,255,.13);
+      background:
+        linear-gradient(rgba(10,132,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(10,132,255,.035) 1px, transparent 1px),
+        radial-gradient(820px 320px at 84% 18%, rgba(10,132,255,.16), transparent 66%),
+        radial-gradient(480px 240px at 12% 100%, rgba(205,158,60,.06), transparent 70%),
+        rgba(255,255,255,.66);
+      background-size: 52px 52px, 52px 52px, auto, auto, auto;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.84),
+        0 26px 76px rgba(10,10,20,.065);
+    }
+
+    .servicesFinalCta:before{
+      content:"";
+      position:absolute;
+      left: clamp(18px, 2.8vw, 48px);
+      right: clamp(18px, 2.8vw, 48px);
+      top: auto;
+      bottom: clamp(24px, 2.4vw, 36px);
+      height:1px;
+      background: linear-gradient(90deg, rgba(10,132,255,.38), rgba(35,198,190,.14), transparent);
+      pointer-events:none;
+      opacity:.42;
+    }
+
+    .servicesFinalCta > *{
+      position:relative;
+      z-index:2;
+    }
+
+    .servicesFinalCta span{
+      color: rgba(10,132,255,.76);
+      font-size: 11px;
+      font-weight: 780;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+    }
+
+    .servicesFinalCta h2{
+      max-width: 8.4em;
+      margin: 10px 0 0;
+      font-size: clamp(34px, 4vw, 68px);
+      line-height:.92;
+      letter-spacing:-.056em;
+    }
+
+    .servicesFinalCta p{
+      margin:0;
+      max-width: 48ch;
+      color: rgba(15,15,20,.64);
+      line-height:1.66;
+    }
+
+    .servicesFinalCta .primary{
+      white-space:nowrap;
+      background: rgba(255,255,255,.66);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    @media (max-width: 760px){
+      .servicesPage{
+        --interface-container: min(100% - 32px, 1640px);
+      }
+
+      .servicesPage .interfaceHero{
+        grid-template-columns: 1fr;
+        padding-top: 26px;
+        padding-bottom: 34px;
+      }
+
+      .servicesPage .interfaceTitle{
+        font-size: clamp(48px, 15vw, 64px);
+      }
+
+      .servicesPage .interfaceSection{
+        padding: 38px 0;
+        scroll-margin-top: 104px;
+      }
+
+      .servicesPage .interfaceSectionHead{
+        margin-bottom: 22px;
+      }
+
+      .catalogHero{
+        min-height:auto;
+        display:grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        padding: 14px;
+      }
+
+      .catalogOrbit,
+      .catalogDiagnostics{
+        display:none;
+      }
+
+      .catalogCore{
+        position:relative;
+        grid-column: 1 / -1;
+        left:auto;
+        top:auto;
+        transform:none;
+        width:100%;
+        height:auto;
+        min-height: 96px;
+        border-radius: 22px;
+      }
+
+      .catalogNode,
+      .cn1,.cn2,.cn3,.cn4,.cn5,.cn6,
+      .cn5:hover,.cn6:hover{
+        position:relative;
+        left:auto;
+        right:auto;
+        top:auto;
+        bottom:auto;
+        min-width:0;
+        transform:none;
+        padding: 11px 12px;
+        border-radius: 16px;
+      }
+
+      .catalogNode span{
+        font-size: 9px;
+      }
+
+      .catalogNode strong{
+        margin-top: 6px;
+        font-size: 14px;
+        line-height:1.1;
+      }
+
+      .servicesPage .servicePathCard{
+        min-height: 318px;
+        border-radius: 24px;
+      }
+
+      .servicePathIntro{
+        padding-right: 34px;
+      }
+
+      .servicePathMotif{
+        opacity:.56;
+      }
+
+      .servicesFinalCta{
+        grid-template-columns: 1fr;
+        align-items:start;
+        border-radius: 24px;
+      }
+
+      .servicesFinalCta:before{
+        top:auto;
+        bottom: 76px;
+      }
+
+      .servicesFinalCta .primary{
+        width:100%;
+      }
+    }
+
+  </style>
 </BaseLayout>

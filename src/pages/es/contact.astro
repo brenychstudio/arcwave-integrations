@@ -1,125 +1,214 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import HeroBanner from "../../components/HeroBanner.astro";
-import Section from "../../components/Section.astro";
 import QuoteForm from "../../components/forms/QuoteForm.tsx";
-
 import { siteEs } from "../../content/site.es";
+import { COMPANY } from "../../content/company";
 import { servicesEs, commonQuoteFieldsEs } from "../../content/services.es";
 import type { ServiceKey } from "../../content/services";
+import "../../styles/interface.css";
 
 const serviceParamRaw = Astro.url.searchParams.get("service");
 const serviceParam = serviceParamRaw === "cctv" ? "alarms" : serviceParamRaw;
 
 const defaultServiceKey: ServiceKey | undefined =
   servicesEs.some((s) => s.key === serviceParam) ? (serviceParam as ServiceKey) : undefined;
+
+const telHref = `tel:${COMPANY.phoneTel}`;
+const mailHref = `mailto:${COMPANY.email}`;
 ---
 
-<BaseLayout title={`Contacto — ${siteEs.name}`} description="Solicita presupuesto o contáctanos directamente.">
-  <HeroBanner
-    title="Contacto"
-    subtitle="Solicita presupuesto con un brief corto o contáctanos directamente."
-    image="/macro/macro-network-ports-01.png"
-    primaryCta={{ label: "Solicitar presupuesto", href: "#quote" }}
-    secondaryCta={{ label: "Servicios", href: "/es/services" }}
-  />
-
-  <Section
-    eyebrow="Contacto"
-    title="Contacto directo"
-    note="Respondemos en 1–2 días laborables. Si es urgente, incluye horario de acceso y limitaciones del sitio."
-  >
-    <div class="stack">
-      <div class="grid">
-        <div class="card box">
-          <div class="k">Área de servicio</div>
-          <div class="v">{siteEs.contact.serviceArea}</div>
+<BaseLayout
+  title={`Contacto - ${siteEs.name}`}
+  description="Convierte una necesidad tecnica en un brief claro para telecomunicaciones, redes, electricidad, carga VE, seguridad o audio."
+>
+  <div class="interfacePage">
+    <section class="interfaceHero">
+      <div class="interfaceHeroCopy motionIn">
+        <div class="interfaceEyebrow">Hub de solicitud tecnica</div>
+        <h1 class="interfaceTitle">Convierte una necesidad en un brief claro.</h1>
+        <p class="interfaceLead">
+          Selecciona la ruta de servicio, describe el espacio y las limitaciones,
+          y dale a ARCWAVE suficiente senal para responder con un camino tecnico practico.
+        </p>
+        <div class="interfaceActions">
+          <a class="primary" href="#quote">Iniciar solicitud</a>
+          <a class="secondary" href="/es/services" data-vt="1">Explorar servicios</a>
         </div>
-
-        <div class="card box noteCard">
-          <div class="k">Nota</div>
-          <div class="p">Un brief corto es suficiente. Confirmamos alcance y plazos en una llamada rápida.</div>
-
-          <div class="hr" style="margin:14px 0;"></div>
-
-          <div class="k">Consejo</div>
-          <div class="p">Incluye: horario de acceso, ubicación de rack/cuadro, distancias y normas del edificio.</div>
+        <div class="interfaceFormula" aria-label="Flujo de solicitud">
+          <span>servicio</span><i></i><span>espacio</span><i></i><span>limitaciones</span><i></i><span>brief</span>
         </div>
       </div>
 
-      <div id="quote" class="card box formCard">
-        <div class="ey">SOLICITUD</div>
-        <div class="h">Cuéntanos lo que necesitas</div>
-        <div class="p">Formulario corto. Te contactamos con preguntas si hace falta.</div>
-
-        <div class="hr" style="margin:14px 0;"></div>
-
-        <QuoteForm
-          client:idle
-          services={servicesEs}
-          commonFields={commonQuoteFieldsEs}
-          defaultServiceKey={defaultServiceKey}
-          endpoint={siteEs.form.endpoint}
-          fallbackEmail={siteEs.contact.email}
-          fallbackSubject={`${siteEs.name} — solicitud de presupuesto`}
-        />
+      <div class="interfacePanel contactHeroPanel motionIn" aria-label="Interfaz de contacto">
+        <div class="briefPreview">
+          <span class="interfaceIndex">Brief vivo</span>
+          <strong>Listo para revision tecnica</strong>
+          <p>Servicio, espacio, plazo y limitaciones se convierten en una solicitud mantenible.</p>
+        </div>
+        <div class="briefRows">
+          <div><span>Servicio</span><strong>{defaultServiceKey ? servicesEs.find((s) => s.key === defaultServiceKey)?.title : "Redes y Wi-Fi"}</strong></div>
+          <div><span>Area</span><strong>{siteEs.contact.serviceArea}</strong></div>
+          <div><span>Respuesta</span><strong>1-2 dias laborables</strong></div>
+        </div>
       </div>
-    </div>
-  </Section>
+    </section>
+
+    <section class="interfaceSection" id="quote">
+      <div class="contactGrid">
+        <aside class="contactAside">
+          <div class="interfaceEyebrow">Contacto directo</div>
+          <h2 class="contactTitle">Un brief corto basta para empezar.</h2>
+          <p>
+            Para revisar mas rapido, incluye acceso al sitio, ubicacion de rack o
+            cuadro, cableado existente, distancias aproximadas y normas del edificio.
+          </p>
+
+          <div class="contactChannels">
+            <a class="interfaceCard contactChannel" href={mailHref}>
+              <span>Email</span>
+              <strong>{COMPANY.email}</strong>
+            </a>
+            <a class="interfaceCard contactChannel" href={telHref}>
+              <span>Telefono</span>
+              <strong>{COMPANY.phoneDisplay}</strong>
+            </a>
+            <div class="interfaceCard contactChannel">
+              <span>Area de servicio</span>
+              <strong>{siteEs.contact.serviceArea}</strong>
+            </div>
+            <div class="interfaceCard contactChannel">
+              <span>Horario</span>
+              <strong>{COMPANY.hours}</strong>
+            </div>
+          </div>
+        </aside>
+
+        <div class="interfacePanel requestPanel">
+          <div class="requestHead">
+            <span class="interfaceIndex">Entrada de senal</span>
+            <h2>Interfaz de solicitud tecnica</h2>
+            <p>
+              El formulario se adapta a la ruta seleccionada y usa email como
+              fallback si no hay endpoint configurado.
+            </p>
+          </div>
+
+          <QuoteForm
+            client:idle
+            services={servicesEs}
+            commonFields={commonQuoteFieldsEs}
+            defaultServiceKey={defaultServiceKey}
+            endpoint={siteEs.form.endpoint}
+            fallbackEmail={COMPANY.email}
+            fallbackSubject={`${siteEs.name} - solicitud de presupuesto`}
+          />
+        </div>
+      </div>
+    </section>
+
+    <section class="interfaceSection">
+      <div class="interfaceMetrics">
+        <article class="interfaceMetric">
+          <span class="interfaceIndex">01 / Senal util</span>
+          <strong>Describe el espacio.</strong>
+          <p>Vivienda, oficina, comercio, sala tecnica u otro contexto relevante.</p>
+        </article>
+        <article class="interfaceMetric">
+          <span class="interfaceIndex">02 / Limitaciones</span>
+          <strong>Indica lo que afecta a las rutas.</strong>
+          <p>Cableado existente, entrada de operador, acceso al cuadro, exterior o plazo.</p>
+        </article>
+        <article class="interfaceMetric">
+          <span class="interfaceIndex">03 / Respuesta</span>
+          <strong>Recibe un siguiente paso claro.</strong>
+          <p>ARCWAVE puede responder con preguntas, alcance y una ruta de presupuesto practica.</p>
+        </article>
+      </div>
+    </section>
+  </div>
 
   <style>
-    .stack{ display:grid; gap: 14px; }
     #quote{ scroll-margin-top: 120px; }
-
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      align-items:start;
+    .contactHeroPanel{
+      min-height: 680px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      padding: clamp(22px, 2.8vw, 44px);
     }
-
-    .box{ padding: 16px; border-radius: var(--radius); }
-
-    .k,
-    .ey{
-      font-size: 12px;
+    .briefPreview,
+    .briefRows{ position:relative; z-index:2; }
+    .briefPreview{
+      max-width: 560px;
+      padding: clamp(22px, 2.6vw, 40px);
+      border-radius: 28px;
+      border: 1px solid rgba(10,132,255,.12);
+      background: rgba(255,255,255,.66);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .briefPreview strong{
+      display:block;
+      margin-top: 12px;
+      max-width: 8em;
+      font-size: clamp(42px, 5vw, 76px);
+      line-height:.9;
+      letter-spacing:-.06em;
+    }
+    .briefPreview p{ margin-top: 18px; max-width: 44ch; }
+    .briefRows{
+      display:grid;
+      gap: 1px;
+      overflow:hidden;
+      border: 1px solid rgba(15,15,20,.075);
+      border-radius: 24px;
+      background: rgba(15,15,20,.06);
+    }
+    .briefRows div{
+      display:grid;
+      grid-template-columns: 130px 1fr;
+      gap: 18px;
+      padding: 18px;
+      background: rgba(255,255,255,.70);
+    }
+    .briefRows span{
+      color: var(--muted2);
+      font-size: 11px;
       letter-spacing:.16em;
       text-transform:uppercase;
-      color: var(--muted2);
-      font-weight: 520;
+      font-weight:760;
     }
-
-    .v{
-      margin-top: 6px;
-      font-weight: 600;
-      letter-spacing: .005em;
+    .briefRows strong{ color: rgba(15,15,20,.74); }
+    .contactTitle{
+      margin: 20px 0 0;
+      max-width: 7em;
+      font-size: clamp(44px, 5.8vw, 96px);
+      line-height:.9;
+      letter-spacing:-.06em;
     }
-
-    .h{
-      font-size: 22px;
-      font-weight: 760;
-      letter-spacing: -.01em;
-      margin-top: 6px;
-      line-height: 1.15;
+    .contactAside > p{
+      margin: 20px 0 28px;
+      max-width: 44ch;
+      color: rgba(15,15,20,.62);
+      line-height:1.7;
     }
-
-    .p{
-      margin-top: 6px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.55;
-      font-weight: 420;
+    .requestHead{
+      position:relative;
+      z-index:2;
+      margin-bottom: 28px;
     }
-
-    .noteCard{
-      background: rgba(255,255,255,.55);
-      border: 1px solid var(--border2);
+    .requestHead h2{
+      margin-top: 10px;
+      font-size: clamp(34px, 3.2vw, 58px);
+      line-height:.95;
+      letter-spacing:-.05em;
     }
-
-    .formCard{ padding: 18px; }
-
-    @media (max-width: 980px){
-      .grid{ grid-template-columns: 1fr; }
+    .requestHead p{
+      margin-top: 12px;
+      max-width: 58ch;
+      color: rgba(15,15,20,.62);
     }
+    @media (max-width: 1180px){ .contactHeroPanel{ min-height: 520px; } }
+    @media (max-width: 760px){ .briefRows div{ grid-template-columns: 1fr; } }
   </style>
 </BaseLayout>
