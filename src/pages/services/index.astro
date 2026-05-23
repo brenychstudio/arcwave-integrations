@@ -696,34 +696,55 @@ const serviceExcerpts = {
 
     @media (max-width: 760px){
       .servicesPage{
-        --interface-container: min(100% - 32px, 1640px);
+        --interface-container: min(100% - 28px, 1640px);
       }
 
       .servicesPage .interfaceHero{
         grid-template-columns: 1fr;
-        padding-top: 26px;
-        padding-bottom: 34px;
+        padding-top: 24px;
+        padding-bottom: 28px;
       }
 
       .servicesPage .interfaceTitle{
-        font-size: clamp(48px, 15vw, 64px);
+        max-width: 100%;
+        font-size: clamp(36px, 10.6vw, 46px);
+        line-height:.97;
+        letter-spacing:-.035em;
+        overflow-wrap: break-word;
+        text-wrap: balance;
+      }
+
+      .servicesPage .interfaceLead{
+        max-width: 42ch;
+      }
+
+      .servicesPage .interfaceActions{
+        display:grid;
+        grid-template-columns: 1fr;
+        width:100%;
+      }
+
+      .servicesPage .interfaceActions .primary,
+      .servicesPage .interfaceActions .secondary{
+        width:100%;
       }
 
       .servicesPage .interfaceSection{
-        padding: 38px 0;
+        padding: 34px 0;
         scroll-margin-top: 104px;
       }
 
       .servicesPage .interfaceSectionHead{
-        margin-bottom: 22px;
+        margin-bottom: 18px;
       }
 
       .catalogHero{
         min-height:auto;
         display:grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 12px;
-        padding: 14px;
+        gap: 10px;
+        padding: 12px;
+        border-radius: 22px;
       }
 
       .catalogOrbit,
@@ -739,8 +760,8 @@ const serviceExcerpts = {
         transform:none;
         width:100%;
         height:auto;
-        min-height: 96px;
-        border-radius: 22px;
+        min-height: 82px;
+        border-radius: 18px;
       }
 
       .catalogNode,
@@ -753,8 +774,8 @@ const serviceExcerpts = {
         bottom:auto;
         min-width:0;
         transform:none;
-        padding: 11px 12px;
-        border-radius: 16px;
+        padding: 10px 11px;
+        border-radius: 15px;
       }
 
       .catalogNode span{
@@ -768,12 +789,29 @@ const serviceExcerpts = {
       }
 
       .servicesPage .servicePathCard{
-        min-height: 318px;
-        border-radius: 24px;
+        min-height: auto;
+        padding: 18px;
+        border-radius: 20px;
+        gap: 24px;
       }
 
       .servicePathIntro{
-        padding-right: 34px;
+        padding-right: 28px;
+      }
+
+      .servicesPage .servicePathCard .servicePathIntro p{
+        margin-top: 10px;
+      }
+
+      .servicePathBody{
+        gap: 10px;
+      }
+
+      .servicePathBody > p{
+        display:-webkit-box;
+        -webkit-line-clamp:3;
+        -webkit-box-orient:vertical;
+        overflow:hidden;
       }
 
       .servicePathMotif{
@@ -783,12 +821,22 @@ const serviceExcerpts = {
       .servicesFinalCta{
         grid-template-columns: 1fr;
         align-items:start;
-        border-radius: 24px;
+        gap: 16px;
+        padding: 20px;
+        border-radius: 22px;
       }
 
       .servicesFinalCta:before{
-        top:auto;
-        bottom: 76px;
+        display:none;
+      }
+
+      .servicesFinalCta h2{
+        font-size: clamp(34px, 10vw, 46px);
+        line-height:.98;
+      }
+
+      .servicesFinalCta p{
+        line-height:1.5;
       }
 
       .servicesFinalCta .primary{

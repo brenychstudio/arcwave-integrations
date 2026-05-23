@@ -6,139 +6,232 @@ import "../../styles/interface.css";
 const process = [
   {
     index: "01",
-    title: "Senal",
-    text: "La solicitud empieza como una necesidad: cobertura, energia, carga, seguridad, control o audio.",
-    details: ["Categoria", "Tipo de espacio", "Problema principal"],
+    title: "Señal",
+    text: "La solicitud empieza como una necesidad: cobertura, energía, carga, seguridad, control o audio.",
+    details: ["Categoría de servicio", "Tipo de espacio", "Punto principal"],
+    state: "Capturada",
+    input: "Necesidad / problema",
+    output: "Señal técnica inicial",
   },
   {
     index: "02",
     title: "Sistema",
-    text: "ARCWAVE mapea el servicio como parte de una capa tecnica conectada.",
-    details: ["Dependencias", "Rutas", "Limitaciones"],
+    text: "ARCWAVE mapea la necesidad como parte de una capa técnica conectada, no como una tarea aislada.",
+    details: ["Dependencias de red + energía", "Capas de seguridad / confort", "Puntos de acceso"],
+    state: "Mapeado",
+    input: "Mezcla de servicios",
+    output: "Vista del sistema",
   },
   {
     index: "03",
     title: "Ruta",
-    text: "Alcance, materiales, acceso y recorrido quedan claros antes de presupuestar.",
-    details: ["Ruta de instalacion", "Equipos", "Plazo"],
+    text: "Alcance, materiales, recorridos, acceso y plazo quedan claros para poder presupuestar.",
+    details: ["Rutas y distancias", "Ubicación de cuadro / rack", "Restricciones del edificio"],
+    state: "Aclarada",
+    input: "Restricciones del sitio",
+    output: "Camino instalable",
   },
   {
     index: "04",
     title: "Prueba",
-    text: "La claridad tecnica sustituye las promesas genericas: etiquetas, notas y contexto.",
-    details: ["Pruebas", "Etiquetas", "Entrega"],
+    text: "La claridad técnica sustituye promesas genéricas: notas, etiquetas, diagramas y contexto de soporte.",
+    details: ["Etiquetas y notas", "Resultado esperado", "Entrega preparada para soporte"],
+    state: "Verificada",
+    input: "Plan técnico",
+    output: "Paquete de claridad",
   },
   {
     index: "05",
     title: "Presupuesto",
-    text: "La respuesta se basa en el espacio, las limitaciones y el resultado esperado.",
-    details: ["Alcance", "Siguientes pasos", "Respuesta"],
+    text: "El cliente recibe una respuesta práctica basada en espacio, restricciones y resultado esperado.",
+    details: ["Servicio seleccionado", "Notas del espacio", "Siguiente respuesta"],
+    state: "Lista",
+    input: "Alcance confirmado",
+    output: "Brief de presupuesto",
   },
 ];
+
+const heroStages = [
+  { index: "01", title: "Necesidad", meta: "Capturada", input: "Solicitud", output: "Señal" },
+  { index: "02", title: "Sistema", meta: "Mapeado", input: "Servicios", output: "Capa" },
+  { index: "03", title: "Límites", meta: "Revisados", input: "Sitio real", output: "Límites" },
+  { index: "04", title: "Instalación", meta: "Trazada", input: "Rutas", output: "Camino" },
+  { index: "05", title: "Brief", meta: "Listo", input: "Alcance", output: "Brief" },
+];
+
+const proofRail = [
+  "Necesidad capturada",
+  "Dependencias mapeadas",
+  "Ruta de presupuesto aclarada",
+  "Contexto de soporte documentado",
+];
+
+const briefItems = ["Servicio", "Espacio", "Restricciones", "Siguiente respuesta"];
 ---
 
 <BaseLayout
   title={`Proceso - ${siteEs.name}`}
-  description="Senal, sistema, ruta de servicio, prueba y presupuesto para instalaciones tecnicas mantenibles."
+  description="Señal, sistema, ruta de servicio, prueba y presupuesto para instalaciones técnicas mantenibles."
 >
-  <div class="interfacePage">
+  <div class="interfacePage processPage">
     <section class="interfaceHero">
       <div class="interfaceHeroCopy motionIn">
-        <div class="interfaceEyebrow">Ruta de instalacion</div>
-        <h1 class="interfaceTitle">De necesidad suelta a sistema instalado.</h1>
+        <div class="interfaceEyebrow">Ruta técnica de servicio</div>
+        <h1 class="interfaceTitle">De la señal al sistema instalado.</h1>
         <p class="interfaceLead">
-          El proceso ARCWAVE convierte una solicitud tecnica poco definida en una
-          ruta clara: dependencias, limitaciones, instalacion limpia y entrega mantenible.
+          ARCWAVE convierte solicitudes técnicas en dependencias mapeadas, alcance
+          claro, rutas de instalación limpias y entrega preparada para soporte.
         </p>
+        <div class="processProofRail" aria-label="Resultados del proceso">
+          {proofRail.map((item) => <span>{item}</span>)}
+        </div>
         <div class="interfaceActions">
           <a class="primary" href="/es/contact#quote" data-vt="1">Solicitar presupuesto</a>
           <a class="secondary" href="/es/services" data-vt="1">Explorar servicios</a>
         </div>
-        <div class="interfaceFormula" aria-label="Formula de proceso">
-          <span>senal</span><i></i><span>sistema</span><i></i><span>ruta</span><i></i><span>prueba</span><i></i><span>presupuesto</span>
+        <div class="interfaceFormula" aria-label="Fórmula de proceso">
+          <span>señal</span><i></i><span>sistema</span><i></i><span>ruta</span><i></i><span>prueba</span><i></i><span>presupuesto</span>
         </div>
       </div>
 
-      <div class="interfacePanel processHeroPanel motionIn" aria-label="Sistema de proceso">
-        {process.map((item) => (
-          <div class="processNode">
-            <span>{item.index}</span>
-            <strong>{item.title}</strong>
+      <div class="interfacePanel processHeroPanel motionIn" aria-label="Panel diagnóstico solicitud-presupuesto">
+        <div class="diagnosticRail" aria-hidden="true">
+          <span>Señal de solicitud</span>
+          <i></i>
+          <span>Sistema mapeado</span>
+          <i></i>
+          <span>Ruta presupuestable</span>
+        </div>
+        <div class="diagnosticPathLine" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="diagnosticStageGrid">
+          {heroStages.map((item, index) => (
+            <div class={`diagnosticStage ${index === 2 ? "isActive" : ""}`.trim()}>
+              <div>
+                <span>{item.index}</span>
+                <strong>{item.title}</strong>
+                <p>{item.meta}</p>
+              </div>
+              <dl>
+                <div>
+                  <dt>Input</dt>
+                  <dd>{item.input}</dd>
+                </div>
+                <div>
+                  <dt>Output</dt>
+                  <dd>{item.output}</dd>
+                </div>
+              </dl>
+            </div>
+          ))}
+        </div>
+        <div class="diagnosticSummary">
+          <div>
+            <span>Resumen técnico</span>
+            <strong>Necesidad -&gt; presupuesto</strong>
           </div>
-        ))}
+          <dl>
+            <div><dt>Input</dt><dd>Necesidad</dd></div>
+            <div><dt>Mapeado</dt><dd>Red + energía + acceso</dd></div>
+            <div><dt>Output</dt><dd>Ruta clara</dd></div>
+          </dl>
+        </div>
       </div>
     </section>
 
-    <section class="interfaceSection">
+    <section class="interfaceSection processJourneySection">
       <div class="interfaceSectionHead">
         <div>
-          <div class="interfaceEyebrow">Journey de servicio</div>
+          <div class="interfaceEyebrow">Recorrido de servicio</div>
           <p>
-            La ruta ayuda a comprar trabajo tecnico invisible con menos dudas:
-            mejores decisiones, menos supuestos y entrega mas clara.
+            La ruta ayuda a comprar trabajo técnico invisible con menos supuestos:
+            decisiones más claras, mejor alcance y entrega más legible.
           </p>
         </div>
-        <h2>Una ruta tecnica comprensible.</h2>
+        <h2>Una ruta técnica que se mantiene comprensible.</h2>
       </div>
 
       <div class="interfaceTopology">
-        <div class="processGrid">
+        <div class="processLane" aria-label="Ruta diagnóstica">
           {process.map((item) => (
             <article class="interfaceCard pathStep">
-              <span class="interfaceIndex">{item.index}</span>
-              <div>
+              <div class="pathStepHead">
+                <span class="interfaceIndex">{item.index} / {item.title}</span>
                 <h3>{item.title}</h3>
-                <p>{item.text}</p>
-                <ul>
-                  {item.details.map((detail) => <li>{detail}</li>)}
-                </ul>
               </div>
+              <div class="pathStepIO">
+                <div>
+                  <span>Input</span>
+                  <strong>{item.input}</strong>
+                </div>
+                <div>
+                  <span>Output</span>
+                  <strong>{item.output}</strong>
+                </div>
+              </div>
+              <p>{item.text}</p>
+              <ul>
+                {item.details.map((detail) => <li>{detail}</li>)}
+              </ul>
             </article>
           ))}
         </div>
       </div>
     </section>
 
-    <section class="interfaceSection">
+    <section class="interfaceSection processClaritySection">
       <div class="interfaceSectionHead">
         <div>
           <div class="interfaceEyebrow">Claridad de entrega</div>
           <p>
-            La confianza viene de lo que se comprueba, se instala y se entrega de
-            forma legible para soporte futuro.
+            Esto hace creíble el proceso: el cliente entiende qué se revisará,
+            qué se instalará y qué recibirá para soporte futuro.
           </p>
         </div>
-        <h2>Lo que ARCWAVE hace explicito.</h2>
+        <h2>Lo que ARCWAVE aclara antes de empezar.</h2>
       </div>
 
       <div class="interfaceMetrics">
         <article class="interfaceMetric">
+          <span class="proofDot" aria-hidden="true"></span>
           <span class="interfaceIndex">01 / Alcance</span>
-          <strong>Limitaciones antes de comprometerse.</strong>
-          <p>Acceso, distancias, cableado existente, cuadro y entrada de operador se aclaran pronto.</p>
+          <strong>Restricciones antes del compromiso.</strong>
+          <p>Acceso, distancias, cableado existente, energía y entrada de operador se aclaran pronto.</p>
         </article>
         <article class="interfaceMetric">
-          <span class="interfaceIndex">02 / Instalacion</span>
-          <strong>Trabajo limpio que se entiende despues.</strong>
-          <p>Rutas, etiquetas, terminaciones y decisiones practicas forman parte del servicio.</p>
+          <span class="proofDot" aria-hidden="true"></span>
+          <span class="interfaceIndex">02 / Instalación</span>
+          <strong>Trabajo limpio que se entiende después.</strong>
+          <p>Rutas, etiquetas, terminaciones y decisiones prácticas forman parte del servicio.</p>
         </article>
         <article class="interfaceMetric">
+          <span class="proofDot" aria-hidden="true"></span>
           <span class="interfaceIndex">03 / Entrega</span>
           <strong>Un sistema, no una caja negra.</strong>
-          <p>Notas y contexto de soporte facilitan mantenimiento y futuras mejoras.</p>
+          <p>Notas y contexto de soporte facilitan mantenimiento y futuras ampliaciones.</p>
         </article>
       </div>
     </section>
 
-    <section class="interfaceSection">
+    <section class="interfaceSection processCtaSection">
       <div class="interfacePanel interfaceCta">
         <div>
           <div class="interfaceEyebrow">Siguiente paso</div>
-          <h2>Convierte tu espacio en un brief tecnico.</h2>
+          <h2>Convierte tu espacio en un brief técnico.</h2>
           <p>
-            Selecciona la ruta de servicio, describe el espacio y las limitaciones,
-            y ARCWAVE podra responder con mejores preguntas y un presupuesto mas claro.
+            Selecciona la ruta de servicio, describe espacio y restricciones, y
+            ARCWAVE convertirá la solicitud en una ruta de presupuesto más clara.
           </p>
+        </div>
+        <div class="briefCard" aria-label="Inputs del brief">
+          <span>Brief técnico</span>
+          {briefItems.map((item) => (
+            <div>
+              <strong>{item}</strong>
+              <i></i>
+            </div>
+          ))}
         </div>
         <a class="primary" href="/es/contact#quote" data-vt="1">Solicitar presupuesto</a>
       </div>
@@ -146,50 +239,580 @@ const process = [
   </div>
 
   <style>
-    .processHeroPanel{
-      min-height: 680px;
-      display:grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 12px;
-      align-items:end;
-      padding: clamp(18px, 2.4vw, 34px);
+    .processPage{
+      --interface-container: min(100% - clamp(28px, 5vw, 92px), 1640px);
     }
-    .processNode{
+
+    .processPage .interfaceHero{
+      min-height:auto;
+      grid-template-columns: minmax(380px, .76fr) minmax(0, 1.06fr);
+      gap: clamp(30px, 4.8vw, 78px);
+      align-items:center;
+      padding: clamp(42px, 6vw, 82px) 0 clamp(40px, 5vw, 72px);
+    }
+
+    .processPage .interfaceTitle{
+      max-width: 7.8em;
+      font-size: clamp(56px, 7.1vw, 116px);
+    }
+
+    .processProofRail{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 8px;
+      margin-top: 22px;
+      max-width: 58ch;
+    }
+
+    .processProofRail span{
+      display:inline-flex;
+      align-items:center;
+      min-height: 30px;
+      padding: 0 10px;
+      border-radius:999px;
+      border: 1px solid rgba(15,15,20,.075);
+      background: rgba(255,255,255,.62);
+      color: rgba(15,15,20,.62);
+      font-size: 11px;
+      font-weight:760;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .processPage .interfaceSection{
+      padding: clamp(46px, 5.4vw, 88px) 0;
+    }
+
+    .processHeroPanel{
+      min-height: clamp(470px, 42vw, 590px);
+      display:grid;
+      grid-template-rows: auto 1fr auto;
+      gap: clamp(16px, 2vw, 26px);
+      padding: clamp(18px, 2.4vw, 34px);
+      border-color: rgba(10,132,255,.13);
+    }
+
+    .diagnosticRail{
       position:relative;
-      z-index:2;
-      min-height: 190px;
+      z-index:4;
+      display:grid;
+      grid-template-columns: auto minmax(24px, 1fr) auto minmax(24px, 1fr) auto;
+      align-items:center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(15,15,20,.065);
+      background: rgba(255,255,255,.60);
+    }
+
+    .diagnosticRail span,
+    .diagnosticSummary > div > span,
+    .briefCard > span{
+      color: var(--muted2);
+      font-size: 10px;
+      font-weight:760;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+
+    .diagnosticRail i{
+      height:1px;
+      background: linear-gradient(90deg, rgba(10,132,255,.40), rgba(35,198,190,.18));
+    }
+
+    .diagnosticPathLine{
+      position:absolute;
+      left: clamp(34px, 4vw, 64px);
+      right: clamp(34px, 4vw, 64px);
+      top: 48%;
+      z-index:1;
+      display:grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      align-items:center;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(10,132,255,.42), rgba(35,198,190,.18), transparent);
+      pointer-events:none;
+    }
+
+    .diagnosticPathLine span{
+      justify-self:center;
+      width: 8px;
+      height: 8px;
+      border-radius:999px;
+      background: rgba(10,132,255,.54);
+      box-shadow: 0 0 0 7px rgba(10,132,255,.07);
+    }
+
+    .diagnosticStageGrid{
+      position:relative;
+      z-index:3;
+      display:grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: clamp(8px, 1vw, 14px);
+      align-items:center;
+    }
+
+    .diagnosticStage{
+      min-height: clamp(220px, 22vw, 310px);
       display:flex;
       flex-direction:column;
       justify-content:space-between;
-      padding: 18px;
-      border-radius: 22px;
-      border: 1px solid rgba(15,15,20,.075);
-      background: rgba(255,255,255,.70);
-      box-shadow: 0 18px 60px rgba(10,10,20,.08);
+      padding: clamp(14px, 1.45vw, 20px);
+      border-radius: 20px;
+      border: 1px solid rgba(15,15,20,.08);
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.70));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 18px 58px rgba(10,10,20,.075);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
     }
-    .processNode:nth-child(2),
-    .processNode:nth-child(4){ min-height: 280px; }
-    .processNode:nth-child(3){ min-height: 390px; }
-    .processNode span{
-      color: rgba(10,132,255,.78);
-      font-size: 12px;
+
+    .diagnosticStage:nth-child(2),
+    .diagnosticStage:nth-child(4){ transform: translateY(18px); }
+    .diagnosticStage:nth-child(5){ transform: translateY(28px); }
+    .diagnosticStage.isActive{
+      min-height: clamp(250px, 25vw, 340px);
+      border-color: rgba(10,132,255,.28);
+    }
+
+    .diagnosticStage span{
+      color: rgba(10,132,255,.80);
+      font-size: 11px;
       letter-spacing:.16em;
       font-weight:760;
     }
-    .processNode strong{
-      font-size: clamp(24px, 2.2vw, 38px);
-      line-height:.96;
+
+    .diagnosticStage strong{
+      display:block;
+      margin-top: 24px;
+      font-size: clamp(18px, 1.35vw, 24px);
+      line-height:.98;
       letter-spacing:-.04em;
+      overflow-wrap:normal;
+      word-break:normal;
     }
+
+    .diagnosticStage p{
+      width:fit-content;
+      margin: 10px 0 0;
+      padding: 5px 8px;
+      border-radius:999px;
+      border: 1px solid rgba(10,132,255,.14);
+      background: rgba(10,132,255,.065);
+      color: rgba(10,132,255,.72);
+      font-size: 10px;
+      font-weight:760;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+
+    .diagnosticStage dl,
+    .diagnosticSummary dl{
+      margin: 20px 0 0;
+      display:grid;
+      gap: 1px;
+      overflow:hidden;
+      border-radius: 14px;
+      border: 1px solid rgba(15,15,20,.065);
+      background: rgba(15,15,20,.055);
+    }
+
+    .diagnosticStage dl div,
+    .diagnosticSummary dl div{
+      display:grid;
+      gap: 3px;
+      min-width:0;
+      padding: 10px;
+      background: rgba(255,255,255,.60);
+    }
+
+    .diagnosticStage dt,
+    .diagnosticSummary dt{
+      color: var(--muted2);
+      font-size: 9px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-weight:760;
+    }
+
+    .diagnosticStage dd,
+    .diagnosticSummary dd{
+      margin:0;
+      color: rgba(15,15,20,.72);
+      font-size: 12px;
+      font-weight:720;
+      line-height:1.3;
+      overflow-wrap:anywhere;
+      hyphens:auto;
+    }
+
+    .diagnosticSummary{
+      position:relative;
+      z-index:4;
+      display:grid;
+      grid-template-columns: minmax(170px, .52fr) minmax(0, 1fr);
+      gap: 14px;
+      align-items:stretch;
+      padding: 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(10,132,255,.12);
+      background: linear-gradient(135deg, rgba(10,132,255,.06), transparent 48%), rgba(255,255,255,.64);
+    }
+
+    .diagnosticSummary > div > strong{
+      display:block;
+      margin-top: 8px;
+      font-size: 20px;
+      line-height:1;
+      letter-spacing:-.03em;
+    }
+
+    .diagnosticSummary dl{
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin:0;
+    }
+
+    .processLane{
+      position:relative;
+      z-index:2;
+      display:grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 1px;
+      padding: clamp(14px, 1.8vw, 24px);
+      border-radius: inherit;
+      background: rgba(15,15,20,.055);
+    }
+
+    .processPage .pathStep{
+      min-height: clamp(330px, 25vw, 390px);
+      display:grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 16px;
+      border-radius: 22px;
+      padding: clamp(20px, 2vw, 30px);
+      background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.70));
+    }
+
+    .pathStepIO{
+      display:grid;
+      gap: 1px;
+      overflow:hidden;
+      border-radius: 16px;
+      border: 1px solid rgba(15,15,20,.065);
+      background: rgba(15,15,20,.055);
+    }
+
+    .pathStepIO div{
+      display:grid;
+      gap: 4px;
+      padding: 11px;
+      background: rgba(255,255,255,.58);
+    }
+
+    .pathStepIO span{
+      color: var(--muted2);
+      font-size: 9px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-weight:760;
+    }
+
+    .pathStepIO strong{
+      color: rgba(15,15,20,.72);
+      font-size: 13px;
+      line-height:1.25;
+    }
+
+    .processPage .pathStep ul{
+      align-self:end;
+      margin:0;
+      padding:0;
+      list-style:none;
+      display:grid;
+      gap: 8px;
+    }
+
+    .processPage .pathStep li{
+      position:relative;
+      padding-left: 14px;
+      color: rgba(15,15,20,.56);
+      font-size: 13px;
+      line-height:1.35;
+    }
+
+    .processPage .pathStep li:before{
+      content:"";
+      position:absolute;
+      left:0;
+      top:.55em;
+      width: 5px;
+      height: 5px;
+      border-radius:999px;
+      background: rgba(10,132,255,.46);
+    }
+
+    .processPage .interfaceMetric{
+      position:relative;
+      min-height: clamp(240px, 20vw, 300px);
+    }
+
+    .proofDot{
+      position:absolute;
+      top: clamp(22px, 2vw, 34px);
+      right: clamp(22px, 2vw, 34px);
+      width: 9px;
+      height: 9px;
+      border-radius:999px;
+      background: rgba(10,132,255,.36);
+      box-shadow: 0 0 0 8px rgba(10,132,255,.065);
+    }
+
+    .processPage .interfaceCta{
+      min-height: clamp(280px, 26vw, 340px);
+      display:grid;
+      grid-template-columns: minmax(0, 1fr) minmax(220px, .34fr) auto;
+      align-items:flex-end;
+    }
+
+    .briefCard{
+      position:relative;
+      z-index:2;
+      min-width: 220px;
+      padding: 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(15,15,20,.075);
+      background: rgba(255,255,255,.64);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.82), 0 18px 54px rgba(10,10,20,.065);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .briefCard > div{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+      margin-top: 11px;
+      padding-top: 11px;
+      border-top: 1px solid rgba(15,15,20,.065);
+    }
+
+    .briefCard strong{
+      color: rgba(15,15,20,.72);
+      font-size: 13px;
+      line-height:1.2;
+    }
+
+    .briefCard i{
+      width: 8px;
+      height: 8px;
+      border-radius:999px;
+      background: rgba(10,132,255,.42);
+      box-shadow: 0 0 0 6px rgba(10,132,255,.055);
+      flex: 0 0 auto;
+    }
+
     @media (max-width: 1180px){
-      .processHeroPanel{ min-height:auto; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .processNode,
-      .processNode:nth-child(2),
-      .processNode:nth-child(3),
-      .processNode:nth-child(4){ min-height: 220px; }
+      .processPage .interfaceHero{
+        grid-template-columns: 1fr;
+      }
+
+      .processHeroPanel{
+        min-height:auto;
+      }
+
+      .diagnosticStageGrid{
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .diagnosticPathLine{
+        display:none;
+      }
+
+      .diagnosticStage,
+      .diagnosticStage:nth-child(2),
+      .diagnosticStage:nth-child(4),
+      .diagnosticStage:nth-child(5),
+      .diagnosticStage.isActive{
+        min-height: 230px;
+        transform:none;
+      }
+
+      .diagnosticSummary{
+        grid-template-columns: 1fr;
+      }
+
+      .processLane{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .processPage .interfaceCta{
+        grid-template-columns: 1fr;
+        align-items:start;
+      }
+
+      .briefCard{
+        width: min(100%, 420px);
+      }
     }
-    @media (max-width: 760px){ .processHeroPanel{ grid-template-columns: 1fr; } }
+
+    @media (max-width: 760px){
+      .processPage{
+        --interface-container: min(100% - 28px, 100%);
+      }
+
+      .processPage .interfaceHero{
+        padding-top: 26px;
+        padding-bottom: 26px;
+      }
+
+      .processPage .interfaceTitle{
+        max-width: 100%;
+        font-size: clamp(36px, 10.4vw, 46px);
+        line-height:.98;
+        letter-spacing:-.035em;
+        overflow-wrap: break-word;
+        text-wrap: balance;
+      }
+
+      .processPage .interfaceSectionHead h2{
+        max-width: 100%;
+        font-size: clamp(32px, 9.4vw, 43px);
+        line-height:1;
+        overflow-wrap:break-word;
+      }
+
+      .processPage .interfaceLead{
+        max-width: 36ch;
+      }
+
+      .processPage .interfaceActions{
+        display:grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .processPage .interfaceActions .primary,
+      .processPage .interfaceActions .secondary{
+        width:100%;
+      }
+
+      .processPage .interfaceFormula{
+        gap: 8px;
+        font-size: 10px;
+      }
+
+      .processPage .interfaceFormula i{
+        width: 18px;
+      }
+
+      .processPage .interfaceSection{
+        padding: 32px 0;
+      }
+
+      .processHeroPanel{
+        padding: 14px;
+        border-radius: 22px;
+      }
+
+      .diagnosticRail,
+      .diagnosticStageGrid,
+      .processLane{
+        grid-template-columns: 1fr;
+      }
+
+      .diagnosticRail i{
+        display:none;
+      }
+
+      .diagnosticSummary dl{
+        grid-template-columns: 1fr;
+      }
+
+      .diagnosticStage,
+      .diagnosticStage:nth-child(2),
+      .diagnosticStage:nth-child(4),
+      .diagnosticStage:nth-child(5),
+      .diagnosticStage.isActive,
+      .processPage .pathStep{
+        min-height: auto;
+      }
+
+      .diagnosticStage{
+        padding: 14px;
+        border-radius: 17px;
+      }
+
+      .diagnosticStage strong{
+        margin-top: 14px;
+      }
+
+      .diagnosticStage dl{
+        margin-top: 14px;
+      }
+
+      .processLane{
+        gap: 10px;
+        padding: 0 0 0 16px;
+        border-radius: 0;
+        background: transparent;
+      }
+
+      .processLane:before{
+        display:block;
+        left: 3px;
+        right:auto;
+        top: 8px;
+        bottom: 8px;
+        width: 1px;
+        height:auto;
+        background: linear-gradient(180deg, rgba(10,132,255,.38), rgba(35,198,190,.18), transparent);
+      }
+
+      .processPage .pathStep{
+        gap: 12px;
+        padding: 16px 40px 16px 16px;
+        border-radius: 18px;
+      }
+
+      .proofDot{
+        top: 16px;
+        right: 16px;
+        left:auto;
+        bottom:auto;
+        z-index:1;
+        pointer-events:none;
+      }
+
+      .processPage .pathStep > *,
+      .processPage .interfaceMetric > *{
+        position:relative;
+        z-index:2;
+      }
+
+      .processPage .pathStep li{
+        display:grid;
+        grid-template-columns: 10px minmax(0, 1fr);
+        gap: 6px;
+        padding-left:0;
+      }
+
+      .processPage .pathStep li:before{
+        position:relative;
+        left:auto;
+        top:.55em;
+        transform:none;
+      }
+
+      .processPage .interfaceCta{
+        min-height: auto;
+        grid-template-columns: 1fr;
+        align-items:start;
+      }
+
+      .briefCard{
+        width:100%;
+        min-width:0;
+      }
+    }
   </style>
 </BaseLayout>

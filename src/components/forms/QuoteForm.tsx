@@ -15,6 +15,13 @@ type Props = {
   defaultServiceKey?: ServiceKey;
   fallbackEmail?: string;
   fallbackSubject?: string;
+  labels?: {
+    service?: string;
+    fallbackNotice?: string;
+    sendButton?: string;
+    prepareButton?: string;
+    sent?: string;
+  };
 };
 
 function normalizeFields(fields: QuoteField[]) {
@@ -53,6 +60,7 @@ export default function QuoteForm({
   defaultServiceKey,
   fallbackEmail,
   fallbackSubject,
+  labels,
 }: Props) {
   const safeCommon = useMemo(() => normalizeFields(commonFields ?? []), [commonFields]);
 
@@ -215,7 +223,7 @@ export default function QuoteForm({
 
       <div style={{ display: "grid", gap: 12 }}>
         <div>
-          <label className="k">Service</label>
+          <label className="k">{labels?.service || "Service"}</label>
           <select
             className="in"
             value={serviceKey}
@@ -301,15 +309,19 @@ export default function QuoteForm({
         </div>
 
         {!isConfiguredEndpoint(endpoint) ? (
-          <div className="muted">Concept demo: your request opens as a prepared email draft.</div>
+          <div className="muted">
+            {labels?.fallbackNotice || "Your request opens as a prepared email draft."}
+          </div>
         ) : null}
 
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
           <button className="btn primary" type="submit" disabled={status.kind === "sending"}>
-            {isConfiguredEndpoint(endpoint) ? "Send technical brief" : "Prepare technical brief"}
+            {isConfiguredEndpoint(endpoint)
+              ? labels?.sendButton || "Send technical brief"
+              : labels?.prepareButton || "Prepare technical brief"}
           </button>
 
-          {status.kind === "sent" ? <div className="ok">Sent.</div> : null}
+          {status.kind === "sent" ? <div className="ok">{labels?.sent || "Sent."}</div> : null}
           {status.kind === "error" ? <div className="err">{status.message}</div> : null}
         </div>
       </div>
@@ -360,6 +372,23 @@ export default function QuoteForm({
         .err{ font-size: 13px; color: #b00020; }
         @media (max-width: 780px){
           .grid2{ grid-template-columns: 1fr; }
+        }
+        @media (max-width: 760px){
+          .k{
+            font-size:10px;
+            letter-spacing:.14em;
+          }
+          .in{
+            min-height:46px;
+            border-radius:13px;
+            padding: 11px 12px;
+          }
+          textarea.in{
+            min-height:132px;
+          }
+          button.primary{
+            width:100%;
+          }
         }
       `}</style>
     </form>

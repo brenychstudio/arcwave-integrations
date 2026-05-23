@@ -386,30 +386,95 @@ const requestSteps = ["Service", "Space", "Constraints", "Brief"];
 
     @media (max-width: 760px){
       .contactPage .interfaceHero{
-        padding-top: 32px;
-        padding-bottom: 34px;
+        padding-top: 26px;
+        padding-bottom: 28px;
       }
 
       .contactPage .interfaceSection{
-        padding: 36px 0;
+        padding: 32px 0;
       }
 
       .contactPage .interfaceHero + .interfaceSection{
-        padding-top: 24px;
+        padding-top: 18px;
+      }
+
+      .contactHeroPanel{
+        min-height: 245px;
+        padding: 16px;
+        border-radius: 22px;
+      }
+
+      .briefPreview{
+        padding: 16px;
+        border-radius: 18px;
+      }
+
+      .briefPreview strong{
+        max-width: 10em;
+        font-size: clamp(28px, 8.8vw, 40px);
+        line-height:1;
+      }
+
+      .briefPreview p{
+        margin-top: 10px;
+        font-size: 13px;
+        line-height:1.45;
       }
 
       .briefRows div{
         grid-template-columns: 1fr;
+        gap: 5px;
+        padding: 12px;
+      }
+
+      .contactGrid{
+        display:flex;
+        flex-direction:column;
+        gap: 22px;
+      }
+
+      .requestPanel{
+        order:1;
+      }
+
+      .contactAside{
+        order:2;
+      }
+
+      .contactTitle{
+        max-width: 9em;
+        font-size: clamp(32px, 9vw, 44px);
+        line-height:.98;
       }
 
       .contactPage .contactChannel{
         grid-template-columns: 1fr;
         min-height: auto;
+        gap: 5px;
+        padding: 12px;
+      }
+
+      .contactPage .contactChannel strong{
+        overflow-wrap:anywhere;
+      }
+
+      .requestPanel{
+        padding: 18px;
+        border-radius: 22px;
+      }
+
+      .requestHead h2{
+        max-width: 9.6em;
+        font-size: clamp(28px, 8vw, 36px);
+        line-height:1;
+        overflow-wrap: break-word;
+        text-wrap: balance;
       }
 
       .requestRail{
         grid-template-columns: 1fr 1fr;
         gap: 8px;
+        padding: 10px;
       }
 
       .requestRail i{

@@ -1003,13 +1003,24 @@ const briefItems = ["Service", "Space", "Constraints", "Next response"];
       }
 
       .processPage .interfaceHero{
-        padding-top: 32px;
-        padding-bottom: 30px;
+        padding-top: 26px;
+        padding-bottom: 26px;
       }
 
       .processPage .interfaceTitle{
-        max-width: 6.2em;
-        font-size: clamp(38px, 11.8vw, 52px);
+        max-width: 8.8em;
+        font-size: clamp(36px, 10.4vw, 46px);
+        line-height:.98;
+        letter-spacing:-.035em;
+        overflow-wrap: break-word;
+        text-wrap: balance;
+      }
+
+      .processPage .interfaceSectionHead h2{
+        max-width: 100%;
+        font-size: clamp(32px, 9.6vw, 44px);
+        line-height:1;
+        overflow-wrap:break-word;
       }
 
       .processProofRail{
@@ -1037,15 +1048,16 @@ const briefItems = ["Service", "Space", "Constraints", "Next response"];
       }
 
       .processPage .interfaceSection{
-        padding: 36px 0;
+        padding: 32px 0;
       }
 
       .processPage .interfaceHero + .interfaceSection{
-        padding-top: 26px;
+        padding-top: 20px;
       }
 
       .processHeroPanel{
         padding: 14px;
+        border-radius: 22px;
       }
 
       .diagnosticRail{
@@ -1067,7 +1079,17 @@ const briefItems = ["Service", "Space", "Constraints", "Next response"];
       .diagnosticStage:nth-child(4),
       .diagnosticStage:nth-child(5),
       .diagnosticStage.isActive{
-        min-height: 190px;
+        min-height: auto;
+        padding: 14px;
+        border-radius: 17px;
+      }
+
+      .diagnosticStage strong{
+        margin-top: 14px;
+      }
+
+      .diagnosticStage dl{
+        margin-top: 14px;
       }
 
       .diagnosticSummary dl{
@@ -1101,10 +1123,61 @@ const briefItems = ["Service", "Space", "Constraints", "Next response"];
         margin-top: 18px;
       }
 
+      .processLane{
+        gap: 10px;
+        padding: 0 0 0 16px;
+        border-radius: 0;
+        background: transparent;
+      }
+
+      .processLane:before{
+        display:block;
+        left: 3px;
+        right:auto;
+        top: 8px;
+        bottom: 8px;
+        width: 1px;
+        height:auto;
+        background: linear-gradient(180deg, rgba(10,132,255,.38), rgba(35,198,190,.18), transparent);
+      }
+
       .processPage .pathStep,
       .processPage .pathStep:nth-child(even),
       .processPage .pathStep:nth-child(odd){
-        min-height: 250px;
+        min-height: auto;
+        gap: 12px;
+        padding: 16px 40px 16px 16px;
+        border-radius: 18px;
+      }
+
+      .pathStep:before,
+      .proofDot{
+        top: 16px;
+        right: 16px;
+        left:auto;
+        bottom:auto;
+        z-index:1;
+        pointer-events:none;
+      }
+
+      .pathStep > *,
+      .processPage .interfaceMetric > *{
+        position:relative;
+        z-index:2;
+      }
+
+      .processPage .pathStep li{
+        display:grid;
+        grid-template-columns: 10px minmax(0, 1fr);
+        gap: 6px;
+        padding-left:0;
+      }
+
+      .processPage .pathStep li:before{
+        position:relative;
+        left:auto;
+        top:.55em;
+        transform:none;
       }
 
       .processPage .interfaceCta{

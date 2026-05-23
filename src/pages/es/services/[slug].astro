@@ -1,54 +1,89 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { siteEs } from "../../../content/site.es";
+import { COMPANY } from "../../../content/company";
 import { servicesEs } from "../../../content/services.es";
 import type { Service } from "../../../content/services";
+import { serviceDetailsEs } from "../../../content/serviceDetails.es";
 import "../../../styles/interface.css";
 
 export async function getStaticPaths() {
-  return servicesEs.map((s) => ({
-    params: { slug: s.key },
-    props: { service: s },
-  }));
+  return servicesEs
+    .filter((s) => typeof s?.key === "string" && s.key.trim().length > 0)
+    .map((s) => ({
+      params: { slug: s.key },
+      props: { service: s },
+    }));
 }
 
 const service = (Astro.props as { service?: Service }).service;
-if (!service) return Astro.redirect("/es/services");
+if (!service) {
+  return Astro.redirect("/es/services");
+}
 
 const serviceIndex = servicesEs.findIndex((item) => item.key === service.key);
 const serviceNumber = String(serviceIndex + 1).padStart(2, "0");
-const relatedServices = servicesEs.filter((item) => item.key !== service.key).slice(0, 3);
 const quoteHref = `/es/contact?service=${service.key}#quote`;
 const desc = service.description || service.short;
-
-const servicePath = [
-  { index: "01 / Senal", title: "La necesidad se vuelve visible.", text: service.short },
+const fallbackPath = [
+  {
+    index: "01 / Señal",
+    title: "La necesidad se vuelve visible.",
+    text: service.short,
+  },
   {
     index: "02 / Sistema",
     title: "Las dependencias se mapean.",
-    text: "Rutas, acceso, energia, red y limitaciones de soporte se aclaran antes de instalar.",
+    text: "Rutas, acceso, energía, red y restricciones de soporte se aclaran antes de instalar.",
   },
   {
     index: "03 / Entrega",
     title: "El resultado queda mantenible.",
-    text: "Etiquetas, notas practicas y recomendaciones dejan el sistema legible despues del trabajo.",
+    text: "Etiquetas, notas prácticas y recomendaciones mantienen el sistema legible después del trabajo.",
   },
 ];
+const detail = {
+  outcome: service.short,
+  activeLayer: service.title,
+  activeLayerText: service.short,
+  heroTags: [service.title, "Soporte"],
+  pathCards: fallbackPath,
+  quoteHints: ["acceso", "rutas", "cableado existente", "plazo"],
+  relatedServiceKeys: servicesEs.filter((item) => item.key !== service.key).map((item) => item.key),
+  scopeIntro:
+    "Los entregables se confirman con el sitio real: acceso, rutas, materiales, restricciones y nivel de soporte esperado.",
+  faqIntro: "Respuestas breves para reducir fricción antes de preparar la solicitud técnica.",
+  ...serviceDetailsEs[service.key],
+};
+const relatedByKey = detail.relatedServiceKeys
+  .map((key) => servicesEs.find((item) => item.key === key))
+  .filter((item): item is Service => Boolean(item));
+const relatedServices =
+  relatedByKey.length > 0
+    ? relatedByKey.slice(0, 3)
+    : servicesEs.filter((item) => item.key !== service.key).slice(0, 3);
+const servicePath = detail.pathCards;
+const heroTags = detail.heroTags.length > 0 ? detail.heroTags : [service.title, "Soporte"];
+const quoteHints = detail.quoteHints.length > 0 ? detail.quoteHints : ["acceso", "rutas", "cableado existente", "plazo"];
+const finalCtaCopy = `Abre el formulario con ${service.title} seleccionado y añade las restricciones importantes del sitio: ${quoteHints.join(", ")} y el resultado esperado.`;
 ---
 
 <BaseLayout title={`${service.title} - ${siteEs.name}`} description={desc}>
-  <div class="interfacePage">
+  <div class="interfacePage serviceDetailPage">
     <section class="interfaceHero">
       <div class="interfaceHeroCopy motionIn">
         <div class="interfaceEyebrow">{serviceNumber} / Ruta de servicio</div>
         <h1 class="interfaceTitle">{service.title}</h1>
-        <p class="interfaceLead">{desc}</p>
+        <p class="interfaceLead">{detail.outcome}</p>
+        <div class="serviceHeroTags" aria-label="Señales del servicio">
+          {heroTags.map((tag) => <span>{tag}</span>)}
+        </div>
         <div class="interfaceActions">
           <a class="primary" href={quoteHref} data-vt="1">Solicitar presupuesto</a>
           <a class="secondary" href="/es/services" data-vt="1">Todos los servicios</a>
         </div>
         <div class="interfaceFormula" aria-label="Ruta de servicio">
-          <span>senal</span><i></i><span>sistema</span><i></i><span>entrega</span><i></i><span>presupuesto</span>
+          <span>señal</span><i></i><span>sistema</span><i></i><span>entrega</span><i></i><span>presupuesto</span>
         </div>
       </div>
 
@@ -57,10 +92,10 @@ const servicePath = [
         <div class="interfacePanelContent">
           <div>
             <span class="interfaceIndex">Capa activa</span>
-            <h2>{service.title}</h2>
-            <p>{service.short}</p>
+            <h2>{detail.activeLayer}</h2>
+            <p>{detail.activeLayerText}</p>
           </div>
-          <div class="detailChip">Barcelona</div>
+          <div class="detailChip">Barcelona y alrededores</div>
         </div>
       </div>
     </section>
@@ -68,10 +103,10 @@ const servicePath = [
     <section class="interfaceSection">
       <div class="interfaceSectionHead">
         <div>
-          <div class="interfaceEyebrow">Ruta tecnica</div>
+          <div class="interfaceEyebrow">Ruta técnica</div>
           <p>
-            Esta pagina presenta {service.title} como una ruta instalable: necesidad,
-            sistema, limitaciones y entrega clara.
+            Esta página presenta {service.title} como una ruta instalable: qué necesita
+            el cliente, qué mapea ARCWAVE y qué debe entregarse con claridad.
           </p>
         </div>
         <h2>De solicitud a sistema mantenible.</h2>
@@ -94,12 +129,9 @@ const servicePath = [
       <div class="interfaceSectionHead">
         <div>
           <div class="interfaceEyebrow">Alcance claro</div>
-          <p>
-            Los entregables se confirman con el sitio real: acceso, rutas,
-            materiales, limitaciones y nivel de soporte esperado.
-          </p>
+          <p>{detail.scopeIntro}</p>
         </div>
-        <h2>Que puede incluir este servicio.</h2>
+        <h2>Qué puede incluir este servicio.</h2>
       </div>
 
       <div class="deliverableGrid">
@@ -110,74 +142,163 @@ const servicePath = [
         <aside class="interfaceCard factsPanel">
           <span class="interfaceIndex">Contexto de presupuesto</span>
           <dl>
-            <div><dt>Respuesta</dt><dd>1-2 dias laborables</dd></div>
-            <div><dt>Area</dt><dd>{siteEs.contact.serviceArea}</dd></div>
-            <div><dt>Siguiente</dt><dd><a href={quoteHref}>Solicitar presupuesto</a></dd></div>
-            <div><dt>Preseleccion</dt><dd>{service.title}</dd></div>
+            <div>
+              <dt>Respuesta</dt>
+              <dd>1-2 días laborables</dd>
+            </div>
+            <div>
+              <dt>Área</dt>
+              <dd>{siteEs.contact.serviceArea}</dd>
+            </div>
+            <div>
+              <dt>Contacto</dt>
+              <dd><a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a></dd>
+            </div>
+            <div>
+              <dt>Preselección</dt>
+              <dd>{service.title}</dd>
+            </div>
           </dl>
+          <div class="quoteHints" aria-label="Pistas para presupuesto">
+            {quoteHints.map((hint) => <span>{hint}</span>)}
+          </div>
         </aside>
       </div>
     </section>
 
-    {service.faqs?.length ? (
-      <section class="interfaceSection">
-        <div class="interfaceSectionHead">
-          <div>
-            <div class="interfaceEyebrow">Soporte de decision</div>
-            <p>Respuestas breves para reducir friccion antes de solicitar presupuesto.</p>
-          </div>
-          <h2>Preguntas frecuentes.</h2>
-        </div>
-
-        <div class="faqGrid">
-          {service.faqs.map((item) => (
-            <details class="interfaceCard interfaceFaq">
-              <summary>{item.q}</summary>
-              <div>{item.a}</div>
-            </details>
-          ))}
-        </div>
-      </section>
-    ) : null}
-
-    <section class="interfaceSection">
+    <section class="interfaceSection serviceSupportSection">
       <div class="interfaceSectionHead">
         <div>
-          <div class="interfaceEyebrow">Rutas relacionadas</div>
-          <p>Muchas instalaciones conectan mas de una capa tecnica.</p>
+          <div class="interfaceEyebrow">Soporte de decisión</div>
+          <p>{detail.faqIntro}</p>
         </div>
-        <h2>Capas de infraestructura cercanas.</h2>
+        <h2>Preguntas y capas conectadas.</h2>
       </div>
 
-      <div class="servicePathGrid interfaceTopology">
-        {relatedServices.map((item, index) => (
-          <a class="interfaceCard servicePathCard" href={`/es/services/${item.key}`} data-vt="1">
-            <div>
-              <span class="interfaceIndex">{String(index + 1).padStart(2, "0")} / Relacionada</span>
-              <h3>{item.title}</h3>
-              <p>{item.short}</p>
-            </div>
-            <div class="servicePathMeta">
-              <span>Capa tecnica</span>
-              <span>Ruta de presupuesto</span>
-            </div>
-          </a>
-        ))}
+      <div class="serviceSupportGrid">
+        {service.faqs?.length ? (
+          <div class="supportFaqList">
+            {service.faqs.map((item) => (
+              <details class="interfaceCard interfaceFaq compactFaq">
+                <summary>{item.q}</summary>
+                <div>{item.a}</div>
+              </details>
+            ))}
+          </div>
+        ) : null}
+
+        <aside class="interfaceTopology relatedCompactPanel">
+          <div class="relatedCompactHead">
+            <span class="interfaceIndex">Rutas relacionadas</span>
+            <p>La mayoría de instalaciones toca más de una capa. Estas rutas suelen conectarse.</p>
+          </div>
+
+          <div class="relatedCompactList">
+            {relatedServices.map((item, index) => (
+              <a class="interfaceCard relatedCompactCard" href={`/es/services/${item.key}`} data-vt="1">
+                <div>
+                  <span class="interfaceIndex">{String(index + 1).padStart(2, "0")} / Relacionada</span>
+                  <h3>{item.title}</h3>
+                  <p>{item.short}</p>
+                </div>
+                <div class="relatedCompactFooter">
+                  <div class="servicePathMeta">
+                    <span>Capa del sistema</span>
+                    <span>Ruta de presupuesto</span>
+                  </div>
+                  <span class="relatedCompactCta">Ver ruta</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </aside>
       </div>
     </section>
 
     <section class="interfaceSection">
       <div class="interfacePanel interfaceCta">
         <div>
-          <div class="interfaceEyebrow">Solicitud tecnica</div>
-          <h2>Solicita presupuesto para {service.title}.</h2>
-          <p>
-            Abre el formulario con este servicio seleccionado y anade las limitaciones
-            importantes del sitio: acceso, rutas, cableado existente, plazo y resultado esperado.
-          </p>
+          <div class="interfaceEyebrow">Solicitud técnica</div>
+          <h2>Obtén un presupuesto claro para {service.title}.</h2>
+          <p>{finalCtaCopy}</p>
         </div>
         <a class="primary" href={quoteHref} data-vt="1">Solicitar presupuesto</a>
       </div>
     </section>
   </div>
+
+  <style>
+    .serviceDetailPage .detailHeroPanel .interfacePanelContent,
+    .serviceDetailPage .detailHeroPanel .interfacePanelContent > div,
+    .serviceDetailPage .detailTile,
+    .serviceDetailPage .factsPanel div,
+    .serviceDetailPage .relatedCompactCard{
+      min-width:0;
+    }
+
+    .serviceDetailPage .interfaceLead,
+    .serviceDetailPage .detailHeroPanel h2,
+    .serviceDetailPage .detailHeroPanel p,
+    .serviceDetailPage .detailTile h3,
+    .serviceDetailPage .detailTile p,
+    .serviceDetailPage .factsPanel dd,
+    .serviceDetailPage .relatedCompactCard h3,
+    .serviceDetailPage .relatedCompactCard p,
+    .serviceDetailPage .serviceHeroTags span,
+    .serviceDetailPage .quoteHints span{
+      overflow-wrap:break-word;
+      word-break:normal;
+      hyphens:auto;
+    }
+
+    @media (max-width: 760px){
+      .serviceDetailPage .detailHeroPanel h2{
+        font-size: clamp(24px, 7vw, 30px);
+        line-height:1.04;
+      }
+
+      .serviceDetailPage .detailHeroPanel p{
+        font-size:14px;
+        line-height:1.48;
+      }
+
+      .serviceDetailPage .interfaceActions{
+        display:grid;
+        grid-template-columns: 1fr;
+        width:100%;
+      }
+
+      .serviceDetailPage .interfaceActions .primary,
+      .serviceDetailPage .interfaceActions .secondary{
+        width:100%;
+      }
+
+      .serviceDetailPage .detailChip{
+        width:fit-content;
+        max-width:100%;
+      }
+
+      .serviceDetailPage .interfaceFormula{
+        gap:8px;
+      }
+
+      .serviceDetailPage .interfaceFormula i{
+        width:22px;
+      }
+    }
+
+    @media (max-width: 420px){
+      .serviceDetailPage .interfaceTitle,
+      .serviceDetailPage .interfaceSectionHead h2,
+      .serviceDetailPage .interfaceCta h2{
+        font-size: clamp(34px, 10.2vw, 44px);
+        overflow-wrap: break-word;
+        text-wrap: balance;
+      }
+
+      .serviceDetailPage .detailHeroPanel{
+        min-height:340px;
+      }
+    }
+  </style>
 </BaseLayout>

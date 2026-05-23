@@ -47,6 +47,25 @@ const labelSystem = t(lang, "System", "Sistema");
 const labelAvailability = t(lang, "Barcelona & nearby", "Barcelona y alrededores");
 const labelBrief = t(lang, "Technical brief", "Brief tecnico");
 const labelQuote = t(lang, "Request a quote", "Presupuesto");
+const pathParts = Astro.url.pathname.split("/").filter(Boolean);
+const serviceIndex = pathParts.indexOf("services");
+const serviceKey =
+  serviceIndex >= 0 && pathParts[serviceIndex + 1]
+    ? pathParts[serviceIndex + 1] === "cctv"
+      ? "alarms"
+      : pathParts[serviceIndex + 1]
+    : null;
+const isServiceDetail = Boolean(serviceKey);
+const isContactPage = pathParts.at(-1) === "contact";
+const isLegalPage =
+  pathParts.includes("legal") ||
+  pathParts.at(-1) === "privacy" ||
+  pathParts.at(-1) === "cookies";
+const showMobileBottomCta = !isContactPage && !isLegalPage;
+const mobileBottomCtaLabel = t(lang, "Start request", "Iniciar solicitud");
+const mobileBottomCtaHref = isServiceDetail
+  ? `${base}/contact?service=${serviceKey}#quote`
+  : `${base}/contact#quote`;
 const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
 ---
 
@@ -108,6 +127,11 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
 
         --container: 1120px;
         --site-header-space: 104px;
+        --mobile-shell: min(100% - 28px, 640px);
+        --mobile-section-y: 56px;
+        --mobile-section-y-tight: 36px;
+        --mobile-card-radius: 22px;
+        --mobile-header-safe: 86px;
         /* Typography weights (Windows-friendly) */
         --w-body: 420;
         --w-ui: 600;
@@ -169,6 +193,10 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
         margin-inline: auto;
       }
 
+      .mobileBottomCta{
+        display:none;
+      }
+
       .hr{ height:1px; background: var(--border2); }
 
       .card{
@@ -228,6 +256,107 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
       @media (max-width: 520px){
         :root{
           --site-header-space: 92px;
+        }
+      }
+
+      @media (max-width: 760px){
+        :root{
+          --site-header-space: var(--mobile-header-safe);
+        }
+
+        html{
+          scroll-padding-top: var(--mobile-header-safe);
+          overflow-x:hidden;
+        }
+
+        body{
+          overflow-x:hidden;
+        }
+
+        body[data-mobile-cta="true"]{
+          padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .container,
+        .mobile-shell{
+          width: var(--mobile-shell);
+          margin-inline:auto;
+        }
+
+        .mobile-section{
+          padding-block: var(--mobile-section-y);
+          scroll-margin-top: var(--mobile-header-safe);
+        }
+
+        .mobile-section-tight{
+          padding-block: var(--mobile-section-y-tight);
+        }
+
+        .main{
+          padding-top: var(--mobile-header-safe);
+        }
+
+        .btn,
+        a.primary, button.primary,
+        a.secondary, button.secondary{
+          min-height: 44px;
+          padding-inline: 15px;
+        }
+
+        .card{
+          border-radius: var(--mobile-card-radius);
+        }
+
+        .mobileBottomCta{
+          position:fixed;
+          left: 16px;
+          right: 16px;
+          bottom: calc(10px + env(safe-area-inset-bottom));
+          z-index:70;
+          min-height: 52px;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          gap: 10px;
+          border-radius:999px;
+          border: 1px solid rgba(10,132,255,.34);
+          background:
+            linear-gradient(180deg, rgba(255,255,255,.92), rgba(234,246,255,.86));
+          color: rgba(15,15,20,.92);
+          box-shadow:
+            inset 0 1px 0 rgba(255,255,255,.94),
+            0 18px 54px rgba(10,10,20,.18);
+          backdrop-filter: blur(18px) saturate(1.12);
+          -webkit-backdrop-filter: blur(18px) saturate(1.12);
+          font-size: 14px;
+          font-weight: 760;
+          letter-spacing:.02em;
+          transform: translateY(calc(100% + 18px));
+          opacity:0;
+          pointer-events:none;
+          transition: transform .18s ease, opacity .18s ease;
+          -webkit-tap-highlight-color: transparent;
+        }
+
+        .mobileBottomCta:before{
+          content:"";
+          width: 8px;
+          height: 8px;
+          border-radius:999px;
+          background: rgba(10,132,255,.88);
+          box-shadow:
+            0 0 0 5px rgba(10,132,255,.10),
+            0 0 20px rgba(10,132,255,.36);
+        }
+
+        .mobileBottomCta.isReady{
+          opacity:1;
+          pointer-events:auto;
+          transform: translateY(0);
+        }
+
+        body[data-mobile-cta="true"] .waFab{
+          bottom: calc(74px + env(safe-area-inset-bottom));
         }
       }
 
@@ -1070,11 +1199,25 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
 
       @media (max-width: 680px){
         .ft{
-          padding: 30px 0 24px;
+          margin-top: 28px;
+          padding: 24px 0 24px;
         }
 
         .ftShell{
           width: 100%;
+          padding: 16px;
+          border-radius: 28px;
+          border: 1px solid rgba(10,132,255,.12);
+          background:
+            radial-gradient(420px 260px at 100% 0%, rgba(10,132,255,.10), transparent 70%),
+            linear-gradient(180deg, rgba(255,255,255,.78), rgba(241,248,253,.60));
+          box-shadow:
+            inset 0 1px 0 rgba(255,255,255,.86),
+            0 24px 70px rgba(10,36,70,.08);
+        }
+
+        .ftShell:before{
+          opacity:.42;
         }
 
         .ftBrandPanel,
@@ -1083,9 +1226,98 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
           padding-right: 0;
         }
 
+        .ftBrandPanel{
+          padding-top: 0;
+          padding-bottom: 14px;
+          gap: 10px;
+          border-bottom: 1px solid rgba(10,36,70,.08);
+        }
+
+        .ftBlurb{
+          max-width: 34ch;
+          margin-top: 10px;
+          font-size: 12px;
+          line-height:1.5;
+          display:-webkit-box;
+          -webkit-line-clamp:3;
+          -webkit-box-orient:vertical;
+          overflow:hidden;
+        }
+
+        .ftStatus{
+          display:none;
+        }
+
+        .ftColumn{
+          padding-top: 14px;
+          padding-bottom: 0;
+          border-bottom: 0;
+        }
+
+        .ftK{
+          margin-bottom: 8px;
+        }
+
+        .ftLinks{
+          gap: 7px;
+        }
+
+        .ftLinks a{
+          min-height: 34px;
+          padding: 0 11px;
+          border: 1px solid rgba(10,36,70,.08);
+          border-radius: 13px;
+          background: rgba(255,255,255,.46);
+          box-shadow: inset 0 1px 0 rgba(255,255,255,.66);
+        }
+
+        .ftLinks a:after{
+          width: 14px;
+          opacity:.56;
+        }
+
+        .ftContact{
+          display:grid;
+          grid-template-columns: 1fr;
+          gap: 8px;
+        }
+
+        .ftContact > div:nth-child(2),
+        .ftContact > div:nth-child(4){
+          display:none;
+        }
+
+        .ftContact a,
+        .ftContact span{
+          min-height: 42px;
+          padding: 9px 11px;
+          border: 1px solid rgba(10,36,70,.08);
+          border-radius: 14px;
+          background: rgba(255,255,255,.46);
+          box-shadow: inset 0 1px 0 rgba(255,255,255,.66);
+        }
+
+        .ftActions{
+          display:none;
+        }
+
+        .ft .social{
+          margin-top: 12px;
+          padding-top: 12px;
+          border-top: 1px solid rgba(10,36,70,.08);
+        }
+
+        .ft .ico{
+          width: 28px;
+          height: 28px;
+        }
+
         .ftBottom{
           align-items: flex-start;
           flex-direction: column;
+          gap: 5px;
+          padding: 12px 2px 0;
+          font-size: 11px;
           width: 100%;
         }
       }
@@ -1093,7 +1325,7 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
     </style>
   </head>
 
-  <body>
+  <body data-mobile-cta={showMobileBottomCta ? "true" : undefined}>
     <Header active={Astro.url.pathname} />
 
     <main class="main">
@@ -1330,6 +1562,84 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
       document.addEventListener("astro:page-load", restoreScroll);
       document.addEventListener("astro:after-swap", restoreScroll);
     </script>
+
+    {showMobileBottomCta ? (
+      <a class="mobileBottomCta" href={mobileBottomCtaHref} data-mobile-bottom-cta data-vt="1">
+        {mobileBottomCtaLabel}
+      </a>
+    ) : null}
+
+    {showMobileBottomCta ? (
+      <script is:inline>
+        (() => {
+          function initArcwaveMobileBottomCta() {
+            const cta = document.querySelector("[data-mobile-bottom-cta]");
+            const footer = document.querySelector(".ft");
+            if (!cta || !footer) return;
+            if (cta.getAttribute("data-mobile-observed") === "true") return;
+            cta.setAttribute("data-mobile-observed", "true");
+
+            const homeHero = document.querySelector("#signal-field");
+            const hero =
+              homeHero ||
+              document.querySelector(".interfaceHero") ||
+              document.querySelector("main > section");
+
+            let heroVisible = Boolean(hero);
+            let footerVisible = false;
+            const getScrollTop = () =>
+              window.scrollY ||
+              document.documentElement.scrollTop ||
+              document.body.scrollTop ||
+              0;
+            let pastThreshold = getScrollTop() > window.innerHeight * 0.6;
+
+            const sync = () => {
+              if (homeHero) {
+                const rect = homeHero.getBoundingClientRect();
+                heroVisible = rect.bottom > window.innerHeight * 0.18 && rect.top < window.innerHeight * 0.58;
+              } else if (hero) {
+                heroVisible = getScrollTop() <= window.innerHeight * 0.6;
+              }
+              cta.classList.toggle("isReady", pastThreshold && !heroVisible && !footerVisible);
+            };
+
+            const onScroll = () => {
+              pastThreshold = getScrollTop() > window.innerHeight * 0.6;
+              sync();
+            };
+
+            window.addEventListener("scroll", onScroll, { passive: true });
+            document.addEventListener("scroll", onScroll, { passive: true });
+
+            if ("IntersectionObserver" in window) {
+              const footerObserver = new IntersectionObserver(
+                ([entry]) => {
+                  footerVisible = Boolean(entry?.isIntersecting);
+                  sync();
+                },
+                { rootMargin: "0px 0px -18% 0px", threshold: 0 }
+              );
+
+              const heroObserver = hero
+                ? new IntersectionObserver(
+                    () => sync(),
+                    { rootMargin: "-12% 0px -42% 0px", threshold: 0 }
+                  )
+                : null;
+
+              footerObserver.observe(footer);
+              heroObserver?.observe(hero);
+            }
+
+            sync();
+          }
+
+          initArcwaveMobileBottomCta();
+          document.addEventListener("astro:after-swap", initArcwaveMobileBottomCta);
+        })();
+      </script>
+    ) : null}
 
     <WhatsAppFab />
   </body>

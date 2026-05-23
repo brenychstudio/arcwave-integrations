@@ -38,16 +38,20 @@ const href = waNumber ? `https://wa.me/${waNumber}?text=${text}` : null;
     justify-content: center;
 
     background: rgba(255,255,255,.78);
-    border: 1px solid var(--border2);
-    box-shadow: 0 18px 48px rgba(10,10,20,.12);
+    border: 1px solid rgba(10,132,255,.16);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.9),
+      0 18px 48px rgba(10,10,20,.12);
     backdrop-filter: blur(10px);
 
-    color: #25D366;
+    color: var(--accent, #0A84FF);
     transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
   }
   .waFab:hover{
     transform: translateY(-1px);
-    box-shadow: 0 22px 60px rgba(10,10,20,.14);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.92),
+      0 22px 60px rgba(10,10,20,.14);
   }
   @media (prefers-reduced-motion: reduce){
     .waFab{ transition: none; }

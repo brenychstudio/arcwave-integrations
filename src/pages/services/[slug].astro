@@ -4,6 +4,7 @@ import { site } from "../../content/site";
 import { COMPANY } from "../../content/company";
 import { services } from "../../content/services";
 import type { Service } from "../../content/services";
+import { serviceDetails } from "../../content/serviceDetails";
 import "../../styles/interface.css";
 
 export async function getStaticPaths() {
@@ -22,11 +23,9 @@ if (!service) {
 
 const serviceIndex = services.findIndex((item) => item.key === service.key);
 const serviceNumber = String(serviceIndex + 1).padStart(2, "0");
-const relatedServices = services.filter((item) => item.key !== service.key).slice(0, 3);
 const quoteHref = `/contact?service=${service.key}#quote`;
 const desc = service.description || service.short;
-
-const servicePath = [
+const fallbackPath = [
   {
     index: "01 / Signal",
     title: "Need becomes visible.",
@@ -35,7 +34,7 @@ const servicePath = [
   {
     index: "02 / System",
     title: "Dependencies are mapped.",
-    text: "Routes, access, power, network and support constraints are clarified before the installation starts.",
+    text: "Routes, access, power, network and support constraints are clarified before installation starts.",
   },
   {
     index: "03 / Handover",
@@ -43,15 +42,42 @@ const servicePath = [
     text: "Labels, practical notes and next-step recommendations keep the system readable after the work is complete.",
   },
 ];
+const detail = {
+  outcome: service.short,
+  activeLayer: service.title,
+  activeLayerText: service.short,
+  heroTags: [service.title, "Support-ready"],
+  pathCards: fallbackPath,
+  quoteHints: ["access", "routes", "existing wiring", "timing"],
+  relatedServiceKeys: services.filter((item) => item.key !== service.key).map((item) => item.key),
+  scopeIntro:
+    "Typical deliverables are confirmed against the actual site: access, routing, materials, constraints and the desired level of support.",
+  faqIntro: "Short answers to reduce friction before the technical request.",
+  ...serviceDetails[service.key],
+};
+const relatedByKey = detail.relatedServiceKeys
+  .map((key) => services.find((item) => item.key === key))
+  .filter((item): item is Service => Boolean(item));
+const relatedServices =
+  relatedByKey.length > 0
+    ? relatedByKey.slice(0, 3)
+    : services.filter((item) => item.key !== service.key).slice(0, 3);
+const servicePath = detail.pathCards;
+const heroTags = detail.heroTags.length > 0 ? detail.heroTags : [service.title, "Support-ready"];
+const quoteHints = detail.quoteHints.length > 0 ? detail.quoteHints : ["access", "routes", "existing wiring", "timing"];
+const finalCtaCopy = `Open the request form with ${service.title} preselected and add the site constraints that matter: ${quoteHints.join(", ")} and desired outcome.`;
 ---
 
 <BaseLayout title={`${service.title} - ${site.name}`} description={desc}>
-  <div class="interfacePage">
+  <div class="interfacePage serviceDetailPage">
     <section class="interfaceHero">
       <div class="interfaceHeroCopy motionIn">
         <div class="interfaceEyebrow">{serviceNumber} / Service path</div>
         <h1 class="interfaceTitle">{service.title}</h1>
-        <p class="interfaceLead">{desc}</p>
+        <p class="interfaceLead">{detail.outcome}</p>
+        <div class="serviceHeroTags" aria-label="Service signals">
+          {heroTags.map((tag) => <span>{tag}</span>)}
+        </div>
         <div class="interfaceActions">
           <a class="primary" href={quoteHref} data-vt="1">Request a quote</a>
           <a class="secondary" href="/services" data-vt="1">All services</a>
@@ -66,8 +92,8 @@ const servicePath = [
         <div class="interfacePanelContent">
           <div>
             <span class="interfaceIndex">Active layer</span>
-            <h2>{service.title}</h2>
-            <p>{service.short}</p>
+            <h2>{detail.activeLayer}</h2>
+            <p>{detail.activeLayerText}</p>
           </div>
           <div class="detailChip">Barcelona area</div>
         </div>
@@ -103,10 +129,7 @@ const servicePath = [
       <div class="interfaceSectionHead">
         <div>
           <div class="interfaceEyebrow">Scope clarity</div>
-          <p>
-            Typical deliverables are confirmed against the actual site: access,
-            routing, materials, constraints and the desired level of support.
-          </p>
+          <p>{detail.scopeIntro}</p>
         </div>
         <h2>What this service can include.</h2>
       </div>
@@ -136,54 +159,59 @@ const servicePath = [
               <dd>{service.title}</dd>
             </div>
           </dl>
+          <div class="quoteHints" aria-label="Quote hints">
+            {quoteHints.map((hint) => <span>{hint}</span>)}
+          </div>
         </aside>
       </div>
     </section>
 
-    {service.faqs?.length ? (
-      <section class="interfaceSection">
-        <div class="interfaceSectionHead">
-          <div>
-            <div class="interfaceEyebrow">Decision support</div>
-            <p>Short answers to reduce friction before the technical request.</p>
-          </div>
-          <h2>Common questions.</h2>
-        </div>
-
-        <div class="faqGrid">
-          {service.faqs.map((item) => (
-            <details class="interfaceCard interfaceFaq">
-              <summary>{item.q}</summary>
-              <div>{item.a}</div>
-            </details>
-          ))}
-        </div>
-      </section>
-    ) : null}
-
-    <section class="interfaceSection">
+    <section class="interfaceSection serviceSupportSection">
       <div class="interfaceSectionHead">
         <div>
-          <div class="interfaceEyebrow">Related paths</div>
-          <p>Most installations touch more than one layer. These paths often connect.</p>
+          <div class="interfaceEyebrow">Decision support</div>
+          <p>{detail.faqIntro}</p>
         </div>
-        <h2>Adjacent infrastructure layers.</h2>
+        <h2>Questions and connected layers.</h2>
       </div>
 
-      <div class="servicePathGrid interfaceTopology">
-        {relatedServices.map((item, index) => (
-          <a class="interfaceCard servicePathCard" href={`/services/${item.key}`} data-vt="1">
-            <div>
-              <span class="interfaceIndex">{String(index + 1).padStart(2, "0")} / Related</span>
-              <h3>{item.title}</h3>
-              <p>{item.short}</p>
-            </div>
-            <div class="servicePathMeta">
-              <span>System layer</span>
-              <span>Quote-ready path</span>
-            </div>
-          </a>
-        ))}
+      <div class="serviceSupportGrid">
+        {service.faqs?.length ? (
+          <div class="supportFaqList">
+            {service.faqs.map((item) => (
+              <details class="interfaceCard interfaceFaq compactFaq">
+                <summary>{item.q}</summary>
+                <div>{item.a}</div>
+              </details>
+            ))}
+          </div>
+        ) : null}
+
+        <aside class="interfaceTopology relatedCompactPanel">
+          <div class="relatedCompactHead">
+            <span class="interfaceIndex">Related paths</span>
+            <p>Most installations touch more than one layer. These paths often connect.</p>
+          </div>
+
+          <div class="relatedCompactList">
+            {relatedServices.map((item, index) => (
+              <a class="interfaceCard relatedCompactCard" href={`/services/${item.key}`} data-vt="1">
+                <div>
+                  <span class="interfaceIndex">{String(index + 1).padStart(2, "0")} / Related</span>
+                  <h3>{item.title}</h3>
+                  <p>{item.short}</p>
+                </div>
+                <div class="relatedCompactFooter">
+                  <div class="servicePathMeta">
+                    <span>System layer</span>
+                    <span>Quote-ready path</span>
+                  </div>
+                  <span class="relatedCompactCta">View path</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </aside>
       </div>
     </section>
 
@@ -192,10 +220,7 @@ const servicePath = [
         <div>
           <div class="interfaceEyebrow">Technical request</div>
           <h2>Get a clear quote for {service.title}.</h2>
-          <p>
-            Open the form with this service preselected and add the site constraints
-            that matter: access, routes, existing wiring, timing and desired outcome.
-          </p>
+          <p>{finalCtaCopy}</p>
         </div>
         <a class="primary" href={quoteHref} data-vt="1">Request a quote</a>
       </div>

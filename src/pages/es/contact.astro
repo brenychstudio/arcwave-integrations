@@ -15,40 +15,41 @@ const defaultServiceKey: ServiceKey | undefined =
 
 const telHref = `tel:${COMPANY.phoneTel}`;
 const mailHref = `mailto:${COMPANY.email}`;
+const requestSteps = ["Servicio", "Espacio", "Restricciones", "Brief"];
 ---
 
 <BaseLayout
   title={`Contacto - ${siteEs.name}`}
-  description="Convierte una necesidad tecnica en un brief claro para telecomunicaciones, redes, electricidad, carga VE, seguridad o audio."
+  description="Convierte una necesidad técnica en un brief claro para telecomunicaciones, redes, electricidad, carga VE, seguridad o audio."
 >
-  <div class="interfacePage">
+  <div class="interfacePage contactPage">
     <section class="interfaceHero">
       <div class="interfaceHeroCopy motionIn">
-        <div class="interfaceEyebrow">Hub de solicitud tecnica</div>
+        <div class="interfaceEyebrow">Hub de solicitud técnica</div>
         <h1 class="interfaceTitle">Convierte una necesidad en un brief claro.</h1>
         <p class="interfaceLead">
-          Selecciona la ruta de servicio, describe el espacio y las limitaciones,
-          y dale a ARCWAVE suficiente senal para responder con un camino tecnico practico.
+          Selecciona la ruta de servicio, describe el espacio y las restricciones,
+          y dale a ARCWAVE suficiente señal para responder con un camino técnico práctico.
         </p>
         <div class="interfaceActions">
           <a class="primary" href="#quote">Iniciar solicitud</a>
           <a class="secondary" href="/es/services" data-vt="1">Explorar servicios</a>
         </div>
         <div class="interfaceFormula" aria-label="Flujo de solicitud">
-          <span>servicio</span><i></i><span>espacio</span><i></i><span>limitaciones</span><i></i><span>brief</span>
+          <span>servicio</span><i></i><span>espacio</span><i></i><span>restricciones</span><i></i><span>brief</span>
         </div>
       </div>
 
       <div class="interfacePanel contactHeroPanel motionIn" aria-label="Interfaz de contacto">
         <div class="briefPreview">
           <span class="interfaceIndex">Brief vivo</span>
-          <strong>Listo para revision tecnica</strong>
-          <p>Servicio, espacio, plazo y limitaciones se convierten en una solicitud mantenible.</p>
+          <strong>Listo para revisión técnica</strong>
+          <p>Servicio, espacio, plazo y restricciones se convierten en una solicitud mantenible.</p>
         </div>
         <div class="briefRows">
           <div><span>Servicio</span><strong>{defaultServiceKey ? servicesEs.find((s) => s.key === defaultServiceKey)?.title : "Redes y Wi-Fi"}</strong></div>
-          <div><span>Area</span><strong>{siteEs.contact.serviceArea}</strong></div>
-          <div><span>Respuesta</span><strong>1-2 dias laborables</strong></div>
+          <div><span>Área</span><strong>{siteEs.contact.serviceArea}</strong></div>
+          <div><span>Respuesta</span><strong>1-2 días laborables</strong></div>
         </div>
       </div>
     </section>
@@ -59,8 +60,8 @@ const mailHref = `mailto:${COMPANY.email}`;
           <div class="interfaceEyebrow">Contacto directo</div>
           <h2 class="contactTitle">Un brief corto basta para empezar.</h2>
           <p>
-            Para revisar mas rapido, incluye acceso al sitio, ubicacion de rack o
-            cuadro, cableado existente, distancias aproximadas y normas del edificio.
+            Para revisar más rápido, incluye acceso al sitio, ubicación de rack o
+            cuadro, cableado existente, distancias aproximadas y restricciones del edificio.
           </p>
 
           <div class="contactChannels">
@@ -69,11 +70,11 @@ const mailHref = `mailto:${COMPANY.email}`;
               <strong>{COMPANY.email}</strong>
             </a>
             <a class="interfaceCard contactChannel" href={telHref}>
-              <span>Telefono</span>
+              <span>Teléfono</span>
               <strong>{COMPANY.phoneDisplay}</strong>
             </a>
             <div class="interfaceCard contactChannel">
-              <span>Area de servicio</span>
+              <span>Área de servicio</span>
               <strong>{siteEs.contact.serviceArea}</strong>
             </div>
             <div class="interfaceCard contactChannel">
@@ -85,12 +86,21 @@ const mailHref = `mailto:${COMPANY.email}`;
 
         <div class="interfacePanel requestPanel">
           <div class="requestHead">
-            <span class="interfaceIndex">Entrada de senal</span>
-            <h2>Interfaz de solicitud tecnica</h2>
+            <span class="interfaceIndex">Entrada de señal</span>
+            <h2>Interfaz de solicitud técnica</h2>
             <p>
-              El formulario se adapta a la ruta seleccionada y usa email como
-              fallback si no hay endpoint configurado.
+              Selecciona la ruta de servicio, describe el espacio y las restricciones,
+              y prepara un brief que ARCWAVE pueda revisar.
             </p>
+          </div>
+
+          <div class="requestRail" aria-label="Etapas de solicitud">
+            {requestSteps.map((step, index) => (
+              <>
+                <span><b>{String(index + 1).padStart(2, "0")}</b>{step}</span>
+                {index < requestSteps.length - 1 ? <i></i> : null}
+              </>
+            ))}
           </div>
 
           <QuoteForm
@@ -101,6 +111,13 @@ const mailHref = `mailto:${COMPANY.email}`;
             endpoint={siteEs.form.endpoint}
             fallbackEmail={COMPANY.email}
             fallbackSubject={`${siteEs.name} - solicitud de presupuesto`}
+            labels={{
+              service: "Servicio",
+              fallbackNotice: "La solicitud se preparará como un email técnico con la información introducida.",
+              sendButton: "Enviar brief técnico",
+              prepareButton: "Preparar solicitud técnica",
+              sent: "Enviado.",
+            }}
           />
         </div>
       </div>
@@ -109,9 +126,9 @@ const mailHref = `mailto:${COMPANY.email}`;
     <section class="interfaceSection">
       <div class="interfaceMetrics">
         <article class="interfaceMetric">
-          <span class="interfaceIndex">01 / Senal util</span>
+          <span class="interfaceIndex">01 / Señal útil</span>
           <strong>Describe el espacio.</strong>
-          <p>Vivienda, oficina, comercio, sala tecnica u otro contexto relevante.</p>
+          <p>Vivienda, oficina, comercio, sala técnica u otro contexto relevante.</p>
         </article>
         <article class="interfaceMetric">
           <span class="interfaceIndex">02 / Limitaciones</span>
@@ -121,7 +138,7 @@ const mailHref = `mailto:${COMPANY.email}`;
         <article class="interfaceMetric">
           <span class="interfaceIndex">03 / Respuesta</span>
           <strong>Recibe un siguiente paso claro.</strong>
-          <p>ARCWAVE puede responder con preguntas, alcance y una ruta de presupuesto practica.</p>
+          <p>ARCWAVE puede responder con preguntas, alcance y una ruta de presupuesto práctica.</p>
         </article>
       </div>
     </section>
@@ -129,8 +146,21 @@ const mailHref = `mailto:${COMPANY.email}`;
 
   <style>
     #quote{ scroll-margin-top: 120px; }
+    .contactPage .interfaceHero{
+      min-height:auto;
+      padding: clamp(44px, 6vw, 86px) 0 clamp(42px, 5.4vw, 78px);
+    }
+
+    .contactPage .interfaceSection{
+      padding: clamp(52px, 6vw, 96px) 0;
+    }
+
+    .contactPage .interfaceHero + .interfaceSection{
+      padding-top: clamp(28px, 3.6vw, 58px);
+    }
+
     .contactHeroPanel{
-      min-height: 680px;
+      min-height: clamp(500px, 39vw, 620px);
       display:flex;
       flex-direction:column;
       justify-content:space-between;
@@ -187,15 +217,52 @@ const mailHref = `mailto:${COMPANY.email}`;
       letter-spacing:-.06em;
     }
     .contactAside > p{
-      margin: 20px 0 28px;
+      margin: 18px 0 24px;
       max-width: 44ch;
       color: rgba(15,15,20,.62);
       line-height:1.7;
     }
+    .contactPage .contactChannels{
+      gap: 1px;
+      overflow:hidden;
+      border-radius: 24px;
+      border: 1px solid rgba(15,15,20,.075);
+      background: rgba(15,15,20,.055);
+      box-shadow: 0 24px 76px rgba(10,10,20,.07);
+    }
+
+    .contactPage .contactChannel{
+      grid-template-columns: minmax(96px, .34fr) minmax(0, 1fr);
+      align-items:center;
+      gap: 16px;
+      min-height: 68px;
+      padding: 14px 16px;
+      border:0;
+      border-radius:0;
+      background: rgba(255,255,255,.72);
+      box-shadow:none;
+    }
+
+    .contactPage .contactChannel strong{
+      font-size: 17px;
+      line-height:1.2;
+    }
+
+    .contactPage .requestPanel{
+      overflow:hidden;
+      background:
+        linear-gradient(rgba(10,132,255,.026) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(10,132,255,.026) 1px, transparent 1px),
+        linear-gradient(135deg, rgba(10,132,255,.07), transparent 45%),
+        linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.86)),
+        rgba(255,255,255,.88);
+      background-size: 52px 52px, 52px 52px, auto, auto;
+    }
+
     .requestHead{
       position:relative;
       z-index:2;
-      margin-bottom: 28px;
+      margin-bottom: 18px;
     }
     .requestHead h2{
       margin-top: 10px;
@@ -208,7 +275,181 @@ const mailHref = `mailto:${COMPANY.email}`;
       max-width: 58ch;
       color: rgba(15,15,20,.62);
     }
-    @media (max-width: 1180px){ .contactHeroPanel{ min-height: 520px; } }
-    @media (max-width: 760px){ .briefRows div{ grid-template-columns: 1fr; } }
+
+    .requestRail{
+      position:relative;
+      z-index:2;
+      display:grid;
+      grid-template-columns: auto minmax(18px, 1fr) auto minmax(18px, 1fr) auto minmax(18px, 1fr) auto;
+      align-items:center;
+      gap: 10px;
+      margin-bottom: 22px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(15,15,20,.07);
+      background: rgba(255,255,255,.72);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.86);
+    }
+
+    .requestRail span{
+      display:inline-flex;
+      align-items:center;
+      gap: 7px;
+      color: rgba(15,15,20,.62);
+      font-size: 11px;
+      font-weight:760;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+
+    .requestRail b{
+      color: rgba(10,132,255,.78);
+      font: inherit;
+    }
+
+    .requestRail i{
+      height: 1px;
+      background: linear-gradient(90deg, rgba(10,132,255,.36), rgba(35,198,190,.16));
+    }
+
+    @media (max-width: 1180px){ .contactHeroPanel{ min-height: 500px; } }
+    @media (max-width: 760px){
+      .contactPage .interfaceHero{
+        padding-top: 26px;
+        padding-bottom: 28px;
+      }
+
+      .contactPage .interfaceTitle{
+        max-width: 100%;
+        font-size: clamp(36px, 10.4vw, 46px);
+        line-height:.98;
+        letter-spacing:-.035em;
+        overflow-wrap: break-word;
+        text-wrap: balance;
+      }
+
+      .contactPage .interfaceLead{
+        max-width: 36ch;
+      }
+
+      .contactPage .interfaceActions{
+        display:grid;
+        grid-template-columns: 1fr;
+        width:100%;
+      }
+
+      .contactPage .interfaceActions .primary,
+      .contactPage .interfaceActions .secondary{
+        width:100%;
+      }
+
+      .contactPage .interfaceFormula{
+        gap: 8px;
+        font-size: 10px;
+      }
+
+      .contactPage .interfaceFormula i{
+        width: 18px;
+      }
+
+      .contactPage .interfaceSection{
+        padding: 32px 0;
+      }
+
+      .contactPage .interfaceHero + .interfaceSection{
+        padding-top: 18px;
+      }
+
+      .contactHeroPanel{
+        min-height: 245px;
+        padding: 16px;
+        border-radius: 22px;
+      }
+
+      .briefPreview{
+        padding: 16px;
+        border-radius: 18px;
+      }
+
+      .briefPreview strong{
+        max-width: 10em;
+        font-size: clamp(28px, 8.6vw, 39px);
+        line-height:1;
+      }
+
+      .briefPreview p{
+        margin-top: 10px;
+        font-size: 13px;
+        line-height:1.45;
+      }
+
+      .briefRows div,
+      .contactPage .contactChannel{
+        grid-template-columns: 1fr;
+      }
+
+      .briefRows div{
+        gap: 5px;
+        padding: 12px;
+      }
+
+      .contactGrid{
+        display:flex;
+        flex-direction:column;
+        gap: 22px;
+      }
+
+      .requestPanel{
+        order:1;
+      }
+
+      .contactAside{
+        order:2;
+      }
+
+      .contactTitle{
+        max-width: 9em;
+        font-size: clamp(32px, 9vw, 44px);
+        line-height:.98;
+      }
+
+      .contactPage .contactChannel{
+        min-height: auto;
+        gap: 5px;
+        padding: 12px;
+      }
+
+      .contactPage .contactChannel strong{
+        overflow-wrap:anywhere;
+      }
+
+      .requestPanel{
+        padding: 18px;
+        border-radius: 22px;
+      }
+
+      .requestHead h2{
+        max-width: 9.6em;
+        font-size: clamp(28px, 8vw, 36px);
+        line-height:1;
+        overflow-wrap: break-word;
+        text-wrap: balance;
+      }
+
+      .requestRail{
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        padding: 10px;
+      }
+
+      .requestRail i{
+        display:none;
+      }
+
+      .requestRail span{
+        white-space:normal;
+      }
+    }
   </style>
 </BaseLayout>

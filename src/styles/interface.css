@@ -2,7 +2,8 @@
   position:relative;
   isolation:isolate;
   overflow:hidden;
-  --interface-container: min(100% - clamp(28px, 5vw, 92px), 1880px);
+  /* Canonical shell for every non-home interface page. Home keeps its own wider system. */
+  --interface-container: min(100% - clamp(28px, 5vw, 92px), 1640px);
   --interface-blue: rgba(10,132,255,.82);
   --interface-cyan: rgba(35,198,190,.62);
   --interface-amber: rgba(205,158,60,.62);
@@ -656,20 +657,98 @@
     --interface-container: min(100% - 28px, 100%);
   }
 
+  .interfacePage:after{
+    opacity:.34;
+    background-size: 72px 72px, 72px 72px, 190px 190px, 240px 240px;
+    mask-image:none;
+  }
+
   .interfaceHero{
-    padding-top: 36px;
+    gap: 24px;
+    padding: 28px 0 34px;
+    align-items:start;
+  }
+
+  .interfaceHeroCopy{
+    max-width:100%;
+  }
+
+  .interfaceEyebrow{
+    padding: 7px 10px;
+    font-size: 10px;
+    letter-spacing:.15em;
   }
 
   .interfaceTitle,
   .interfaceSectionHead h2,
   .interfaceCta h2{
-    font-size: clamp(42px, 13vw, 64px);
+    max-width: 100%;
+    font-size: clamp(36px, 10.4vw, 46px);
+    line-height:.96;
+    letter-spacing:-.035em;
+    overflow-wrap: break-word;
+    text-wrap: balance;
+  }
+
+  .interfaceLead,
+  .interfaceSectionHead p,
+  .interfaceCta p{
+    max-width: 36ch;
+    font-size: 15px;
+    line-height:1.55;
+  }
+
+  .interfaceActions{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    width:100%;
+    margin-top: 22px;
+  }
+
+  .interfaceActions .primary,
+  .interfaceActions .secondary{
+    width:100%;
+  }
+
+  .interfaceFormula{
+    gap: 8px;
+    margin-top: 18px;
+    font-size: 10px;
+    letter-spacing:.13em;
+  }
+
+  .interfaceFormula i{
+    width: 18px;
   }
 
   .interfacePanel,
   .interfaceTopology,
   .interfaceCta{
-    border-radius: 26px;
+    border-radius: var(--mobile-card-radius, 22px);
+  }
+
+  .interfacePanel:before,
+  .interfacePanel:after,
+  .interfaceTopology:before,
+  .interfaceTopology:after{
+    opacity:.32;
+  }
+
+  .interfaceSection{
+    padding: var(--mobile-section-y, 56px) 0;
+    scroll-margin-top: var(--mobile-header-safe, 86px);
+  }
+
+  .interfaceSectionHead{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+
+  .interfaceSectionHead h2{
+    max-width: 8.8em;
   }
 
   .servicePathGrid,
@@ -682,9 +761,11 @@
   }
 
   .interfaceMetric{
-    min-height: 220px;
+    min-height: auto;
+    padding: 18px;
     border-right:0;
     border-bottom: 1px solid rgba(15,15,20,.075);
+    background-size: 64px 64px;
   }
 
   .interfaceMetric:last-child{ border-bottom:0; }
@@ -693,7 +774,36 @@
   .pathStep,
   .pathStep:nth-child(even),
   .pathStep:nth-child(odd){
-    min-height: 280px;
+    min-height: auto;
+  }
+
+  .servicePathCard,
+  .detailTile,
+  .pathStep{
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    padding: 18px;
+    border-radius: 20px;
+    overflow-wrap:break-word;
+  }
+
+  .servicePathCard h3,
+  .interfaceMetric strong,
+  .pathStep h3,
+  .detailTile h3{
+    font-size: clamp(24px, 7.8vw, 34px);
+    line-height:1;
+    letter-spacing:-.025em;
+  }
+
+  .servicePathCard p,
+  .pathStep p,
+  .detailTile p,
+  .interfaceMetric p{
+    margin-top: 10px;
+    font-size: 14px;
+    line-height:1.48;
   }
 
   .detailHeroPanel .interfacePanelContent,
@@ -701,12 +811,448 @@
     grid-template-columns: 1fr;
   }
 
+  .detailHeroPanel{
+    min-height: 300px;
+    padding: 14px;
+  }
+
+  .detailHeroPanel img{
+    opacity:.30;
+  }
+
+  .deliverableGrid{
+    gap: 14px;
+  }
+
+  .deliverableList{
+    gap: 9px;
+  }
+
+  .deliverableList li{
+    min-height: auto;
+    padding: 15px 15px 15px 38px;
+    border-radius: 16px;
+    font-size: 14px;
+  }
+
+  .deliverableList li:before{
+    left: 16px;
+    top: 21px;
+    width: 7px;
+    height: 7px;
+  }
+
+  .factsPanel{
+    padding: 18px;
+    border-radius: 20px;
+  }
+
+  .factsPanel dl{
+    margin-top: 14px;
+    border-radius: 16px;
+  }
+
+  .factsPanel div{
+    gap: 6px;
+    padding: 12px;
+  }
+
+  .interfaceFaq{
+    padding: 15px;
+    border-radius: 17px;
+  }
+
+  .interfaceFaq summary{
+    font-size: 16px;
+    line-height:1.25;
+  }
+
   .interfaceCta{
+    min-height: auto;
     flex-direction:column;
     align-items:flex-start;
+    gap: 22px;
+    padding: 22px;
   }
 
   .interfaceCta .primary{
     width:100%;
+  }
+}
+
+.serviceDetailPage .interfaceHero{
+  min-height: calc(100svh - 118px);
+  gap: clamp(34px, 4.5rem, 78px);
+  padding: clamp(54px, 5.8rem, 96px) 0 clamp(46px, 5rem, 78px);
+}
+
+.serviceDetailPage .interfaceSection{
+  padding: clamp(56px, 5.2rem, 96px) 0;
+}
+
+.serviceDetailPage .interfaceHero + .interfaceSection{
+  padding-top: clamp(42px, 4.2rem, 74px);
+}
+
+.serviceDetailPage .interfaceTitle,
+.serviceDetailPage .interfaceSectionHead h2,
+.serviceDetailPage .detailTile h3,
+.serviceDetailPage .relatedCompactCard h3,
+.serviceDetailPage .interfaceCta h2{
+  letter-spacing: 0;
+}
+
+.serviceDetailPage .interfaceTitle{
+  font-size: clamp(56px, 7.2rem, 118px);
+}
+
+.serviceDetailPage .interfaceSectionHead{
+  gap: clamp(24px, 4.5rem, 82px);
+  margin-bottom: clamp(24px, 3.2rem, 44px);
+}
+
+.serviceDetailPage .interfaceSectionHead h2{
+  font-size: clamp(44px, 5.8rem, 94px);
+}
+
+.serviceHeroTags{
+  display:flex;
+  flex-wrap:wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.serviceHeroTags span,
+.quoteHints span{
+  display:inline-flex;
+  align-items:center;
+  min-height: 30px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(10,132,255,.14);
+  background: rgba(255,255,255,.62);
+  color: rgba(15,15,20,.62);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.serviceHeroTags span:before,
+.quoteHints span:before{
+  content:"";
+  width: 5px;
+  height: 5px;
+  margin-right: 7px;
+  border-radius: 999px;
+  background: rgba(10,132,255,.82);
+  box-shadow: 0 0 0 4px rgba(10,132,255,.09);
+}
+
+.serviceDetailPage .interfaceActions{
+  margin-top: 24px;
+}
+
+.serviceDetailPage .interfaceFormula{
+  margin-top: 24px;
+}
+
+.serviceDetailPage .detailHeroPanel{
+  min-height: clamp(500px, 39rem, 620px);
+  border-radius: 30px;
+}
+
+.serviceDetailPage .detailHeroPanel img{
+  opacity: .42;
+}
+
+.serviceDetailPage .detailHeroPanel .interfacePanelContent{
+  padding: 16px;
+  border-radius: 20px;
+}
+
+.serviceDetailPage .detailHeroPanel h2{
+  margin: 10px 0 0;
+  font-size: 28px;
+  line-height: 1;
+}
+
+.serviceDetailPage .detailHeroPanel p{
+  max-width: 58ch;
+  margin: 12px 0 0;
+  color: rgba(15,15,20,.66);
+  line-height: 1.5;
+}
+
+.serviceDetailPage .detailTile{
+  min-height: 250px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.serviceDetailPage .detailTile h3{
+  font-size: clamp(28px, 2.75rem, 42px);
+}
+
+.serviceDetailPage .deliverableGrid{
+  grid-template-columns: minmax(0, 1.18fr) minmax(330px, .82fr);
+  gap: clamp(18px, 2.2rem, 30px);
+}
+
+.serviceDetailPage .deliverableList li{
+  min-height: 86px;
+  padding: 16px 16px 16px 40px;
+}
+
+.serviceDetailPage .factsPanel{
+  padding: clamp(20px, 2rem, 30px);
+}
+
+.quoteHints{
+  display:flex;
+  flex-wrap:wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.serviceSupportGrid{
+  display:grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(360px, .95fr);
+  gap: clamp(18px, 2.2rem, 30px);
+  align-items:start;
+}
+
+.supportFaqList{
+  display:grid;
+  gap: 10px;
+}
+
+.compactFaq{
+  padding: 15px 16px;
+  border-radius: 18px;
+}
+
+.compactFaq summary{
+  font-size: 16px;
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+
+.compactFaq div{
+  margin-top: 10px;
+  line-height: 1.54;
+}
+
+.relatedCompactPanel{
+  padding: clamp(16px, 2rem, 26px);
+  border-radius: 28px;
+}
+
+.relatedCompactHead,
+.relatedCompactList{
+  position:relative;
+  z-index:2;
+}
+
+.relatedCompactHead{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap: 18px;
+  margin-bottom: 14px;
+}
+
+.relatedCompactHead p{
+  max-width: 34ch;
+  margin:0;
+  color: rgba(15,15,20,.60);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.relatedCompactList{
+  display:grid;
+  gap: 10px;
+}
+
+.relatedCompactCard{
+  min-height: 150px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap: 18px;
+  padding: 18px;
+  border-radius: 20px;
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+.relatedCompactCard:hover{
+  transform: translateY(-2px);
+  border-color: rgba(10,132,255,.22);
+  background: rgba(255,255,255,.82);
+  box-shadow: 0 22px 64px rgba(10,10,20,.09);
+}
+
+.relatedCompactCard h3{
+  margin: 12px 0 0;
+  font-size: clamp(24px, 2rem, 32px);
+  line-height: 1.02;
+}
+
+.relatedCompactCard p{
+  margin-top: 8px;
+  color: rgba(15,15,20,.62);
+  line-height: 1.48;
+}
+
+.relatedCompactFooter{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap: 14px;
+}
+
+.relatedCompactCta{
+  color: rgba(10,132,255,.84);
+  font-size: 12px;
+  font-weight: 760;
+  white-space: nowrap;
+}
+
+.serviceDetailPage .servicePathMeta span{
+  min-height: 28px;
+  font-size: 11px;
+}
+
+.serviceDetailPage .interfaceCta{
+  min-height: 300px;
+  padding: clamp(26px, 3.8rem, 56px);
+}
+
+.serviceDetailPage .interfaceCta:after{
+  display:none;
+}
+
+.serviceDetailPage .interfaceCta h2{
+  font-size: clamp(42px, 5rem, 80px);
+}
+
+@media (max-width: 1180px){
+  .serviceDetailPage .interfaceHero{
+    min-height:auto;
+  }
+
+  .serviceDetailPage .deliverableGrid,
+  .serviceSupportGrid{
+    grid-template-columns: 1fr;
+  }
+
+  .relatedCompactHead{
+    align-items:flex-start;
+  }
+}
+
+@media (max-width: 760px){
+  .deliverableList li{
+    min-height:auto;
+    padding: 16px 40px 16px 16px;
+  }
+
+  .deliverableList li:before{
+    left:auto;
+    right: 16px;
+    top: 18px;
+    z-index:1;
+  }
+
+  .deliverableList li > *{
+    position:relative;
+    z-index:2;
+  }
+
+  .serviceDetailPage .interfaceHero{
+    padding-top: 28px;
+    padding-bottom: 30px;
+  }
+
+  .serviceDetailPage .interfaceSection{
+    padding: 36px 0;
+  }
+
+  .serviceDetailPage .interfaceHero + .interfaceSection{
+    padding-top: 26px;
+  }
+
+  .serviceDetailPage .interfaceTitle,
+  .serviceDetailPage .interfaceSectionHead h2,
+  .serviceDetailPage .interfaceCta h2{
+    font-size: clamp(36px, 10.2vw, 46px);
+    line-height:.98;
+    overflow-wrap: break-word;
+    text-wrap: balance;
+  }
+
+  .serviceHeroTags{
+    margin-top: 14px;
+    gap: 7px;
+  }
+
+  .serviceHeroTags span,
+  .quoteHints span{
+    min-height: 28px;
+    font-size: 10px;
+  }
+
+  .serviceDetailPage .detailHeroPanel{
+    min-height: 280px;
+    padding: 14px;
+  }
+
+  .serviceDetailPage .detailHeroPanel .interfacePanelContent{
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .serviceDetailPage .detailTile,
+  .relatedCompactCard{
+    min-height: auto;
+  }
+
+  .relatedCompactHead{
+    display:grid;
+    gap: 8px;
+  }
+
+  .relatedCompactPanel{
+    padding: 14px;
+    border-radius: 22px;
+  }
+
+  .relatedCompactList{
+    display:flex;
+    gap: 10px;
+    overflow-x:auto;
+    padding-bottom: 4px;
+    scroll-snap-type:x mandatory;
+  }
+
+  .relatedCompactCard{
+    flex: 0 0 min(82vw, 330px);
+    scroll-snap-align:start;
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .relatedCompactCard h3{
+    font-size: clamp(23px, 7vw, 30px);
+  }
+
+  .relatedCompactFooter{
+    display:grid;
+    align-items:start;
+    gap: 10px;
+  }
+
+  .serviceDetailPage .interfaceCta{
+    min-height:auto;
   }
 }

@@ -2,182 +2,343 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SignalInfrastructureField from "./SignalInfrastructureField";
 import { services } from "../content/services";
+import { servicesEs } from "../content/services.es";
 import { COMPANY } from "../content/company";
-
-const featuredServices = services.filter((service) =>
-  ["networks", "electricity", "alarms"].includes(service.key)
-);
-
-const systemNodes = [
-  {
-    key: "telecom",
-    label: "Telecom",
-    signal: "Long-distance signal",
-    note: "Lines, terminations, provider handoff",
-  },
-  {
-    key: "networks",
-    label: "Networks",
-    signal: "Stable connectivity",
-    note: "Wi-Fi, access points, topology",
-  },
-  {
-    key: "electricity",
-    label: "Electricity",
-    signal: "Power + control",
-    note: "Panels, circuits, smart-ready wiring",
-  },
-  {
-    key: "ev",
-    label: "EV Charging",
-    signal: "Energy delivery",
-    note: "Charging points and safe routing",
-  },
-  {
-    key: "alarms",
-    label: "Security",
-    signal: "Protected perimeter",
-    note: "Alarms, CCTV, zones, monitoring-ready",
-  },
-  {
-    key: "audio",
-    label: "Audio",
-    signal: "Sound field",
-    note: "Home cinema, multiroom, venue audio",
-  },
-];
-
-const process = [
-  {
-    step: "01",
-    title: "Signal",
-    text: "The need is identified: connectivity, power, security, comfort or audio.",
-    input: "Need / issue",
-    output: "Initial signal",
-    details: ["Service category", "Space type", "Main pain point"],
-  },
-  {
-    step: "02",
-    title: "System",
-    text: "Services are mapped as one technical layer, not isolated tasks.",
-    input: "Service mix",
-    output: "System view",
-    details: ["Network + power dependencies", "Security / comfort layers", "Access points"],
-  },
-  {
-    step: "03",
-    title: "Service path",
-    text: "Scope, constraints, installation route and handover are clarified.",
-    input: "Site constraints",
-    output: "Install path",
-    details: ["Routes and distances", "Panel / rack locations", "Building constraints"],
-  },
-  {
-    step: "04",
-    title: "Proof",
-    text: "Technical clarity, diagrams, handoff notes and bilingual service structure build trust.",
-    input: "Technical plan",
-    output: "Clarity pack",
-    details: ["Labels and notes", "Expected outcome", "Support-ready handover"],
-  },
-  {
-    step: "05",
-    title: "Quote",
-    text: "The request becomes a clear technical brief for the space.",
-    input: "Confirmed scope",
-    output: "Quote brief",
-    details: ["Selected service", "Space notes", "Next response"],
-  },
-];
-
-const impactStats = [
-  {
-    value: 124,
-    suffix: "+",
-    label: "completed installations",
-    text: "Homes, offices and service spaces moved from request to working infrastructure.",
-  },
-  {
-    value: 18,
-    suffix: "",
-    label: "active scopes",
-    text: "Technical requests currently being clarified, quoted or prepared for installation.",
-  },
-  {
-    value: 360,
-    suffix: "+",
-    label: "technical consultations",
-    text: "Early calls and site conversations that turn vague needs into a clear path.",
-  },
-  {
-    value: 6,
-    suffix: "",
-    label: "connected service layers",
-    text: "Telecom, networks, power, EV, security and audio planned as one system.",
-  },
-];
-
-const journeyFocus = [
-  {
-    key: "telecom",
-    step: "01",
-    label: "Telecom",
-    title: "Signal enters the space",
-    text: "Provider handoff, fiber/copper lines and the technical entry point become visible.",
-  },
-  {
-    key: "networks",
-    step: "02",
-    label: "Networks",
-    title: "Connectivity becomes stable",
-    text: "Wi-Fi, access points and topology are planned as a supportable layer.",
-  },
-  {
-    key: "electricity",
-    step: "03",
-    label: "Power",
-    title: "Energy gets routed and controlled",
-    text: "Panels, circuits and smart-ready wiring prepare the space for upgrades.",
-  },
-  {
-    key: "security",
-    step: "04",
-    label: "Security",
-    title: "The perimeter becomes clear",
-    text: "Alarms, CCTV and zones connect to the wider infrastructure plan.",
-  },
-  {
-    key: "quote",
-    step: "05",
-    label: "Quote",
-    title: "The request becomes actionable",
-    text: "The technical path turns into a clear quote brief for the installation.",
-  },
-];
-
-const quoteSpaceTypes = ["Apartment", "House / villa", "Office", "Retail / hospitality", "Technical room"];
-const quoteTimelines = ["Planning", "This month", "1-3 months", "Urgent site issue"];
-const quoteConstraints = ["Existing wiring", "New renovation", "Provider handoff", "Panel / rack access", "Outdoor routing", "Barcelona area"];
-
-const pageNavItems = [
-  { href: "#signal-field", index: "01", label: "Signal" },
-  { href: "#system-map", index: "02", label: "System" },
-  { href: "#service-journey", index: "03", label: "Path" },
-  { href: "#featured-services", index: "04", label: "Services" },
-  { href: "#technical-request", index: "05", label: "Quote" },
-];
 
 type PageProps = {
   title?: string;
   description?: string;
   noindex?: boolean;
+  locale?: "en" | "es";
 };
 
-const {
-  title: layoutTitle = "Connected Infrastructure OS for Modern Spaces",
-  description: layoutDescription = "ARCWAVE designs and integrates telecom, networks, electricity, smart home, EV charging, security and audio systems as one reliable technical layer.",
-  noindex: layoutNoindex = false,
-} = Astro.props as PageProps;
+const incomingProps = Astro.props as PageProps;
+const locale = incomingProps.locale === "es" ? "es" : "en";
+const isEs = locale === "es";
+const basePath = isEs ? "/es" : "";
+const activeServices = isEs ? servicesEs : services;
+const contactHref = `${basePath}/contact#quote`;
+const servicesHref = `${basePath}/services`;
+
+const layoutTitle =
+  incomingProps.title ??
+  (isEs ? "Connected Infrastructure OS para espacios modernos" : "Connected Infrastructure OS for Modern Spaces");
+const layoutDescription =
+  incomingProps.description ??
+  (isEs
+    ? "ARCWAVE diseña e integra telecomunicaciones, redes, electricidad, smart home, carga VE, seguridad y audio como una capa técnica fiable."
+    : "ARCWAVE designs and integrates telecom, networks, electricity, smart home, EV charging, security and audio systems as one reliable technical layer.");
+const layoutNoindex = incomingProps.noindex ?? false;
+
+const copy = isEs
+  ? {
+      navAria: "Navegación de secciones de Home",
+      conceptLabel: "Connected Infrastructure",
+      heroTitle: "Infraestructura invisible, integrada con precisión.",
+      heroLead:
+        "Telecomunicaciones, redes, electricidad, smart home, carga VE, seguridad y audio, planificados como una capa técnica fiable para espacios modernos.",
+      quoteCta: "Solicitar presupuesto",
+      servicesCta: "Explorar servicios",
+      formula: ["señal", "sistema", "ruta de servicio", "prueba", "presupuesto"],
+      focusAria: "Ruta de enfoque de infraestructura",
+      signalStageAria: "Campo de infraestructura de señal",
+      stageCaption: "Campo de infraestructura de señal",
+      stageCaptionSmall: "Capa de topología viva",
+      systemEyebrow: "Mapa de servicios conectados",
+      systemTitle: "Una capa técnica. Seis rutas de servicio conectadas.",
+      systemText:
+        "ARCWAVE presenta la infraestructura como un sistema integrado: señal, energía, seguridad, confort y audio, diseñados para trabajar juntos.",
+      mapHud: "Topología de servicio viva",
+      mapCoreTop: "Integrado",
+      mapCoreMain: "Sistema",
+      impactAria: "Impacto de proyectos ARCWAVE",
+      impactLabel: "Señales de entrega",
+      impactText:
+        "Instalaciones, alcances activos y conversaciones técnicas tempranas muestran cómo ARCWAVE convierte necesidades dispersas en entrega coordinada.",
+      journeyEyebrow: "Service journey",
+      journeyTitle: "De necesidad a sistema instalado.",
+      journeyText:
+        "El flujo de presupuesto se plantea como una ruta técnica: el cliente describe el espacio, ARCWAVE mapea el sistema y la respuesta se convierte en un brief instalable.",
+      inputLabel: "Input",
+      outputLabel: "Output",
+      featuredEyebrow: "Rutas de servicio destacadas",
+      featuredTitle: "Sistemas de alto impacto para espacios modernos.",
+      servicePathLabel: "Ruta de servicio",
+      requestEyebrow: "Interfaz de solicitud técnica",
+      requestTitle: "Convierte una necesidad abierta en un brief instalable.",
+      requestText:
+        "Selecciona la ruta del sistema, describe el espacio y las restricciones, y abre el formulario completo o prepara un brief técnico conciso.",
+      quoteProgress: ["01 Señal", "02 Espacio", "03 Restricciones", "04 Brief"],
+      servicePathKicker: "Ruta de servicio",
+      serviceQuestion: "¿Qué debería mapear ARCWAVE primero?",
+      spaceTypeLabel: "Tipo de espacio",
+      timingLabel: "Plazo",
+      constraintsKicker: "Restricciones conocidas",
+      constraintsQuestion: "¿Qué debe considerarse antes de presupuestar?",
+      notesLabel: "Notas del espacio",
+      notesPlaceholder:
+        "Ejemplo: piso en Barcelona, entrada de operador cerca del acceso, necesito Wi-Fi estable y recorrido de cable limpio.",
+      liveBrief: "Brief vivo",
+      briefReady: "Listo para revisión técnica",
+      briefPath: ["Señal", "Sistema", "Presupuesto"],
+      briefLabels: {
+        service: "Servicio",
+        space: "Espacio",
+        timing: "Plazo",
+        constraints: "Restricciones",
+      },
+      defaultService: "Redes",
+      defaultSpace: "Piso",
+      defaultTiming: "Planificación",
+      defaultConstraints: "Entrada de operador, Barcelona",
+      defaultNotes: "Añade una nota breve para convertirlo en una solicitud técnica más clara.",
+      sendBrief: "Enviar brief técnico",
+      openForm: "Abrir formulario",
+      mailSubjectPrefix: "Solicitud técnica ARCWAVE",
+      mailBodyLabels: {
+        service: "Ruta de servicio",
+        space: "Espacio",
+        timing: "Plazo",
+        constraints: "Restricciones",
+        notes: "Notas",
+      },
+      pageNavItems: [
+        { href: "#signal-field", index: "01", label: "Señal" },
+        { href: "#system-map", index: "02", label: "Sistema" },
+        { href: "#service-journey", index: "03", label: "Ruta" },
+        { href: "#featured-services", index: "04", label: "Servicios" },
+        { href: "#technical-request", index: "05", label: "Presupuesto" },
+      ],
+    }
+  : {
+      navAria: "Home section navigation",
+      conceptLabel: "Connected Infrastructure",
+      heroTitle: "Invisible infrastructure, precisely integrated.",
+      heroLead:
+        "Telecom, networks, electricity, smart home, EV charging, security and audio systems - planned as one reliable technical layer for modern spaces.",
+      quoteCta: "Request a quote",
+      servicesCta: "Explore services",
+      formula: ["signal", "system", "service path", "proof", "quote"],
+      focusAria: "Infrastructure focus path",
+      signalStageAria: "Signal Infrastructure Field",
+      stageCaption: "Signal Infrastructure Field",
+      stageCaptionSmall: "Live topology layer",
+      systemEyebrow: "Connected services map",
+      systemTitle: "One technical layer. Six connected service paths.",
+      systemText:
+        "ARCWAVE presents infrastructure as an integrated system: signal, power, security, comfort and audio - designed to work together.",
+      mapHud: "Live service topology",
+      mapCoreTop: "Integrated",
+      mapCoreMain: "System",
+      impactAria: "ARCWAVE project impact",
+      impactLabel: "Delivery signals",
+      impactText:
+        "Installed systems, active scopes and early technical conversations show how ARCWAVE turns scattered infrastructure needs into coordinated delivery.",
+      journeyEyebrow: "Service journey",
+      journeyTitle: "From need to installed system.",
+      journeyText:
+        "The quote flow is framed as a technical path: the customer describes the space, ARCWAVE maps the system, and the response becomes an installable brief.",
+      inputLabel: "Input",
+      outputLabel: "Output",
+      featuredEyebrow: "Featured service paths",
+      featuredTitle: "High-impact systems for modern spaces.",
+      servicePathLabel: "Service path",
+      requestEyebrow: "Technical request interface",
+      requestTitle: "Turn a loose need into a clear install brief.",
+      requestText:
+        "Select the system path, describe the space and constraints, then open the full quote form or send a concise technical brief directly.",
+      quoteProgress: ["01 Signal", "02 Space", "03 Constraints", "04 Brief"],
+      servicePathKicker: "Service path",
+      serviceQuestion: "What should ARCWAVE map first?",
+      spaceTypeLabel: "Space type",
+      timingLabel: "Timing",
+      constraintsKicker: "Known constraints",
+      constraintsQuestion: "What should be considered before quoting?",
+      notesLabel: "Space notes",
+      notesPlaceholder:
+        "Example: apartment in Barcelona, provider handoff near entrance, need stable Wi-Fi and clean cable routing.",
+      liveBrief: "Live brief",
+      briefReady: "Ready for technical review",
+      briefPath: ["Signal", "System", "Quote"],
+      briefLabels: {
+        service: "Service",
+        space: "Space",
+        timing: "Timing",
+        constraints: "Constraints",
+      },
+      defaultService: "Networks",
+      defaultSpace: "Apartment",
+      defaultTiming: "Planning",
+      defaultConstraints: "Provider handoff, Barcelona area",
+      defaultNotes: "Add a short note to turn this into a cleaner technical request.",
+      sendBrief: "Send technical brief",
+      openForm: "Open full form",
+      mailSubjectPrefix: "ARCWAVE technical request",
+      mailBodyLabels: {
+        service: "Service path",
+        space: "Space",
+        timing: "Timing",
+        constraints: "Constraints",
+        notes: "Notes",
+      },
+      pageNavItems: [
+        { href: "#signal-field", index: "01", label: "Signal" },
+        { href: "#system-map", index: "02", label: "System" },
+        { href: "#service-journey", index: "03", label: "Path" },
+        { href: "#featured-services", index: "04", label: "Services" },
+        { href: "#technical-request", index: "05", label: "Quote" },
+      ],
+    };
+
+const featuredServices = activeServices.filter((service) =>
+  ["networks", "electricity", "alarms"].includes(service.key)
+);
+
+const systemNodes = isEs
+  ? [
+      { key: "telecom", label: "Telecom", signal: "Señal principal", note: "Líneas, terminaciones, handoff de operador" },
+      { key: "networks", label: "Redes", signal: "Conectividad estable", note: "Wi-Fi, puntos de acceso, topología" },
+      { key: "electricity", label: "Electricidad", signal: "Energía + control", note: "Cuadros, circuitos, cableado smart-ready" },
+      { key: "ev", label: "Carga VE", signal: "Entrega de energía", note: "Puntos de carga y recorrido seguro" },
+      { key: "alarms", label: "Seguridad", signal: "Perímetro protegido", note: "Alarmas, CCTV, zonas, monitorización" },
+      { key: "audio", label: "Audio", signal: "Campo sonoro", note: "Cine en casa, multiroom, audio para locales" },
+    ]
+  : [
+      { key: "telecom", label: "Telecom", signal: "Long-distance signal", note: "Lines, terminations, provider handoff" },
+      { key: "networks", label: "Networks", signal: "Stable connectivity", note: "Wi-Fi, access points, topology" },
+      { key: "electricity", label: "Electricity", signal: "Power + control", note: "Panels, circuits, smart-ready wiring" },
+      { key: "ev", label: "EV Charging", signal: "Energy delivery", note: "Charging points and safe routing" },
+      { key: "alarms", label: "Security", signal: "Protected perimeter", note: "Alarms, CCTV, zones, monitoring-ready" },
+      { key: "audio", label: "Audio", signal: "Sound field", note: "Home cinema, multiroom, venue audio" },
+    ];
+
+const process = isEs
+  ? [
+      {
+        step: "01",
+        title: "Señal",
+        text: "La necesidad se identifica: conectividad, energía, seguridad, confort o audio.",
+        input: "Necesidad / problema",
+        output: "Señal inicial",
+        details: ["Categoría de servicio", "Tipo de espacio", "Punto principal"],
+      },
+      {
+        step: "02",
+        title: "Sistema",
+        text: "Los servicios se mapean como una capa técnica, no como tareas aisladas.",
+        input: "Mezcla de servicios",
+        output: "Vista del sistema",
+        details: ["Red + energía", "Seguridad / confort", "Accesos"],
+      },
+      {
+        step: "03",
+        title: "Ruta de servicio",
+        text: "Alcance, restricciones, ruta de instalación y entrega quedan claros.",
+        input: "Restricciones del sitio",
+        output: "Ruta instalable",
+        details: ["Rutas y distancias", "Cuadro / rack", "Restricciones del edificio"],
+      },
+      {
+        step: "04",
+        title: "Prueba",
+        text: "Claridad técnica, diagramas, notas de handoff y estructura de servicio generan confianza.",
+        input: "Plan técnico",
+        output: "Paquete de claridad",
+        details: ["Etiquetas y notas", "Resultado esperado", "Entrega para soporte"],
+      },
+      {
+        step: "05",
+        title: "Presupuesto",
+        text: "La solicitud se convierte en un brief técnico claro para el espacio.",
+        input: "Alcance confirmado",
+        output: "Brief técnico",
+        details: ["Servicio seleccionado", "Notas del espacio", "Siguiente respuesta"],
+      },
+    ]
+  : [
+      {
+        step: "01",
+        title: "Signal",
+        text: "The need is identified: connectivity, power, security, comfort or audio.",
+        input: "Need / issue",
+        output: "Initial signal",
+        details: ["Service category", "Space type", "Main pain point"],
+      },
+      {
+        step: "02",
+        title: "System",
+        text: "Services are mapped as one technical layer, not isolated tasks.",
+        input: "Service mix",
+        output: "System view",
+        details: ["Network + power dependencies", "Security / comfort layers", "Access points"],
+      },
+      {
+        step: "03",
+        title: "Service path",
+        text: "Scope, constraints, installation route and handover are clarified.",
+        input: "Site constraints",
+        output: "Install path",
+        details: ["Routes and distances", "Panel / rack locations", "Building constraints"],
+      },
+      {
+        step: "04",
+        title: "Proof",
+        text: "Technical clarity, diagrams, handoff notes and bilingual service structure build trust.",
+        input: "Technical plan",
+        output: "Clarity pack",
+        details: ["Labels and notes", "Expected outcome", "Support-ready handover"],
+      },
+      {
+        step: "05",
+        title: "Quote",
+        text: "The request becomes a clear technical brief for the space.",
+        input: "Confirmed scope",
+        output: "Quote brief",
+        details: ["Selected service", "Space notes", "Next response"],
+      },
+    ];
+
+const impactStats = isEs
+  ? [
+      { value: 124, suffix: "+", label: "instalaciones completadas", text: "Viviendas, oficinas y espacios de servicio pasados de solicitud a infraestructura funcional." },
+      { value: 18, suffix: "", label: "alcances activos", text: "Solicitudes técnicas en aclaración, presupuesto o preparación de instalación." },
+      { value: 360, suffix: "+", label: "consultas técnicas", text: "Conversaciones tempranas que convierten necesidades vagas en rutas claras." },
+      { value: 6, suffix: "", label: "capas conectadas", text: "Telecom, redes, electricidad, carga VE, seguridad y audio planificados como un sistema." },
+    ]
+  : [
+      { value: 124, suffix: "+", label: "completed installations", text: "Homes, offices and service spaces moved from request to working infrastructure." },
+      { value: 18, suffix: "", label: "active scopes", text: "Technical requests currently being clarified, quoted or prepared for installation." },
+      { value: 360, suffix: "+", label: "technical consultations", text: "Early calls and site conversations that turn vague needs into a clear path." },
+      { value: 6, suffix: "", label: "connected service layers", text: "Telecom, networks, power, EV, security and audio planned as one system." },
+    ];
+
+const journeyFocus = isEs
+  ? [
+      { key: "telecom", step: "01", label: "Telecom", title: "La señal entra en el espacio", text: "Handoff de operador, fibra/cobre y punto técnico de entrada se vuelven visibles." },
+      { key: "networks", step: "02", label: "Redes", title: "La conectividad se estabiliza", text: "Wi-Fi, puntos de acceso y topología se planifican como una capa mantenible." },
+      { key: "electricity", step: "03", label: "Energía", title: "La energía se enruta y controla", text: "Cuadros, circuitos y cableado smart-ready preparan el espacio para ampliaciones." },
+      { key: "security", step: "04", label: "Seguridad", title: "El perímetro queda claro", text: "Alarmas, CCTV y zonas se conectan con el plan de infraestructura." },
+      { key: "quote", step: "05", label: "Presupuesto", title: "La solicitud se vuelve accionable", text: "La ruta técnica se convierte en un brief claro para la instalación." },
+    ]
+  : [
+      { key: "telecom", step: "01", label: "Telecom", title: "Signal enters the space", text: "Provider handoff, fiber/copper lines and the technical entry point become visible." },
+      { key: "networks", step: "02", label: "Networks", title: "Connectivity becomes stable", text: "Wi-Fi, access points and topology are planned as a supportable layer." },
+      { key: "electricity", step: "03", label: "Power", title: "Energy gets routed and controlled", text: "Panels, circuits and smart-ready wiring prepare the space for upgrades." },
+      { key: "security", step: "04", label: "Security", title: "The perimeter becomes clear", text: "Alarms, CCTV and zones connect to the wider infrastructure plan." },
+      { key: "quote", step: "05", label: "Quote", title: "The request becomes actionable", text: "The technical path turns into a clear quote brief for the installation." },
+    ];
+
+const quoteSpaceTypes = isEs
+  ? ["Piso", "Casa / villa", "Oficina", "Retail / hospitality", "Sala técnica"]
+  : ["Apartment", "House / villa", "Office", "Retail / hospitality", "Technical room"];
+const quoteTimelines = isEs
+  ? ["Planificación", "Este mes", "1-3 meses", "Incidencia urgente"]
+  : ["Planning", "This month", "1-3 months", "Urgent site issue"];
+const quoteConstraints = isEs
+  ? ["Cableado existente", "Nueva reforma", "Entrada de operador", "Acceso a cuadro / rack", "Ruta exterior", "Barcelona"]
+  : ["Existing wiring", "New renovation", "Provider handoff", "Panel / rack access", "Outdoor routing", "Barcelona area"];
+
+const pageNavItems = copy.pageNavItems;
 ---
 
 <BaseLayout
@@ -185,7 +346,7 @@ const {
   description={layoutDescription}
   noindex={layoutNoindex}
 >
-  <div class="homeV2">
+  <div class={`homeV2 ${isEs ? "isSpanish" : ""}`.trim()}>
   <div class="livingAtmosphere" aria-hidden="true">
     <div class="atmoLayer atmoGrid"></div>
     <div class="atmoLayer atmoField"></div>
@@ -193,7 +354,7 @@ const {
     <div class="atmoLayer atmoNoise"></div>
   </div>
 
-  <nav class="pageNav" data-page-nav aria-label="Home section navigation">
+  <nav class="pageNav" data-page-nav aria-label={copy.navAria}>
     <div class="pageNavTrack" aria-hidden="true"><span data-page-progress></span></div>
     {pageNavItems.map((item) => (
       <a href={item.href} data-page-nav-link aria-label={item.label}>
@@ -206,33 +367,29 @@ const {
   <section id="signal-field" class="v2Hero">
     <div class="heroGrid">
       <div class="heroCopy">
-        <div class="conceptLabel">Connected Infrastructure OS</div>
+        <div class="conceptLabel">{copy.conceptLabel}</div>
 
-        <h1>Invisible infrastructure, precisely integrated.</h1>
+        <h1>{copy.heroTitle}</h1>
 
         <p class="lead">
-          Telecom, networks, electricity, smart home, EV charging, security and audio systems -
-          planned as one reliable technical layer for modern spaces.
+          {copy.heroLead}
         </p>
 
         <div class="actions">
-          <a class="primary" href="#technical-request" data-vt="1">Request a quote</a>
-          <a class="secondary" href="/services" data-vt="1">Explore services</a>
+          <a class="primary" href="#technical-request" data-vt="1">{copy.quoteCta}</a>
+          <a class="secondary" href={servicesHref} data-vt="1">{copy.servicesCta}</a>
         </div>
 
         <div class="signalFormula" aria-label="Commercial journey">
-          <span>signal</span>
-          <i></i>
-          <span>system</span>
-          <i></i>
-          <span>service path</span>
-          <i></i>
-          <span>proof</span>
-          <i></i>
-          <span>quote</span>
+          {copy.formula.map((item, index) => (
+            <>
+              <span>{item}</span>
+              {index < copy.formula.length - 1 ? <i></i> : null}
+            </>
+          ))}
         </div>
 
-        <div class="focusRail" aria-label="Infrastructure focus path">
+        <div class="focusRail" aria-label={copy.focusAria}>
           {journeyFocus.map((item) => (
             <button type="button" data-field-focus={item.key}>
               <span>{item.step}</span>
@@ -242,11 +399,11 @@ const {
         </div>
       </div>
 
-      <div class="signalStage" aria-label="Signal Infrastructure Field">
-        <SignalInfrastructureField client:only="react" />
+      <div class="signalStage" aria-label={copy.signalStageAria}>
+        <SignalInfrastructureField locale={locale} client:visible />
         <div class="stageCaption">
-          <span>Signal Infrastructure Field</span>
-          <small>Live topology layer</small>
+          <span>{copy.stageCaption}</span>
+          <small>{copy.stageCaptionSmall}</small>
         </div>
       </div>
     </div>
@@ -267,18 +424,15 @@ const {
   <section id="system-map" class="systemSection">
     <div class="container">
       <div class="sectionHead">
-        <div class="eyebrow">Connected services map</div>
-        <h2>One technical layer. Six connected service paths.</h2>
-        <p>
-          ARCWAVE presents infrastructure as an integrated system: signal, power,
-          security, comfort and audio - designed to work together.
-        </p>
+        <div class="eyebrow">{copy.systemEyebrow}</div>
+        <h2>{copy.systemTitle}</h2>
+        <p>{copy.systemText}</p>
       </div>
 
       <div class="systemMap" data-active-system="telecom">
         <div class="mapHud" aria-hidden="true">
-          <span>Live service topology</span>
-          <strong>Connected Infrastructure OS</strong>
+          <span>{copy.mapHud}</span>
+          <strong>{copy.conceptLabel}</strong>
         </div>
 
         <div class="mapRoutes" aria-hidden="true">
@@ -326,7 +480,7 @@ const {
         {systemNodes.map((node, index) => (
           <a
             class={`systemNode n${index + 1}`}
-            href={`/services/${node.key}`}
+            href={`${basePath}/services/${node.key}`}
             data-vt="1"
             data-system-node={node.key}
             aria-label={`Open ${node.label}`}
@@ -339,18 +493,15 @@ const {
         ))}
 
         <div class="mapCore" data-system-node="system">
-          <span>Integrated</span>
-          <strong>System</strong>
+          <span>{copy.mapCoreTop}</span>
+          <strong>{copy.mapCoreMain}</strong>
         </div>
       </div>
 
-      <section id="infrastructure-logic" class="impactStrip" data-impact-strip aria-label="ARCWAVE project impact">
+      <section id="infrastructure-logic" class="impactStrip" data-impact-strip aria-label={copy.impactAria}>
         <div class="impactStripHead">
-          <span>Delivery signals</span>
-          <p>
-            Installed systems, active scopes and early technical conversations show how
-            ARCWAVE turns scattered infrastructure needs into coordinated delivery.
-          </p>
+          <span>{copy.impactLabel}</span>
+          <p>{copy.impactText}</p>
         </div>
 
         <div class="impactLine" aria-hidden="true">
@@ -375,12 +526,9 @@ const {
   <section id="service-journey" class="pathSection">
     <div class="container">
       <div class="sectionHead compact">
-        <div class="eyebrow">Service journey</div>
-        <h2>From need to installed system.</h2>
-        <p>
-          The quote flow is framed as a technical path: the customer describes the
-          space, ARCWAVE maps the system, and the response becomes an installable brief.
-        </p>
+        <div class="eyebrow">{copy.journeyEyebrow}</div>
+        <h2>{copy.journeyTitle}</h2>
+        <p>{copy.journeyText}</p>
       </div>
 
       <div class="pathStage">
@@ -391,11 +539,11 @@ const {
               <span>{item.step}</span>
               <dl>
                 <div>
-                  <dt>Input</dt>
+                  <dt>{copy.inputLabel}</dt>
                   <dd>{item.input}</dd>
                 </div>
                 <div>
-                  <dt>Output</dt>
+                  <dt>{copy.outputLabel}</dt>
                   <dd>{item.output}</dd>
                 </div>
               </dl>
@@ -414,16 +562,16 @@ const {
   <section id="featured-services" class="featuredSection">
     <div class="container">
       <div class="sectionHead compact">
-        <div class="eyebrow">Featured service paths</div>
-        <h2>High-impact systems for modern spaces.</h2>
+        <div class="eyebrow">{copy.featuredEyebrow}</div>
+        <h2>{copy.featuredTitle}</h2>
       </div>
 
       <div class="featuredGrid">
         {featuredServices.map((service, index) => (
-          <a class={`featuredCard f${index + 1}`} href={`/services/${service.key}`} data-vt="1">
+          <a class={`featuredCard f${index + 1}`} href={`${basePath}/services/${service.key}`} data-vt="1">
             <img src={service.cardImage} alt="" loading="lazy" decoding="async" />
             <div>
-              <small>{String(index + 1).padStart(2, "0")} / Service path</small>
+              <small>{String(index + 1).padStart(2, "0")} / {copy.servicePathLabel}</small>
               <span>{service.title}</span>
               <p>{service.short}</p>
             </div>
@@ -436,31 +584,42 @@ const {
   <section id="technical-request" class="quoteFlowSection">
     <div class="container quoteFlowGrid">
       <div class="quoteFlowCopy">
-        <div class="eyebrow">Technical request interface</div>
-        <h2>Turn a loose need into a clear install brief.</h2>
-        <p>
-          Select the system path, describe the space and constraints, then open the
-          full quote form or send a concise technical brief directly.
-        </p>
+        <div class="eyebrow">{copy.requestEyebrow}</div>
+        <h2>{copy.requestTitle}</h2>
+        <p>{copy.requestText}</p>
+        <a class="mobileHomeFinalCta primary" href={contactHref} data-vt="1">{copy.quoteCta}</a>
       </div>
 
-      <form class="quoteInterface" data-quote-interface data-quote-email={COMPANY.email}>
+      <form
+        class="quoteInterface"
+        data-quote-interface
+        data-quote-email={COMPANY.email}
+        data-mail-subject-prefix={copy.mailSubjectPrefix}
+        data-mail-service-label={copy.mailBodyLabels.service}
+        data-mail-space-label={copy.mailBodyLabels.space}
+        data-mail-timing-label={copy.mailBodyLabels.timing}
+        data-mail-constraints-label={copy.mailBodyLabels.constraints}
+        data-mail-notes-label={copy.mailBodyLabels.notes}
+        data-empty-constraints={isEs ? "Sin restricciones seleccionadas" : "No constraints selected"}
+        data-empty-notes={copy.defaultNotes}
+        data-empty-mail-constraints={isEs ? "Ninguna seleccionada" : "None selected"}
+        data-empty-mail-notes={isEs ? "Sin notas añadidas todavía." : "No notes added yet."}
+      >
         <div class="quoteProgress" aria-label="Quote flow steps">
-          <span class="isActive">01 Signal</span>
-          <i></i>
-          <span>02 Space</span>
-          <i></i>
-          <span>03 Constraints</span>
-          <i></i>
-          <span>04 Brief</span>
+          {copy.quoteProgress.map((item, index) => (
+            <>
+              <span class={index === 0 ? "isActive" : undefined}>{item}</span>
+              {index < copy.quoteProgress.length - 1 ? <i></i> : null}
+            </>
+          ))}
         </div>
 
         <div class="quoteWorkspace">
           <div class="quotePanel">
             <div class="quoteGroup">
               <div>
-                <span class="quoteKicker">Service path</span>
-                <strong>What should ARCWAVE map first?</strong>
+                <span class="quoteKicker">{copy.servicePathKicker}</span>
+                <strong>{copy.serviceQuestion}</strong>
               </div>
 
               <div class="quoteServiceGrid">
@@ -483,14 +642,14 @@ const {
 
             <div class="quoteSplit">
               <label class="quoteSelect">
-                <span>Space type</span>
+                <span>{copy.spaceTypeLabel}</span>
                 <select name="space" data-quote-field="space">
                   {quoteSpaceTypes.map((item) => <option value={item}>{item}</option>)}
                 </select>
               </label>
 
               <label class="quoteSelect">
-                <span>Timing</span>
+                <span>{copy.timingLabel}</span>
                 <select name="timeline" data-quote-field="timeline">
                   {quoteTimelines.map((item) => <option value={item}>{item}</option>)}
                 </select>
@@ -499,8 +658,8 @@ const {
 
             <div class="quoteGroup">
               <div>
-                <span class="quoteKicker">Known constraints</span>
-                <strong>What should be considered before quoting?</strong>
+                <span class="quoteKicker">{copy.constraintsKicker}</span>
+                <strong>{copy.constraintsQuestion}</strong>
               </div>
 
               <div class="constraintGrid">
@@ -519,56 +678,57 @@ const {
             </div>
 
             <label class="quoteText">
-              <span>Space notes</span>
+              <span>{copy.notesLabel}</span>
               <textarea
                 name="notes"
                 rows="4"
                 data-quote-field="notes"
-                placeholder="Example: apartment in Barcelona, provider handoff near entrance, need stable Wi-Fi and clean cable routing."
+                placeholder={copy.notesPlaceholder}
               ></textarea>
             </label>
           </div>
 
           <aside class="briefPanel" aria-label="Generated technical brief">
             <div class="briefStatus">
-              <span>Live brief</span>
-              <strong data-quote-status>Ready for technical review</strong>
+              <span>{copy.liveBrief}</span>
+              <strong data-quote-status>{copy.briefReady}</strong>
             </div>
 
             <div class="briefPath" aria-hidden="true">
-              <span>Signal</span>
-              <i></i>
-              <span>System</span>
-              <i></i>
-              <span>Quote</span>
+              {copy.briefPath.map((item, index) => (
+                <>
+                  <span>{item}</span>
+                  {index < copy.briefPath.length - 1 ? <i></i> : null}
+                </>
+              ))}
             </div>
 
             <dl class="briefList">
               <div>
-                <dt>Service</dt>
-                <dd data-quote-output="service">Networks</dd>
+                <dt>{copy.briefLabels.service}</dt>
+                <dd data-quote-output="service">{copy.defaultService}</dd>
               </div>
               <div>
-                <dt>Space</dt>
-                <dd data-quote-output="space">Apartment</dd>
+                <dt>{copy.briefLabels.space}</dt>
+                <dd data-quote-output="space">{copy.defaultSpace}</dd>
               </div>
               <div>
-                <dt>Timing</dt>
-                <dd data-quote-output="timeline">Planning</dd>
+                <dt>{copy.briefLabels.timing}</dt>
+                <dd data-quote-output="timeline">{copy.defaultTiming}</dd>
               </div>
               <div>
-                <dt>Constraints</dt>
-                <dd data-quote-output="constraints">Provider handoff, Barcelona area</dd>
+                <dt>{copy.briefLabels.constraints}</dt>
+                <dd data-quote-output="constraints">{copy.defaultConstraints}</dd>
               </div>
             </dl>
 
             <p data-quote-output="notes">
-              Add a short note to turn this into a cleaner technical request.
+              {copy.defaultNotes}
             </p>
 
             <div class="briefActions">
-              <a class="primary" href="/contact#quote" data-quote-mailto data-vt="1">Send technical brief</a>
-              <a class="secondary" href="/contact#quote" data-vt="1">Open full form</a>
+              <a class="primary" href={contactHref} data-quote-mailto data-vt="1">{copy.sendBrief}</a>
+              <a class="secondary" href={contactHref} data-vt="1">{copy.openForm}</a>
             </div>
           </aside>
         </div>
@@ -686,6 +846,18 @@ const {
 
       const mailto = form.querySelector("[data-quote-mailto]");
       const fallbackEmail = form.getAttribute("data-quote-email") || "hello@example.com";
+      const subjectPrefix = form.getAttribute("data-mail-subject-prefix") || "ARCWAVE technical request";
+      const mailLabels = {
+        service: form.getAttribute("data-mail-service-label") || "Service path",
+        space: form.getAttribute("data-mail-space-label") || "Space type",
+        timing: form.getAttribute("data-mail-timing-label") || "Timing",
+        constraints: form.getAttribute("data-mail-constraints-label") || "Known constraints",
+        notes: form.getAttribute("data-mail-notes-label") || "Space notes",
+      };
+      const emptyConstraints = form.getAttribute("data-empty-constraints") || "No constraints selected";
+      const emptyNotes = form.getAttribute("data-empty-notes") || "Add a short note to turn this into a cleaner technical request.";
+      const emptyMailConstraints = form.getAttribute("data-empty-mail-constraints") || "None selected";
+      const emptyMailNotes = form.getAttribute("data-empty-mail-notes") || "No notes added yet.";
       const outputs = {
         service: form.querySelector('[data-quote-output="service"]'),
         space: form.querySelector('[data-quote-output="space"]'),
@@ -712,8 +884,8 @@ const {
         outputs.service.textContent = service;
         outputs.space.textContent = space;
         outputs.timeline.textContent = timeline;
-        outputs.constraints.textContent = constraints.length ? constraints.join(", ") : "No constraints selected";
-        outputs.notes.textContent = notes || "Add a short note to turn this into a cleaner technical request.";
+        outputs.constraints.textContent = constraints.length ? constraints.join(", ") : emptyConstraints;
+        outputs.notes.textContent = notes || emptyNotes;
 
         form.querySelectorAll(".quoteServiceGrid label").forEach((label) => {
           label.classList.toggle("isSelected", label.querySelector("input")?.checked);
@@ -724,17 +896,17 @@ const {
         });
 
         if (mailto) {
-          const subject = `ARCWAVE technical request - ${service}`;
+          const subject = `${subjectPrefix} - ${service}`;
           const body = [
-            "ARCWAVE technical request",
+            subjectPrefix,
             "",
-            `Service path: ${service}`,
-            `Space type: ${space}`,
-            `Timing: ${timeline}`,
-            `Known constraints: ${constraints.length ? constraints.join(", ") : "None selected"}`,
+            `${mailLabels.service}: ${service}`,
+            `${mailLabels.space}: ${space}`,
+            `${mailLabels.timing}: ${timeline}`,
+            `${mailLabels.constraints}: ${constraints.length ? constraints.join(", ") : emptyMailConstraints}`,
             "",
-            "Space notes:",
-            notes || "No notes added yet.",
+            `${mailLabels.notes}:`,
+            notes || emptyMailNotes,
           ].join("\n");
 
           mailto.setAttribute(
@@ -1014,6 +1186,7 @@ const {
       position: relative;
       isolation:isolate;
       width: 100%;
+      margin-top: calc(var(--site-header-space) * -1);
       background:
         linear-gradient(180deg, rgba(250,252,254,.92), rgba(255,255,255,.82) 42%, rgba(246,250,253,.90) 100%);
       overflow:clip;
@@ -1329,7 +1502,7 @@ const {
     }
 
     .v2Hero{
-      min-height: 118svh;
+      min-height: calc(118svh + var(--site-header-space));
       position:relative;
       padding: 0;
       scroll-margin-top: 112px;
@@ -1546,11 +1719,25 @@ const {
       mask-composite: intersect;
     }
 
+    :global(.signalFieldShell),
     :global(.signalField),
     :global(.fieldCanvas),
     :global(.fieldGrain){
       position:absolute;
       inset:0;
+    }
+
+    :global(.signalFieldShell){
+      overflow:hidden;
+    }
+
+    :global(.signalFieldFallback){
+      transition: opacity .36s ease;
+    }
+
+    :global(.signalFieldShell.isEnhanced .signalFieldFallback){
+      opacity:0;
+      pointer-events:none;
     }
 
     :global(.fieldCanvas canvas){
@@ -4672,6 +4859,17 @@ const {
       letter-spacing:-.04em;
     }
 
+    .homeV2.isSpanish .pathItem h3{
+      overflow-wrap:break-word;
+      word-break:normal;
+      hyphens:auto;
+    }
+
+    .homeV2.isSpanish .pathItem:nth-child(5) h3{
+      font-size: clamp(24px, 1.7vw, 32px);
+      letter-spacing:-.025em;
+    }
+
     .pathItem p{
       margin: 14px 0 0;
       color: rgba(15,15,20,.62);
@@ -4956,6 +5154,10 @@ const {
       color: rgba(15,15,20,.62);
       font-size: 16px;
       line-height:1.7;
+    }
+
+    .mobileHomeFinalCta{
+      display:none;
     }
 
     .quoteInterface{
@@ -5816,10 +6018,38 @@ const {
     @media (max-width: 680px){
       .homeV2{
         --v2-container: min(100vw - 28px, 100%);
+        display:flex;
+        flex-direction:column;
+        margin-top: 0;
+      }
+
+      :global(.main){
+        padding-top:0;
+      }
+
+      .livingAtmosphere{
+        opacity:.46;
+      }
+
+      .homeV2 > .container{
+        display:none;
+      }
+
+      .v2Hero{ order:1; }
+      .systemSection{ order:2; }
+      .featuredSection{ order:3; }
+      .pathSection{ order:4; }
+      .quoteFlowSection{ order:5; }
+
+      .systemSection,
+      .pathSection,
+      .featuredSection,
+      .quoteFlowSection{
+        padding: 34px 0 8px;
       }
 
       .v2Hero{
-        padding: 22px 0 24px;
+        padding: 18px 0;
       }
 
       .pageNav{
@@ -5841,13 +6071,49 @@ const {
       }
 
       h1{
-        max-width: 7.2em;
-        font-size: clamp(36px, 11.2vw, 48px);
+        max-width: 7.4em;
+        font-size: clamp(36px, 11vw, 48px);
+        line-height:.92;
+        letter-spacing:-.045em;
       }
 
       .lead{
         font-size: 15px;
         max-width: 34ch;
+        line-height:1.5;
+      }
+
+      .heroCopy{
+        gap: 16px;
+        padding-top: 14px;
+      }
+
+      .actions{
+        display:grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        width: min(100%, 390px);
+      }
+
+      .actions .primary,
+      .actions .secondary{
+        width:100%;
+        min-width:0;
+        min-height: 43px;
+        padding-inline: 10px;
+        font-size: 14px;
+        text-align:center;
+      }
+
+      .homeV2.isSpanish .actions{
+        display:grid;
+        grid-template-columns: 1fr;
+        width:100%;
+      }
+
+      .homeV2.isSpanish .actions .primary,
+      .homeV2.isSpanish .actions .secondary{
+        width:100%;
       }
 
       .signalFormula{
@@ -5855,21 +6121,60 @@ const {
         gap: 8px;
       }
 
+      .homeV2.isSpanish .signalFormula{
+        font-size: 10px;
+        gap: 7px;
+      }
+
       .signalFormula i{
         width: 20px;
       }
 
+      .homeV2.isSpanish .signalFormula i{
+        width: 16px;
+      }
+
       .signalStage{
-        height: 640px;
-        min-height: 640px;
-        border-radius: 28px;
+        height: 312px;
+        min-height: 312px;
+        margin-top: 20px;
+        border-radius: 22px;
+        box-shadow:
+          inset 0 1px 0 rgba(255,255,255,.74),
+          0 22px 58px rgba(10,10,20,.10);
+      }
+
+      :global(.fieldCanvas){
+        display:none;
+      }
+
+      :global(.fieldGrain){
+        opacity:.45;
       }
 
       :global(.fieldReadout){
-        left: 22px;
-        bottom: 132px;
-        width: calc(100% - 44px);
+        left: 14px;
+        bottom: 14px;
+        width: calc(100% - 28px);
+        padding: 13px;
+        border-radius: 18px;
         transform: none;
+      }
+
+      :global(.fieldReadout span){
+        font-size: 9px;
+      }
+
+      :global(.fieldReadout strong){
+        font-size: 17px;
+      }
+
+      :global(.fieldReadout p){
+        display:-webkit-box;
+        -webkit-line-clamp:2;
+        -webkit-box-orient:vertical;
+        overflow:hidden;
+        font-size: 12px;
       }
 
       .focusRail button{
@@ -5879,29 +6184,27 @@ const {
       }
 
       :global(.fieldNode){
-        font-size: 11px;
-        min-height: 32px;
-        padding: 0 10px;
+        font-size: 10px;
+        min-height: 30px;
+        padding: 0 9px;
       }
 
-      :global(.fieldNode.telecom){ left: 6%; top: 20%; }
-      :global(.fieldNode.networks){ left: 10%; bottom: 32%; }
-      :global(.fieldNode.electricity){ right: 20%; top: 24%; }
-      :global(.fieldNode.ev){ right: 18%; top: 42%; }
-      :global(.fieldNode.security){ right: 18%; bottom: 26%; }
-      :global(.fieldNode.audio){ left: 8%; bottom: 44%; }
-      :global(.fieldNode.quote){ right: 20%; bottom: 18%; }
+      :global(.fieldNode.telecom){ left: 6%; top: 18%; }
+      :global(.fieldNode.networks){ left: 8%; top: 42%; }
+      :global(.fieldNode.electricity){ right: 8%; top: 22%; }
+      :global(.fieldNode.security){ right: 8%; top: 46%; }
+      :global(.fieldNode.ev),
+      :global(.fieldNode.audio),
+      :global(.fieldNode.quote){
+        display:none;
+      }
 
       .node{
         font-size: 11px;
       }
 
       .stageCaption{
-        flex-direction:column;
-        align-items:flex-start;
-        left: 22px;
-        right: 22px;
-        bottom: 18px;
+        display:none;
       }
 
       .systemMap,
@@ -5913,27 +6216,99 @@ const {
         grid-template-columns: 1fr;
       }
 
+      .sectionHead,
+      .sectionHead.compact,
+      .systemSection .sectionHead,
+      .featuredSection .sectionHead{
+        display:grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+
+      .systemSection .sectionHead h2,
+      .valueSection .sectionHead h2,
+      .pathSection .sectionHead h2,
+      .featuredSection .sectionHead h2,
+      .proofCopy h2,
+      .quoteFlowCopy h2,
+      .ctaCard h2{
+        max-width: 8.8em;
+        font-size: clamp(34px, 10.5vw, 48px);
+        line-height:.98;
+        letter-spacing:-.038em;
+      }
+
+      .sectionHead p,
+      .systemSection .sectionHead p,
+      .quoteFlowCopy p{
+        max-width: 38ch;
+        font-size: 14.5px;
+        line-height:1.52;
+      }
+
+      .systemMap{
+        gap: 9px;
+        padding: 10px;
+        border-radius: 22px;
+        background-size: 66px 66px, 66px 66px, auto, auto;
+      }
+
+      .systemNode{
+        min-height: auto;
+        padding: 14px;
+        border-radius: 17px;
+      }
+
+      .systemNode strong{
+        margin-top: 7px;
+        font-size: 20px;
+      }
+
+      .systemNode em{
+        margin-top: 5px;
+        font-size: 12px;
+      }
+
+      .systemNode p{
+        display:-webkit-box;
+        -webkit-line-clamp:2;
+        -webkit-box-orient:vertical;
+        overflow:hidden;
+        font-size: 12px;
+        line-height:1.42;
+      }
+
       .quoteInterface{
-        border-radius: 26px;
+        border-radius: 22px;
       }
 
       .quoteProgress{
-        padding: 14px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        padding: 12px;
         gap: 8px;
       }
 
       .quoteProgress i{
-        width: 20px;
-        flex-basis: 20px;
+        display:none;
       }
 
       .quotePanel,
       .briefPanel{
-        padding: 18px;
+        padding: 16px;
       }
 
       .quoteServiceGrid label{
-        min-height: 128px;
+        min-height: 88px;
+        padding: 13px;
+      }
+
+      .quoteServiceGrid label em{
+        display:none;
+      }
+
+      .constraintGrid{
+        grid-template-columns: 1fr;
       }
 
       .briefStatus strong{
@@ -5954,26 +6329,30 @@ const {
       }
 
       .impactStrip{
-        margin-top: 28px;
-        padding: 24px 0 34px;
+        margin-top: 18px;
+        padding: 20px 0 26px;
       }
 
       .impactStats{
         grid-template-columns: 1fr;
-        row-gap: 38px;
+        row-gap: 22px;
       }
 
       .impactStat{
-        padding-top: 12px;
+        padding-top: 10px;
       }
 
       .impactStat strong{
-        font-size: clamp(54px, 18vw, 82px);
+        font-size: clamp(42px, 13vw, 58px);
       }
 
       .impactStat h3,
       .impactStat p{
         max-width: 30ch;
+      }
+
+      .impactStat:nth-child(n+4){
+        display:none;
       }
 
       :global(.preflightScene){
@@ -6226,32 +6605,59 @@ const {
       .proofCopy h2,
       .quoteFlowCopy h2,
       .ctaCard h2{
-        font-size: clamp(38px, 12vw, 58px);
-        line-height:.95;
-        letter-spacing:-.044em;
+        font-size: clamp(34px, 10.5vw, 48px);
+        line-height:.98;
+        letter-spacing:-.038em;
       }
 
       .quoteFlowCopy h2{
-        font-size: clamp(40px, 11vw, 52px);
+        font-size: clamp(34px, 10vw, 48px);
         line-height:.98;
         max-width: 8.8em;
       }
 
       .pathStage{
-        padding: 14px;
+        padding: 10px;
+        border-radius: 22px;
       }
 
       .pathItem{
-        min-height: 240px;
+        min-height: auto;
+        padding: 16px;
+      }
+
+      .pathItem:before{
+        left:auto;
+        right: 18px;
+        top: 18px;
+        bottom:auto;
+        z-index:1;
+        width: 9px;
+        height: 9px;
+        pointer-events:none;
+      }
+
+      .pathItem > *{
+        position:relative;
+        z-index:2;
+      }
+
+      .pathItem:nth-child(n+4){
+        display:none;
       }
 
       .pathItem dl{
-        margin-top: 48px;
+        margin-top: 20px;
+      }
+
+      .pathItem h3{
+        margin-top: 22px;
+        font-size: clamp(24px, 7.4vw, 32px);
       }
 
       .featuredCard{
-        min-height: 420px;
-        border-radius: 26px;
+        min-height: 285px;
+        border-radius: 22px;
       }
 
       .featuredCard div{
@@ -6271,11 +6677,391 @@ const {
       .ctaCard{
         flex-direction:column;
         align-items:flex-start;
-        min-height: 420px;
+        min-height: auto;
+        padding: 22px;
+        border-radius: 22px;
       }
 
       .ctaCard .primary{
         width:100%;
+      }
+
+      .v2Hero{
+        min-height: 100svh;
+        padding: 0;
+        overflow:hidden;
+      }
+
+      .heroGrid{
+        position:relative;
+        min-height: 100svh;
+        display:grid;
+        align-items:center;
+        overflow:hidden;
+        isolation:isolate;
+      }
+
+      .heroGrid:after{
+        content:"";
+        position:absolute;
+        inset:0;
+        z-index:1;
+        pointer-events:none;
+        background:
+          linear-gradient(180deg, rgba(225,241,252,.04) 0%, rgba(235,247,255,.12) 28%, rgba(246,250,255,.68) 100%),
+          radial-gradient(420px 360px at 0% 55%, rgba(255,255,255,.72), rgba(255,255,255,.36) 48%, transparent 76%),
+          radial-gradient(500px 360px at 58% 16%, rgba(10,132,255,.18), transparent 74%),
+          radial-gradient(560px 420px at 0% 70%, rgba(255,255,255,.42), transparent 76%);
+      }
+
+      .heroCopy{
+        position:relative;
+        z-index:2;
+        width: var(--v2-container);
+        margin-inline:auto;
+        padding: calc(var(--mobile-header-safe) + clamp(72px, 11svh, 112px)) 0 clamp(32px, 5svh, 46px);
+        gap: 18px;
+      }
+
+      .heroCopy:before{
+        content:"";
+        position:absolute;
+        inset: -38px -18px -34px -18px;
+        z-index:-1;
+        pointer-events:none;
+        background:
+          radial-gradient(520px 390px at -4% 52%, rgba(248,250,252,.86), rgba(248,250,252,.44) 46%, transparent 74%);
+        opacity:.72;
+      }
+
+      h1{
+        max-width: 7em;
+        font-size: clamp(44px, 12.4vw, 58px);
+        line-height:.88;
+        letter-spacing:-.052em;
+      }
+
+      .lead{
+        max-width: 34ch;
+        font-size: 15px;
+        line-height:1.55;
+        display:-webkit-box;
+        -webkit-line-clamp:4;
+        -webkit-box-orient:vertical;
+        overflow:hidden;
+      }
+
+      .signalFormula{
+        display:none;
+      }
+
+      .focusRail{
+        display:flex;
+        gap: 8px;
+        overflow-x:auto;
+        padding: 4px 2px 6px;
+        margin: 8px -2px 0;
+        scrollbar-width:none;
+      }
+
+      .focusRail::-webkit-scrollbar{
+        display:none;
+      }
+
+      .focusRail button{
+        flex: 0 0 auto;
+        min-height: 34px;
+        padding: 0 10px;
+        background: rgba(255,255,255,.62);
+      }
+
+      .signalStage{
+        position:absolute;
+        inset:0;
+        z-index:0;
+        width:100%;
+        height:100%;
+        min-height:100%;
+        margin:0;
+        border:0;
+        border-radius:0;
+        box-shadow:none;
+        background:
+          radial-gradient(460px 360px at 48% 18%, rgba(10,132,255,.24), transparent 72%),
+          linear-gradient(180deg, rgba(238,248,255,.76), rgba(246,250,255,.92));
+      }
+
+      :global(.signalFieldShell),
+      :global(.signalField),
+      :global(.signalFieldFallback),
+      :global(.fieldCanvas){
+        display:block !important;
+        position:absolute;
+        inset:0;
+        width:100%;
+        height:100%;
+      }
+
+      :global(.fieldCanvas canvas){
+        width:100% !important;
+        height:100% !important;
+      }
+
+      :global(.fieldReadout){
+        display:none;
+      }
+
+      :global(.fieldLabels){
+        opacity:.82;
+      }
+
+      :global(.signalFieldShell.isEnhanced .signalFieldFallback .fieldLabels){
+        display:none !important;
+      }
+
+      :global(.fieldNode){
+        background: rgba(255,255,255,.58);
+        box-shadow:
+          inset 0 1px 0 rgba(255,255,255,.68),
+          0 10px 28px rgba(10,36,70,.08);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      :global(.fieldAxis){
+        display:none;
+      }
+
+      :global(.fieldNode.telecom){ left: 5%; top: 19%; }
+      :global(.fieldNode.electricity){ right: 7%; top: 24%; }
+      :global(.fieldNode.security){ right: 7%; top: 62%; bottom:auto; opacity:.74; }
+      :global(.fieldNode.quote){ right: 8%; bottom: 14%; display:inline-flex; opacity:.72; }
+      :global(.fieldNode.networks),
+      :global(.fieldNode.ev),
+      :global(.fieldNode.audio){
+        display:none;
+      }
+
+      .scrollFocusStack,
+      .featuredSection{
+        display:none;
+      }
+
+      .impactStrip{
+        display:block;
+        margin-top: 18px;
+        padding: 18px 0 4px;
+      }
+
+      .impactStrip:before{
+        left: 8px;
+        right: 8px;
+      }
+
+      .impactStripHead{
+        display:grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+        margin-bottom: 14px;
+        padding-inline: 4px;
+      }
+
+      .impactStripHead p{
+        max-width: 34ch;
+        font-size: 13px;
+        line-height:1.5;
+        display:-webkit-box;
+        -webkit-line-clamp:2;
+        -webkit-box-orient:vertical;
+        overflow:hidden;
+      }
+
+      .impactLine{
+        margin: 0 4px 12px;
+      }
+
+      .impactStats{
+        position:relative;
+        display:grid;
+        grid-template-columns:1fr;
+        gap: 9px;
+        padding: 2px 4px 8px;
+      }
+
+      .impactStat,
+      .impactStat:nth-child(2),
+      .impactStat:nth-child(3),
+      .impactStat:nth-child(4){
+        justify-self:auto;
+        max-width:none;
+        min-height: 112px;
+        display:grid;
+        grid-template-columns: minmax(136px, .38fr) minmax(0, 1fr);
+        align-items:center;
+        column-gap: 10px;
+        padding: 14px 40px 14px 15px;
+        border: 1px solid rgba(10,132,255,.12);
+        border-radius: 20px;
+        background:
+          linear-gradient(rgba(10,132,255,.035) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(10,132,255,.035) 1px, transparent 1px),
+          linear-gradient(180deg, rgba(255,255,255,.76), rgba(239,248,254,.58));
+        background-size: 34px 34px, 34px 34px, auto;
+        box-shadow:
+          inset 0 1px 0 rgba(255,255,255,.82),
+          0 18px 48px rgba(10,36,70,.07);
+      }
+
+      .impactStat:before{
+        left:auto;
+        right: 18px;
+        top: 18px;
+        width: 8px;
+        height: 8px;
+      }
+
+      .impactStat strong{
+        grid-row: 1 / span 2;
+        font-size: clamp(42px, 12vw, 54px);
+        line-height:.82;
+      }
+
+      .impactStat h3{
+        max-width: 18ch;
+        margin: 0;
+        font-size: 16px;
+        line-height:1.08;
+      }
+
+      .impactStat p{
+        max-width: 26ch;
+        margin: 7px 0 0;
+        font-size: 12px;
+        line-height:1.42;
+        display:-webkit-box;
+        -webkit-line-clamp:2;
+        -webkit-box-orient:vertical;
+        overflow:hidden;
+      }
+
+      .systemSection,
+      .pathSection,
+      .quoteFlowSection{
+        padding: var(--mobile-section-y-tight) 0 8px;
+      }
+
+      .systemSection .sectionHead{
+        margin-bottom: 14px;
+      }
+
+      .systemSection .sectionHead h2{
+        max-width: 9.5em;
+        font-size: clamp(28px, 8.5vw, 38px);
+      }
+
+      .systemSection .sectionHead p{
+        display:-webkit-box;
+        -webkit-line-clamp:2;
+        -webkit-box-orient:vertical;
+        overflow:hidden;
+      }
+
+      .systemMap{
+        display:grid;
+        grid-template-columns:1fr;
+        gap: 7px;
+        min-height: auto;
+        padding: 8px;
+        border-radius: 24px;
+        background:
+          linear-gradient(rgba(10,132,255,.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(10,132,255,.04) 1px, transparent 1px),
+          rgba(220,238,250,.46);
+        background-size: 44px 44px, 44px 44px, auto;
+      }
+
+      .mapHud,
+      .mapRoutes,
+      .mapFlow,
+      .mapBeacons,
+      .mapCore,
+      .systemMap:before,
+      .systemMap:after{
+        display:none;
+      }
+
+      .systemNode{
+        position:relative !important;
+        inset:auto !important;
+        display:grid;
+        grid-template-columns: 38px minmax(0, 1fr);
+        align-items:center;
+        column-gap: 10px;
+        min-height: 68px;
+        padding: 11px 44px 11px 12px;
+        border-radius: 17px;
+        background: rgba(255,255,255,.72);
+      }
+
+      .systemNode:before{
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .systemNode .nodeIndex{
+        grid-row: 1 / span 2;
+        align-self:center;
+      }
+
+      .systemNode strong{
+        margin:0;
+        font-size: 18px;
+        line-height:1.05;
+      }
+
+      .systemNode em{
+        margin: 3px 0 0;
+        font-size: 12px;
+      }
+
+      .systemNode p{
+        display:none;
+      }
+
+      .pathSection .sectionHead h2,
+      .quoteFlowCopy h2{
+        max-width: 9em;
+        font-size: clamp(30px, 9vw, 40px);
+      }
+
+      .quoteFlowGrid{
+        display:block;
+      }
+
+      .quoteFlowCopy{
+        position:relative;
+        top:auto;
+        padding: 22px;
+        border: 1px solid rgba(10,132,255,.18);
+        border-radius: 24px;
+        background:
+          linear-gradient(180deg, rgba(255,255,255,.78), rgba(238,248,255,.62));
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.86);
+      }
+
+      .quoteFlowCopy p{
+        margin-top: 12px;
+      }
+
+      .mobileHomeFinalCta{
+        display:flex;
+        width:100%;
+        margin-top: 18px;
+      }
+
+      .quoteInterface{
+        display:none;
       }
     }
   </style>
