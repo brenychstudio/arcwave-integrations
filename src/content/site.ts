@@ -1,18 +1,19 @@
 // src/content/site.ts
+const siteUrl = (import.meta.env.PUBLIC_SITE_URL || "https://arcwave-integrations.pages.dev").replace(/\/+$/, "");
+const contactEmail = (import.meta.env.PUBLIC_CONTACT_EMAIL || "hello@example.com").trim();
+
 export const site = {
   name: "ARCWAVE",
   tagline: "Premium engineering installations",
 
-  // IMPORTANT: update after you create the Cloudflare Pages project
-  // e.g. https://arcwave-integrations.pages.dev or your custom domain
-  url: "https://arcwave-integrations.pages.dev",
+  url: siteUrl,
 
   defaultOg: "/og/og-default.png",
   accent: "#0A84FF",
 
   contact: {
     phone: "+34 600 000 000",
-    email: "hello@example.com",
+    email: contactEmail,
     serviceArea: "Barcelona & nearby",
   },
 

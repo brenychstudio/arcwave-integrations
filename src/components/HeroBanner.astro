@@ -45,8 +45,8 @@ const pillNote = t(lang, "Illustrative only — no fake projects", "Solo ilustra
     </div>
 
     <div class="media card">
-      <img src={image} alt="" loading="eager" decoding="async" />
-      {overlay && <img class="overlay" src={overlay} alt="" loading="eager" decoding="async" />}
+      <img src={image} alt="" loading="eager" decoding="async" fetchpriority="high" />
+      {overlay && <img class="overlay" src={overlay} alt="" loading="eager" decoding="async" fetchpriority="high" />}
       <div class="shade"></div>
     </div>
   </div>

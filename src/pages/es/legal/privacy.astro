@@ -1,27 +1,34 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Section from "../../../components/Section.astro";
-import { COMPANY } from "../../../content/company";
+import { COMPANY, hasRealEmail } from "../../../content/company";
+
+const mailHref = hasRealEmail(COMPANY.email) ? `mailto:${COMPANY.email}` : null;
 ---
 
 <BaseLayout title="Privacidad" description="Notas sobre privacidad y tratamiento de datos.">
   <Section eyebrow="Legal" title="Privacidad">
     <div class="card box">
       <p class="p">
-        Recopilamos la información que envías mediante el formulario de solicitud únicamente para responder a tu consulta y coordinar el trabajo (alcance, acceso, calendario). No vendemos datos personales.
+        ARCWAVE utiliza la información enviada mediante el formulario de solicitud solo para revisar la necesidad técnica,
+        preparar una respuesta y coordinar el seguimiento sobre alcance, acceso, plazos o encaje del servicio. No se venden datos personales.
       </p>
 
       <div class="hr" style="margin:16px 0;"></div>
 
       <p class="p small">
-        Si se utiliza un proveedor de formularios (por ejemplo, Formspree/Basin/Netlify Forms), las solicitudes se procesan a través de dicho proveedor. La retención depende de la comunicación en curso y de necesidades operativas o legales.
+        Si se usa un proveedor externo para procesar formularios, la información se gestiona a través de ese servicio con fines de entrega y notificación.
+        La conservación depende de la conversación activa, necesidades operativas y obligaciones legales aplicables.
       </p>
 
       <div class="hr" style="margin:16px 0;"></div>
 
       <p class="p small">
-        Para consultas o solicitudes de eliminación, contáctanos en:
-        <a class="link" href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>.
+        {mailHref ? (
+          <>Para solicitudes de acceso, rectificación o eliminación, contacta en <a class="link" href={mailHref}>{COMPANY.email}</a>.</>
+        ) : (
+          <>El contacto para solicitudes de privacidad debe configurarse antes del lanzamiento.</>
+        )}
       </p>
     </div>
   </Section>
@@ -30,6 +37,6 @@ import { COMPANY } from "../../../content/company";
     .box{ padding: 18px; border-radius: var(--radius); }
     .p{ margin:0; color: var(--muted); line-height: 1.65; font-weight: 420; }
     .small{ font-size: 13px; }
-    .link{ margin-left: 6px; text-decoration: underline; text-underline-offset: 3px; }
+    .link{ text-decoration: underline; text-underline-offset: 3px; }
   </style>
 </BaseLayout>

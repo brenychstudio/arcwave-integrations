@@ -1,4 +1,4 @@
-// src/components/forms/QuoteForm.tsx
+﻿// src/components/forms/QuoteForm.tsx
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import type { QuoteField, Service, ServiceKey } from "../../content/services";
 
@@ -30,7 +30,7 @@ function normalizeFields(fields: QuoteField[]) {
 
 function isPlaceholderOption(s: string) {
   const t = String(s ?? "").trim().toLowerCase();
-  return t === "" || t === "—" || t.includes("select") || t.includes("seleccion") || t.includes("elige");
+  return t === "" || t === "\u2014" || t.includes("select") || t.includes("seleccion") || t.includes("elige");
 }
 
 function defaultValueForField(f: QuoteField) {
@@ -53,6 +53,11 @@ function isConfiguredEndpoint(endpoint?: string) {
   return Boolean(endpoint && endpoint.trim().length > 0);
 }
 
+function track(name: string, props: Record<string, string>) {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent("arcwave:track", { detail: { name, props } }));
+}
+
 export default function QuoteForm({
   services,
   endpoint,
@@ -64,11 +69,11 @@ export default function QuoteForm({
 }: Props) {
   const safeCommon = useMemo(() => normalizeFields(commonFields ?? []), [commonFields]);
 
-  // Якщо сервісів немає — краще не падати
+  // If there are no services, keep the form from rendering.
   if (!services || services.length === 0) return null;
 
-  // initial: НЕ читаємо URL тут (щоб уникнути hydration mismatch в Astro)
-  // ?service= буде застосовано в useEffect нижче після гідрації / після swap
+  // Do not read the URL during initial render to avoid Astro hydration mismatch.
+  // ?service= is applied after hydration and after view-transition swaps.
   const initialServiceKey =
     defaultServiceKey || services[0]?.key || ("telecom" as ServiceKey);
 
@@ -81,7 +86,7 @@ export default function QuoteForm({
   const extra = useMemo(() => normalizeFields(service?.extraQuoteFields ?? []), [service]);
   const activeFields = useMemo(() => normalizeFields([...safeCommon, ...extra]), [safeCommon, extra]);
 
-  // Honeypot (має залишатися порожнім)
+  // Honeypot should stay empty.
   const [hp, setHp] = useState("");
 
   const [values, setValues] = useState<Record<string, string>>(() => {
@@ -117,13 +122,13 @@ export default function QuoteForm({
     setValues((p) => ({ ...p, [id]: v }));
   }
 
-  // Тримаємо актуальний serviceKey для listener'ів
+  // Keep the active service key available to URL listeners.
   const serviceKeyRef = useRef<ServiceKey>(serviceKey);
   useEffect(() => {
     serviceKeyRef.current = serviceKey;
   }, [serviceKey]);
 
-  // Після view-transitions / swap — зчитати ?service= і синхронізувати форму
+  // After view-transition swaps, re-read ?service= and sync the form.
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -152,7 +157,6 @@ export default function QuoteForm({
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    // Honeypot: якщо заповнили — просто “тихо” приймаємо і нічого не відправляємо
     if (hp.trim().length > 0) {
       setStatus({ kind: "sent" });
       return;
@@ -164,7 +168,7 @@ export default function QuoteForm({
       service: service?.key || serviceKey,
       service_title: service?.title || String(serviceKey),
       source: "arcwave-site",
-      hp, // хай іде в payload (на випадок якщо endpoint захоче перевіряти)
+      hp,
     };
 
     for (const f of activeFields) {
@@ -175,8 +179,10 @@ export default function QuoteForm({
 
     try {
       if (!configured) {
-        const to = fallbackEmail || "hello@example.com";
-        const subject = fallbackSubject || "ARCWAVE Integrations — quote request";
+        const to = fallbackEmail?.trim() || "";
+        if (!to) throw new Error("Contact email is not configured yet.");
+
+        const subject = fallbackSubject || "ARCWAVE Integrations - quote request";
         const lines = Object.entries(payload)
           .map(([k, v]) => `${k}: ${v}`)
           .join("\n");
@@ -185,6 +191,7 @@ export default function QuoteForm({
           lines
         )}`;
 
+        track("quote_request_mailto", { service: payload.service || "", mode: "mailto" });
         window.location.href = href;
         setStatus({ kind: "sent" });
         return;
@@ -198,14 +205,19 @@ export default function QuoteForm({
 
       if (!res.ok) throw new Error(`Request failed (${res.status})`);
 
+      track("quote_request_sent", { service: payload.service || "", mode: "endpoint" });
       setStatus({ kind: "sent" });
     } catch (err: any) {
+      track("quote_request_error", {
+        service: payload.service || "",
+        message: String(err?.message || "Something went wrong").slice(0, 160),
+      });
       setStatus({ kind: "error", message: err?.message || "Something went wrong" });
     }
   }
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} data-track-form="quote_request" data-track-service={service?.key || serviceKey}>
       {/* Honeypot (hidden) */}
       <div className="hp" aria-hidden="true">
         <label>
@@ -315,7 +327,7 @@ export default function QuoteForm({
         ) : null}
 
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-          <button className="btn primary" type="submit" disabled={status.kind === "sending"}>
+          <button className="btn primary" type="submit" disabled={status.kind === "sending"} data-track="quote_form_submit_button">
             {isConfiguredEndpoint(endpoint)
               ? labels?.sendButton || "Send technical brief"
               : labels?.prepareButton || "Prepare technical brief"}

@@ -1,10 +1,10 @@
----
+﻿---
 import Header from "../components/Header.astro";
 import WhatsAppFab from "../components/WhatsAppFab.astro";
 import { site } from "../content/site";
 import { siteEs } from "../content/site.es";
-import { COMPANY } from "../content/company";
-import { langFromPath, baseFromLang, t } from "../content/i18n";
+import { COMPANY, hasRealEmail, hasRealExternalUrl } from "../content/company";
+import { langFromPath, baseFromLang, otherLangHref, t } from "../content/i18n";
 import { ViewTransitions } from "astro:transitions";
 
 type Props = {
@@ -16,20 +16,53 @@ type Props = {
 
 const { title, description, ogImage, noindex = false } = Astro.props as Props;
 
-const pageTitle = title ? `${title} — ${site.name}` : site.name;
+const pageTitle = title ? (title.includes(site.name) ? title : `${title} - ${site.name}`) : site.name;
 const pageDescription = description ?? site.tagline;
 
 // Canonical: production domain + pathname only (no query like ?service=...)
-const canonicalUrl = new URL(Astro.url.pathname, Astro.site ?? site.url);
+const siteOrigin = Astro.site ?? new URL(site.url);
+const canonicalUrl = new URL(Astro.url.pathname, siteOrigin);
 const canonical = canonicalUrl.toString();
-
+const alternateHref = new URL(otherLangHref(Astro.url), siteOrigin).toString();
+const xDefaultHref =
+  langFromPath(Astro.url.pathname) === "es"
+    ? new URL(Astro.url.pathname.replace(/^\/es(?=\/|$)/, "") || "/", siteOrigin).toString()
+    : canonical;
 // OG/Twitter image: always absolute URL
 const ogImg = ogImage ?? site.defaultOg;
-const ogImgAbs = new URL(ogImg, Astro.site ?? site.url).toString();
+const ogImgAbs = new URL(ogImg, siteOrigin).toString();
 
 const waNumber = String(COMPANY.phoneTel).replace(/[^\d]/g, "");
-const waText = encodeURIComponent("Hi! I’d like to request a quote.");
+const waText = encodeURIComponent("Hi! I'd like to request a quote.");
 const waHref = waNumber ? `https://wa.me/${waNumber}?text=${waText}` : null;
+const mailHref = hasRealEmail(COMPANY.email) ? `mailto:${COMPANY.email}` : null;
+const facebookHref = hasRealExternalUrl(COMPANY.facebookUrl) ? COMPANY.facebookUrl : null;
+const linkedinHref = hasRealExternalUrl(COMPANY.linkedinUrl) ? COMPANY.linkedinUrl : null;
+const sameAs = [facebookHref, linkedinHref].filter(Boolean);
+const organizationJsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  name: site.name,
+  description: pageDescription,
+  url: site.url,
+  image: ogImgAbs,
+  areaServed: site.contact.serviceArea,
+  telephone: COMPANY.phoneDisplay,
+  ...(mailHref ? { email: COMPANY.email } : {}),
+  ...(sameAs.length ? { sameAs } : {}),
+});
+const websiteJsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: site.name,
+  url: site.url,
+  inLanguage: ["en", "es"],
+});
+const gaId = (import.meta.env.PUBLIC_GA_ID || "").trim();
+const plausibleDomain = (import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN || "").trim();
+const plausibleSrc = (import.meta.env.PUBLIC_PLAUSIBLE_SRC || "https://plausible.io/js/script.js").trim();
+const umamiWebsiteId = (import.meta.env.PUBLIC_UMAMI_WEBSITE_ID || "").trim();
+const umamiSrc = (import.meta.env.PUBLIC_UMAMI_SRC || "https://cloud.umami.is/script.js").trim();
 
 const lang = langFromPath(Astro.url.pathname);
 const base = baseFromLang(lang);
@@ -66,7 +99,7 @@ const mobileBottomCtaLabel = t(lang, "Start request", "Iniciar solicitud");
 const mobileBottomCtaHref = isServiceDetail
   ? `${base}/contact?service=${serviceKey}#quote`
   : `${base}/contact#quote`;
-const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
+const creditLabel = t(lang, "Design & development", "Diseno y desarrollo");
 ---
 
 <!doctype html>
@@ -78,6 +111,8 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
 <meta name="robots" content={noindex ? "noindex,nofollow" : "index,follow"} />
 
 <link rel="canonical" href={canonical} />
+<link rel="alternate" hreflang={lang === "es" ? "en" : "es"} href={alternateHref} />
+<link rel="alternate" hreflang="x-default" href={xDefaultHref} />
 
 <!-- Favicons -->
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-512.png" />
@@ -93,6 +128,8 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
 <meta property="og:title" content={pageTitle} />
 <meta property="og:description" content={pageDescription} />
 <meta property="og:url" content={canonical} />
+<meta property="og:locale" content={lang === "es" ? "es_ES" : "en_US"} />
+<meta property="og:locale:alternate" content={lang === "es" ? "en_US" : "es_ES"} />
 <meta property="og:image" content={ogImgAbs} />
 
 <!-- Twitter -->
@@ -100,6 +137,29 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
 <meta name="twitter:title" content={pageTitle} />
 <meta name="twitter:description" content={pageDescription} />
 <meta name="twitter:image" content={ogImgAbs} />
+<script type="application/ld+json" set:html={organizationJsonLd}></script>
+<script type="application/ld+json" set:html={websiteJsonLd}></script>
+
+{gaId ? (
+  <>
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
+    <script is:inline define:vars={{ gaId }}>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      window.gtag = window.gtag || gtag;
+      gtag("js", new Date());
+      gtag("config", gaId, { send_page_view: true });
+    </script>
+  </>
+) : null}
+
+{plausibleDomain ? (
+  <script defer data-domain={plausibleDomain} src={plausibleSrc}></script>
+) : null}
+
+{umamiWebsiteId ? (
+  <script async data-website-id={umamiWebsiteId} src={umamiSrc}></script>
+) : null}
 
 <ViewTransitions />
 
@@ -126,6 +186,11 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
         --accentBorder: rgba(10,132,255,.35);
 
         --container: 1120px;
+        --arc-shell: min(1280px, calc(100vw - 64px));
+        --arc-shell-wide: min(1480px, calc(100vw - 48px));
+        --arc-shell-narrow: min(1060px, calc(100vw - 48px));
+        --arc-nav-shell: min(980px, calc(100vw - 48px));
+        --arc-footer-shell: min(1640px, calc(100vw - clamp(28px, 5vw, 92px)));
         --site-header-space: 104px;
         --mobile-shell: min(100% - 28px, 640px);
         --mobile-section-y: 56px;
@@ -261,6 +326,11 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
 
       @media (max-width: 760px){
         :root{
+          --arc-shell: min(100% - 28px, 1280px);
+          --arc-shell-wide: min(100% - 24px, 1480px);
+          --arc-shell-narrow: min(100% - 28px, 1060px);
+          --arc-nav-shell: min(100% - 28px, 980px);
+          --arc-footer-shell: min(100% - 28px, 1280px);
           --site-header-space: var(--mobile-header-safe);
         }
 
@@ -365,13 +435,13 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
   border-top: 0;
   margin-top: 56px;
 
-  /* створюємо “buffer” для fade, щоб текст не потрапляв у напівпрозору зону */
+  /* Extra padding gives the footer fade room without overlapping lower content. */
   padding: 88px 0 40px;
 
   color: var(--muted);
   font-size: 13px;
 
-  /* фон прибираємо з самого футера — fade робимо через ::before */
+  /* The fade is painted by ::before so the footer content remains crisp. */
   background: transparent;
   position: relative;
   z-index: 1;
@@ -383,7 +453,7 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
   inset:0;
   pointer-events:none;
 
-  /* Fade всередині футера: гасить glow без “смуги” */
+  /* Keep the footer fade light and atmospheric, without heavy glow. */
   background: linear-gradient(
     180deg,
     rgba(255,255,255,0) 0%,
@@ -396,6 +466,8 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
 .ft > .container{
   position: relative;
   z-index: 2;
+  width: var(--arc-footer-shell);
+  margin-inline: auto;
 }
 
       .ft .grid{
@@ -988,11 +1060,11 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
       }
 
       .ftShell{
-        width: min(1120px, 100%);
-        max-width: 1120px;
+        width: 100%;
+        max-width: none;
         margin-inline: auto;
         display: grid;
-        grid-template-columns: minmax(270px, .92fr) minmax(0, 1.96fr);
+        grid-template-columns: minmax(320px, .86fr) minmax(0, 2.14fr);
         gap: 0;
         padding: 0;
         overflow: visible;
@@ -1023,7 +1095,7 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
 
       .ftBrandPanel{
         min-height: 0;
-        padding: 24px 30px 22px 0;
+        padding: 24px clamp(30px, 3vw, 54px) 22px 0;
         gap: 18px;
         border-right: 1px solid rgba(10,10,20,.08);
       }
@@ -1038,7 +1110,7 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
       }
 
       .ftBlurb{
-        max-width: 31ch;
+        max-width: 38ch;
         margin-top: 16px;
         font-size: 12px;
         line-height: 1.62;
@@ -1059,14 +1131,14 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
 
       .ftSystemPanel{
         display: grid;
-        grid-template-columns: 1.08fr 1.22fr .92fr;
+        grid-template-columns: minmax(180px, .92fr) minmax(230px, 1.14fr) minmax(180px, .86fr);
         gap: 0;
         padding: 0;
       }
 
       .ftColumn{
         min-height: 0;
-        padding: 24px 22px 22px;
+        padding: 24px clamp(22px, 2.4vw, 38px) 22px;
         border: 0;
         border-right: 1px solid rgba(10,10,20,.07);
         border-radius: 0;
@@ -1157,8 +1229,8 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
       }
 
       .ftBottom{
-        width: min(1120px, 100%);
-        max-width: 1120px;
+        width: 100%;
+        max-width: none;
         margin-inline: auto;
         padding-top: 13px;
         color: rgba(92,94,104,.76);
@@ -1167,7 +1239,7 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
 
       @media (max-width: 1040px){
         .ftShell{
-          width: min(720px, 100%);
+          width: 100%;
           grid-template-columns: 1fr;
         }
 
@@ -1193,7 +1265,7 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
         }
 
         .ftBottom{
-          width: min(720px, 100%);
+          width: 100%;
         }
       }
 
@@ -1322,6 +1394,23 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
         }
       }
 
+      @media (max-width: 760px){
+        .ft{
+          padding-bottom: 28px;
+        }
+
+        .ft .grid{
+          gap: 18px;
+        }
+
+        .ftBlurb{
+          display:-webkit-box;
+          -webkit-line-clamp:3;
+          -webkit-box-orient:vertical;
+          overflow:hidden;
+        }
+      }
+
     </style>
   </head>
 
@@ -1369,13 +1458,15 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
             <section class="ftColumn">
               <h2 class="ftK">{labelContact}</h2>
               <div class="ftContact">
-                <div>
-                  <small>Email</small>
-                  <a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a>
-                </div>
+                {mailHref ? (
+                  <div>
+                    <small>Email</small>
+                    <a href={mailHref} data-track="contact_email">{COMPANY.email}</a>
+                  </div>
+                ) : null}
                 <div>
                   <small>Phone</small>
-                  <a href={`tel:${COMPANY.phoneTel}`}>{COMPANY.phoneDisplay}</a>
+                  <a href={`tel:${COMPANY.phoneTel}`} data-track="contact_phone">{COMPANY.phoneDisplay}</a>
                 </div>
                 <div>
                   <small>Area</small>
@@ -1388,8 +1479,8 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
               </div>
 
               <div class="ftActions">
-                <a class="ftAction primary" href={`${base}/contact#quote`} data-vt="1">{labelQuote}</a>
-                <a class="ftAction" href={`mailto:${COMPANY.email}`}>Email</a>
+                <a class="ftAction primary" href={`${base}/contact#quote`} data-vt="1" data-track="footer_quote">{labelQuote}</a>
+                {mailHref ? <a class="ftAction" href={mailHref} data-track="footer_email">Email</a> : null}
               </div>
             </section>
 
@@ -1401,29 +1492,35 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
               </nav>
 
               <div class="social" aria-label="Contact links">
-                <a class="ico" href={`mailto:${COMPANY.email}`} aria-label="Email" title="Email">
-                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M4 7.5A2.5 2.5 0 0 1 6.5 5h11A2.5 2.5 0 0 1 20 7.5v9A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5v-9Z" stroke="currentColor" stroke-width="1.6"/>
-                    <path d="M6.5 7.2 12 11l5.5-3.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </a>
+                {mailHref ? (
+                  <a class="ico" href={mailHref} aria-label="Email" title="Email" data-track="social_email">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M4 7.5A2.5 2.5 0 0 1 6.5 5h11A2.5 2.5 0 0 1 20 7.5v9A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5v-9Z" stroke="currentColor" stroke-width="1.6"/>
+                      <path d="M6.5 7.2 12 11l5.5-3.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </a>
+                ) : null}
 
-                <a class="ico" href={COMPANY.facebookUrl} target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook">
-                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M14 8.5V7.2c0-.9.6-1.2 1.2-1.2H17V3h-2.2C12.6 3 11 4.6 11 7v1.5H9v3h2V21h3v-9.5h2.5l.5-3H14Z" fill="currentColor"/>
-                  </svg>
-                </a>
+                {facebookHref ? (
+                  <a class="ico" href={facebookHref} target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook" data-track="social_facebook">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M14 8.5V7.2c0-.9.6-1.2 1.2-1.2H17V3h-2.2C12.6 3 11 4.6 11 7v1.5H9v3h2V21h3v-9.5h2.5l.5-3H14Z" fill="currentColor"/>
+                    </svg>
+                  </a>
+                ) : null}
 
-                <a class="ico" href={COMPANY.linkedinUrl} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn">
-                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M6.7 6.9a1.9 1.9 0 1 1 0-3.8 1.9 1.9 0 0 1 0 3.8Z" fill="currentColor"/>
-                    <path d="M5.2 20.5V9.2h3v11.3h-3Z" fill="currentColor"/>
-                    <path d="M10.3 20.5V9.2h2.9v1.5c.4-.9 1.6-1.8 3.2-1.8 3 0 3.6 2 3.6 4.6v7h-3v-6.2c0-1.5 0-3-1.8-3s-2.1 1.4-2.1 2.9v6.3h-2.8Z" fill="currentColor"/>
-                  </svg>
-                </a>
+                {linkedinHref ? (
+                  <a class="ico" href={linkedinHref} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn" data-track="social_linkedin">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M6.7 6.9a1.9 1.9 0 1 1 0-3.8 1.9 1.9 0 0 1 0 3.8Z" fill="currentColor"/>
+                      <path d="M5.2 20.5V9.2h3v11.3h-3Z" fill="currentColor"/>
+                      <path d="M10.3 20.5V9.2h2.9v1.5c.4-.9 1.6-1.8 3.2-1.8 3 0 3.6 2 3.6 4.6v7h-3v-6.2c0-1.5 0-3-1.8-3s-2.1 1.4-2.1 2.9v6.3h-2.8Z" fill="currentColor"/>
+                    </svg>
+                  </a>
+                ) : null}
 
                 {waHref ? (
-                  <a class="ico" href={waHref} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" title="WhatsApp">
+                  <a class="ico" href={waHref} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" title="WhatsApp" data-track="social_whatsapp">
                     <svg viewBox="0 0 32 32" aria-hidden="true">
                       <path
                         fill="currentColor"
@@ -1447,77 +1544,6 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
         </div>
       </div>
     </footer>
-
-    <footer class="ftLegacy" hidden>
-      <div class="container">
-        <div class="grid">
-          <div>
-  <div class="k">{site.name}</div>
-  <div>{COMPANY.blurb}</div>
-</div>
-
-          <div>
-  <div class="k">{labelContact}</div>
-
-  <div><a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a></div>
-  <div style="margin-top:6px;"><a href={`tel:${COMPANY.phoneTel}`}>{COMPANY.phoneDisplay}</a></div>
-  <div style="margin-top:6px;">{COMPANY.hours}</div>
-  <div style="margin-top:6px;">{siteLocal.contact.serviceArea}</div>
-
-  <div class="social" aria-label="Contact links">
-    <a class="ico" href={`mailto:${COMPANY.email}`} aria-label="Email" title="Email">
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M4 7.5A2.5 2.5 0 0 1 6.5 5h11A2.5 2.5 0 0 1 20 7.5v9A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5v-9Z" stroke="currentColor" stroke-width="1.6"/>
-        <path d="M6.5 7.2 12 11l5.5-3.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </a>
-
-    <a class="ico" href={COMPANY.facebookUrl} target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook">
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M14 8.5V7.2c0-.9.6-1.2 1.2-1.2H17V3h-2.2C12.6 3 11 4.6 11 7v1.5H9v3h2V21h3v-9.5h2.5l.5-3H14Z" fill="currentColor"/>
-      </svg>
-    </a>
-
-    <a class="ico" href={COMPANY.linkedinUrl} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn">
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M6.7 6.9a1.9 1.9 0 1 1 0-3.8 1.9 1.9 0 0 1 0 3.8Z" fill="currentColor"/>
-        <path d="M5.2 20.5V9.2h3v11.3h-3Z" fill="currentColor"/>
-        <path d="M10.3 20.5V9.2h2.9v1.5c.4-.9 1.6-1.8 3.2-1.8 3 0 3.6 2 3.6 4.6v7h-3v-6.2c0-1.5 0-3-1.8-3s-2.1 1.4-2.1 2.9v6.3h-2.8Z" fill="currentColor"/>
-      </svg>
-    </a>
-
-    {waHref ? (
-      <a class="ico" href={waHref} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" title="WhatsApp">
-        <svg viewBox="0 0 32 32" aria-hidden="true">
-          <path
-            fill="currentColor"
-            d="M19.11 17.62c-.27-.14-1.62-.8-1.87-.9-.25-.09-.44-.14-.62.14-.18.27-.71.9-.87 1.09-.16.18-.32.2-.59.07-.27-.14-1.15-.42-2.2-1.35-.82-.73-1.37-1.64-1.53-1.91-.16-.27-.02-.42.12-.55.12-.12.27-.32.41-.48.14-.16.18-.27.27-.46.09-.18.05-.34-.02-.48-.07-.14-.62-1.5-.85-2.05-.22-.53-.45-.46-.62-.46l-.53-.01c-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.29 0 1.34.98 2.64 1.12 2.82.14.18 1.94 2.96 4.7 4.15.66.28 1.17.45 1.57.57.66.21 1.26.18 1.73.11.53-.08 1.62-.66 1.85-1.3.23-.64.23-1.18.16-1.3-.07-.11-.25-.18-.52-.32zM16.04 4.67c-6.24 0-11.31 5.02-11.31 11.19 0 2 .54 3.96 1.56 5.67L4.5 27.33l5.98-1.57a11.34 11.34 0 0 0 5.56 1.45c6.24 0 11.31-5.02 11.31-11.19S22.28 4.67 16.04 4.67zm0 20.6c-1.85 0-3.66-.49-5.25-1.42l-.38-.22-3.55.93.95-3.43-.25-.36a9.23 9.23 0 0 1-1.49-5.02c0-5.08 4.18-9.21 9.33-9.21 5.15 0 9.33 4.13 9.33 9.21 0 5.08-4.18 9.21-9.33 9.21z"
-          />
-        </svg>
-      </a>
-    ) : null}
-  </div>
-</div>
-
-          <div>
-            <div class="k">{labelLegal}</div>
-            <div><a href={`${base}/legal/privacy`}>{labelPrivacy}</a></div>
-            <div style="margin-top:6px;"><a href={`${base}/legal/cookies`}>{labelCookies}</a></div>
-          </div>
-        </div>
-
-        <div class="hr" style="margin:18px 0;"></div>
-        <div class="ftBottom">
-          <div>© {new Date().getFullYear()} {site.name}. All rights reserved.</div>
-
-          <div class="ftCredit">
-            {creditLabel} —
-            <a href="https://brenychstudio.com/" target="_blank" rel="noopener noreferrer">brenychstudio</a>
-          </div>
-        </div>
-      </div>
-    </footer>
-
     <script type="module">
       import { navigate } from "astro:transitions/client";
 
@@ -1561,10 +1587,97 @@ const creditLabel = t(lang, "Design & development", "Diseño y desarrollo");
 
       document.addEventListener("astro:page-load", restoreScroll);
       document.addEventListener("astro:after-swap", restoreScroll);
+
+      function trackEvent(name, props = {}) {
+        try {
+          if (typeof window.gtag === "function") {
+            window.gtag("event", name, props);
+          }
+
+          if (typeof window.plausible === "function") {
+            window.plausible(name, { props });
+          }
+
+          if (window.umami && typeof window.umami.track === "function") {
+            window.umami.track(name, props);
+          }
+
+          window.dispatchEvent(new CustomEvent("arcwave:analytics", { detail: { name, props } }));
+        } catch {}
+      }
+
+      document.addEventListener("click", (e) => {
+        const target = e.target?.closest?.("a,button");
+        if (!target) return;
+
+        const explicit = target.getAttribute("data-track");
+        if (explicit) {
+          trackEvent(explicit, {
+            href: target.getAttribute("href") || "",
+            label: (target.textContent || "").trim().slice(0, 120),
+          });
+          return;
+        }
+
+        const href = target.getAttribute("href") || "";
+        if (href.startsWith("mailto:")) {
+          trackEvent("contact_email", { href });
+          return;
+        }
+
+        if (href.startsWith("tel:")) {
+          trackEvent("contact_phone", { href });
+          return;
+        }
+
+        if (href.includes("wa.me")) {
+          trackEvent("contact_whatsapp", { href });
+          return;
+        }
+
+        if (target.matches("a.primary,button.primary")) {
+          trackEvent("primary_cta_click", {
+            href,
+            label: (target.textContent || "").trim().slice(0, 120),
+          });
+        }
+      });
+
+      document.addEventListener("submit", (e) => {
+        const form = e.target;
+        if (!(form instanceof HTMLFormElement)) return;
+        if (form.getAttribute("data-track-form") !== "quote_request") return;
+
+        trackEvent("quote_request_submit", {
+          service: form.getAttribute("data-track-service") || "",
+          path: window.location.pathname,
+        });
+      });
+
+      window.addEventListener("arcwave:track", (e) => {
+        const detail = e.detail || {};
+        if (!detail.name) return;
+        trackEvent(detail.name, detail.props || {});
+      });
+
+      window.addEventListener("error", (e) => {
+        trackEvent("js_error", {
+          message: e.message || "Unknown error",
+          source: e.filename || window.location.pathname,
+        });
+      });
+
+      window.addEventListener("unhandledrejection", (e) => {
+        const reason = e.reason?.message || String(e.reason || "Unhandled rejection");
+        trackEvent("promise_rejection", {
+          message: reason.slice(0, 180),
+          source: window.location.pathname,
+        });
+      });
     </script>
 
     {showMobileBottomCta ? (
-      <a class="mobileBottomCta" href={mobileBottomCtaHref} data-mobile-bottom-cta data-vt="1">
+      <a class="mobileBottomCta" href={mobileBottomCtaHref} data-mobile-bottom-cta data-vt="1" data-track="mobile_bottom_cta">
         {mobileBottomCtaLabel}
       </a>
     ) : null}

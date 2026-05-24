@@ -12,7 +12,7 @@ const excludedFromSitemap = [
 ];
 
 export default defineConfig({
-  site: "https://arcwave-integrations.pages.dev",
+  site: (process.env.PUBLIC_SITE_URL || "https://arcwave-integrations.pages.dev").replace(/\/+$/, ""),
   integrations: [
     react(),
     sitemap({

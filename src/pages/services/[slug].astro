@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { site } from "../../content/site";
-import { COMPANY } from "../../content/company";
+import { COMPANY, hasRealEmail } from "../../content/company";
 import { services } from "../../content/services";
 import type { Service } from "../../content/services";
 import { serviceDetails } from "../../content/serviceDetails";
@@ -66,6 +66,7 @@ const servicePath = detail.pathCards;
 const heroTags = detail.heroTags.length > 0 ? detail.heroTags : [service.title, "Support-ready"];
 const quoteHints = detail.quoteHints.length > 0 ? detail.quoteHints : ["access", "routes", "existing wiring", "timing"];
 const finalCtaCopy = `Open the request form with ${service.title} preselected and add the site constraints that matter: ${quoteHints.join(", ")} and desired outcome.`;
+const mailHref = hasRealEmail(COMPANY.email) ? `mailto:${COMPANY.email}` : null;
 ---
 
 <BaseLayout title={`${service.title} - ${site.name}`} description={desc}>
@@ -88,7 +89,7 @@ const finalCtaCopy = `Open the request form with ${service.title} preselected an
       </div>
 
       <div class="interfacePanel detailHeroPanel motionIn">
-        <img src={service.heroImage} alt="" loading="eager" decoding="async" />
+        <img src={service.heroImage} alt="" loading="eager" decoding="async" fetchpriority="high" />
         <div class="interfacePanelContent">
           <div>
             <span class="interfaceIndex">Active layer</span>
@@ -152,7 +153,7 @@ const finalCtaCopy = `Open the request form with ${service.title} preselected an
             </div>
             <div>
               <dt>Contact</dt>
-              <dd><a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a></dd>
+              <dd>{mailHref ? <a href={mailHref} data-track="service_detail_email">{COMPANY.email}</a> : "Use the request form"}</dd>
             </div>
             <div>
               <dt>Preselect</dt>

@@ -2,21 +2,41 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Section from "../../components/Section.astro";
 import { site } from "../../content/site";
+import { COMPANY, hasRealEmail } from "../../content/company";
+
+const mailHref = hasRealEmail(COMPANY.email) ? `mailto:${COMPANY.email}` : null;
 ---
-<BaseLayout title={`Privacy — ${site.name}`} description="Privacy and data handling notes.">
-  <Section title="Privacy" note="Replace with your final legal text.">
+<BaseLayout title={`Privacy - ${site.name}`} description="Privacy and data handling notes.">
+  <Section title="Privacy" note="How request details are handled on this site.">
     <div class="card box">
-      <p>
-        We use this form only to respond to your request. Data is not sold. Retention depends on ongoing communication.
+      <p class="p">
+        ARCWAVE uses the information sent through the request form only to review the technical need, prepare a response,
+        and coordinate follow-up about scope, access, timing or service fit. Personal data is not sold.
       </p>
+
       <div class="hr" style="margin:16px 0;"></div>
-      <p class="small">
-        If you use Formspree/Basin/Netlify Forms, submissions are processed by that provider. Update this policy accordingly.
+
+      <p class="p small">
+        If a third-party form provider is used to process submissions, the request data is handled through that provider
+        for delivery and notification. Retention depends on the active conversation, operational needs and applicable legal obligations.
+      </p>
+
+      <div class="hr" style="margin:16px 0;"></div>
+
+      <p class="p small">
+        {mailHref ? (
+          <>For access, correction or deletion requests, contact <a class="link" href={mailHref}>{COMPANY.email}</a>.</>
+        ) : (
+          <>Contact details for privacy requests should be configured before launch.</>
+        )}
       </p>
     </div>
   </Section>
 
   <style>
     .box{ padding: 18px; border-radius: var(--radius); }
+    .p{ margin:0; color: var(--muted); line-height: 1.65; }
+    .small{ font-size: 13px; }
+    .link{ text-decoration: underline; text-underline-offset: 3px; }
   </style>
 </BaseLayout>

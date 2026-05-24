@@ -17,6 +17,15 @@ const nav = [
   { href: `${base}/contact`, label: t(lang, "Contact", "Contacto") },
 ];
 
+const serviceNav = [
+  { href: `${base}/services/telecom`, label: t(lang, "Telecom", "Telecom") },
+  { href: `${base}/services/networks`, label: t(lang, "Networks", "Redes") },
+  { href: `${base}/services/electricity`, label: t(lang, "Electricity & Smart Home", "Electricidad y Smart Home") },
+  { href: `${base}/services/ev`, label: t(lang, "EV Charging", "Carga VE") },
+  { href: `${base}/services/alarms`, label: t(lang, "Alarm systems", "Alarmas y CCTV") },
+  { href: `${base}/services/audio`, label: t(lang, "Audio & Home Cinema", "Audio y Home Cinema") },
+];
+
 function isActive(href: string) {
   if (href === "/" || href === "/es") return path === href;
   return path === href || path.startsWith(href + "/");
@@ -24,6 +33,12 @@ function isActive(href: string) {
 
 const quoteHref = `${base}/contact#quote`;
 const quoteLabel = t(lang, "Request a quote", "Presupuesto");
+const menuId = "arcwave-mobile-command-menu";
+const menuOpenLabel = t(lang, "Open menu", "Abrir menu");
+const menuCloseLabel = t(lang, "Close menu", "Cerrar menu");
+const menuTitle = t(lang, "ARCWAVE System", "Sistema ARCWAVE");
+const mainNavLabel = t(lang, "Navigation", "Navegacion");
+const servicePathsLabel = t(lang, "Service paths", "Rutas de servicio");
 
 const langToggleHref = otherLangHref(url);
 const langToggleLabel = lang === "es" ? "EN" : "ES";
@@ -64,9 +79,68 @@ const langToggleLabel = lang === "es" ? "EN" : "ES";
           <span aria-hidden="true"></span>
           {quoteLabel}
         </a>
+
+        <button
+          class="menuToggle"
+          type="button"
+          data-mobile-menu-toggle
+          aria-label={menuOpenLabel}
+          aria-controls={menuId}
+          aria-expanded="false"
+        >
+          <span class="menuGlyph" aria-hidden="true">
+            <i></i>
+            <i></i>
+            <i></i>
+          </span>
+        </button>
       </div>
     </div>
   </div>
+
+  <button class="mobileMenuBackdrop" type="button" data-mobile-menu-backdrop aria-label={menuCloseLabel}></button>
+
+  <aside class="mobileMenu" id={menuId} data-mobile-menu aria-hidden="true" tabindex="-1">
+    <div class="mobileMenuHead">
+      <div>
+        <span class="mobileMenuKicker">{menuTitle}</span>
+        <strong>Infrastructure OS</strong>
+      </div>
+
+      <button class="mobileMenuClose" type="button" data-mobile-menu-close aria-label={menuCloseLabel}>
+        <span aria-hidden="true"></span>
+      </button>
+    </div>
+
+    <nav class="mobileMenuSection" aria-label={mainNavLabel}>
+      <span class="mobileMenuLabel">{mainNavLabel}</span>
+      <div class="mobileMenuLinks">
+        {nav.map((item) => (
+          <a href={item.href} data-vt="1" class={isActive(item.href) ? "isActive" : ""}>
+            <span>{item.label}</span>
+            <i aria-hidden="true"></i>
+          </a>
+        ))}
+      </div>
+    </nav>
+
+    <nav class="mobileMenuSection" aria-label={servicePathsLabel}>
+      <span class="mobileMenuLabel">{servicePathsLabel}</span>
+      <div class="mobileServiceLinks">
+        {serviceNav.map((item, index) => (
+          <a href={item.href} data-vt="1" class={isActive(item.href) ? "isActive" : ""}>
+            <small>{String(index + 1).padStart(2, "0")}</small>
+            <span>{item.label}</span>
+          </a>
+        ))}
+      </div>
+    </nav>
+
+    <a class="mobileMenuCta" href={quoteHref} data-vt="1">
+      <span aria-hidden="true"></span>
+      {quoteLabel}
+    </a>
+  </aside>
 </header>
 
 <style>
@@ -79,6 +153,11 @@ const langToggleLabel = lang === "es" ? "EN" : "ES";
     padding: 14px 0;
     pointer-events:none;
     transition: padding .22s ease, transform .22s ease;
+  }
+
+  .hdr > .container{
+    width: var(--arc-nav-shell);
+    margin-inline: auto;
   }
 
   .bar{
@@ -323,6 +402,303 @@ const langToggleLabel = lang === "es" ? "EN" : "ES";
     border-color: rgba(10,132,255,.46);
   }
 
+  .menuToggle,
+  .mobileMenuBackdrop,
+  .mobileMenu{
+    display:none;
+  }
+
+  .menuToggle{
+    position:relative;
+    align-items:center;
+    justify-content:center;
+    width: 40px;
+    height: 40px;
+    padding:0;
+    border-radius:999px;
+    border: 1px solid rgba(10,132,255,.34);
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.52), rgba(10,132,255,.13));
+    color: rgba(15,15,20,.84);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.78),
+      0 12px 28px rgba(10,132,255,.10),
+      0 8px 22px rgba(10,10,20,.05);
+    cursor:pointer;
+  }
+
+  .menuToggle:focus-visible,
+  .mobileMenuClose:focus-visible{
+    outline: none;
+    border-color: rgba(10,132,255,.46);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.84),
+      0 0 0 4px rgba(10,132,255,.13),
+      0 14px 34px rgba(10,132,255,.12);
+  }
+
+  .menuGlyph{
+    position:relative;
+    width: 17px;
+    height: 14px;
+    display:grid;
+    align-content:space-between;
+  }
+
+  .menuGlyph i{
+    display:block;
+    height: 2px;
+    border-radius:999px;
+    background: rgba(15,15,20,.72);
+  }
+
+  .menuGlyph i:nth-child(1){
+    width: 11px;
+  }
+
+  .menuGlyph i:nth-child(2){
+    width: 17px;
+  }
+
+  .menuGlyph i:nth-child(3){
+    width: 9px;
+    justify-self:end;
+    background: rgba(15,15,20,.72);
+  }
+
+  .mobileMenuBackdrop{
+    position:fixed;
+    inset:0;
+    z-index:58;
+    border:0;
+    padding:0;
+    background: rgba(244,249,253,.34);
+    opacity:0;
+    pointer-events:none;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    transition: opacity .18s ease;
+  }
+
+  .mobileMenu{
+    position:fixed;
+    left: 14px;
+    right: 14px;
+    top: calc(var(--mobile-header-safe, 86px) + 4px);
+    z-index:59;
+    max-height: calc(100svh - var(--mobile-header-safe, 86px) - 20px);
+    overflow:auto;
+    padding: 16px;
+    border-radius: 28px;
+    border: 1px solid rgba(10,132,255,.14);
+    background:
+      linear-gradient(rgba(10,132,255,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(10,132,255,.04) 1px, transparent 1px),
+      radial-gradient(420px 260px at 92% 0%, rgba(10,132,255,.13), transparent 68%),
+      linear-gradient(180deg, rgba(255,255,255,.92), rgba(240,248,253,.82));
+    background-size: 42px 42px, 42px 42px, auto, auto;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.94),
+      0 28px 90px rgba(10,36,70,.16);
+    opacity:0;
+    pointer-events:none;
+    transform: translateY(-8px) scale(.985);
+    transform-origin: top center;
+    transition: opacity .18s ease, transform .18s ease;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .hdr.isMenuOpen .mobileMenuBackdrop,
+  .hdr.isMenuOpen .mobileMenu{
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  .hdr.isMenuOpen .mobileMenu{
+    transform: translateY(0) scale(1);
+  }
+
+  .mobileMenuHead{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap: 16px;
+    padding: 3px 2px 14px;
+    border-bottom: 1px solid rgba(10,36,70,.08);
+  }
+
+  .mobileMenuKicker{
+    display:block;
+    color: rgba(10,132,255,.86);
+    font-size: 10px;
+    font-weight: 820;
+    line-height:1;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+  }
+
+  .mobileMenuHead strong{
+    display:block;
+    margin-top: 7px;
+    color: rgba(15,15,20,.92);
+    font-size: 24px;
+    line-height:1;
+    letter-spacing:-.03em;
+  }
+
+  .mobileMenuClose{
+    position:relative;
+    flex: 0 0 auto;
+    width: 38px;
+    height: 38px;
+    border-radius:999px;
+    border: 1px solid rgba(15,15,20,.08);
+    background: rgba(255,255,255,.66);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.82);
+    cursor:pointer;
+  }
+
+  .mobileMenuClose span,
+  .mobileMenuClose:after{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:50%;
+    width: 15px;
+    height: 2px;
+    border-radius:999px;
+    background: rgba(15,15,20,.62);
+  }
+
+  .mobileMenuClose span{
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .mobileMenuClose:after{
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+
+  .mobileMenuSection{
+    margin-top: 16px;
+  }
+
+  .mobileMenuLabel{
+    display:block;
+    margin: 0 2px 9px;
+    color: rgba(120,120,132,.90);
+    font-size: 10px;
+    font-weight: 820;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+  }
+
+  .mobileMenuLinks{
+    display:grid;
+    gap: 7px;
+  }
+
+  .mobileMenuLinks a{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 14px;
+    min-height: 44px;
+    padding: 0 13px;
+    border-radius: 15px;
+    border: 1px solid rgba(10,36,70,.08);
+    background: rgba(255,255,255,.58);
+    color: rgba(15,15,20,.82);
+    font-size: 15px;
+    font-weight: 720;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.72);
+  }
+
+  .mobileMenuLinks a i{
+    width: 18px;
+    height: 1px;
+    border-radius:999px;
+    background: rgba(10,132,255,.34);
+  }
+
+  .mobileMenuLinks a.isActive,
+  .mobileServiceLinks a.isActive{
+    border-color: rgba(10,132,255,.22);
+    background: rgba(234,246,255,.74);
+  }
+
+  .mobileServiceLinks{
+    display:grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .mobileServiceLinks a{
+    min-height: 58px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap: 6px;
+    padding: 11px 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(10,36,70,.08);
+    background: rgba(255,255,255,.50);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.70);
+  }
+
+  .mobileServiceLinks small{
+    color: rgba(10,132,255,.86);
+    font-size: 10px;
+    font-weight: 850;
+    line-height:1;
+    letter-spacing:.12em;
+  }
+
+  .mobileServiceLinks span{
+    color: rgba(15,15,20,.84);
+    font-size: 13px;
+    font-weight: 740;
+    line-height:1.15;
+  }
+
+  .mobileMenuCta{
+    min-height: 50px;
+    margin-top: 16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap: 10px;
+    border-radius:999px;
+    border: 1px solid rgba(10,132,255,.34);
+    background: linear-gradient(180deg, rgba(255,255,255,.76), rgba(10,132,255,.13));
+    color: rgba(15,15,20,.92);
+    font-size: 14px;
+    font-weight: 820;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.84),
+      0 14px 34px rgba(10,132,255,.10);
+  }
+
+  .mobileMenuCta span{
+    width: 8px;
+    height: 8px;
+    border-radius:999px;
+    background: rgba(10,132,255,.86);
+    box-shadow:
+      0 0 0 5px rgba(10,132,255,.10),
+      0 0 18px rgba(10,132,255,.34);
+  }
+
+  :global(html.arcMobileMenuOpen),
+  :global(body.arcMobileMenuOpen){
+    overflow:hidden;
+  }
+
+  :global(body.arcMobileMenuOpen [data-mobile-bottom-cta]){
+    opacity:0 !important;
+    pointer-events:none !important;
+    transform: translateY(calc(100% + 18px)) !important;
+  }
+
   @media (max-width: 520px){
     .hdr{ padding: 12px 0; }
     .bar{ height: 62px; padding: 0 10px 0 14px; }
@@ -360,6 +736,10 @@ const langToggleLabel = lang === "es" ? "EN" : "ES";
 
   @media (max-width: 760px){
     .hdr{ padding: 10px 0; }
+    .hdr > .container{
+      width: var(--arc-nav-shell);
+    }
+
     .bar{
       height: 58px;
       padding: 0 10px 0 14px;
@@ -388,10 +768,24 @@ const langToggleLabel = lang === "es" ? "EN" : "ES";
       width: 40px;
       height: 36px;
     }
+
+    .right{
+      gap: 8px;
+    }
+
     .cta{
-      min-height: 38px;
-      padding-inline: 13px;
-      font-size: 12px;
+      display:none;
+    }
+
+    .menuToggle{
+      display:inline-flex;
+      width: 40px;
+      height: 40px;
+    }
+
+    .mobileMenuBackdrop,
+    .mobileMenu{
+      display:block;
     }
   }
 
@@ -404,8 +798,103 @@ const langToggleLabel = lang === "es" ? "EN" : "ES";
   @media (prefers-reduced-motion: reduce){
     .hdr,
     .navLink,
-    .navLink:after{
+    .navLink:after,
+    .mobileMenu,
+    .mobileMenuBackdrop,
+    .menuToggle{
       transition:none;
     }
   }
 </style>
+
+<script is:inline>
+  (() => {
+    function initArcwaveMobileMenu() {
+      const header = document.querySelector("[data-site-header]");
+      if (!header || header.getAttribute("data-mobile-menu-ready") === "true") return;
+
+      const toggle = header.querySelector("[data-mobile-menu-toggle]");
+      const menu = header.querySelector("[data-mobile-menu]");
+      const backdrop = header.querySelector("[data-mobile-menu-backdrop]");
+      const closeButton = header.querySelector("[data-mobile-menu-close]");
+      if (!toggle || !menu || !backdrop || !closeButton) return;
+
+      header.setAttribute("data-mobile-menu-ready", "true");
+
+      const focusableSelector = [
+        "a[href]",
+        "button:not([disabled])",
+        "[tabindex]:not([tabindex='-1'])",
+      ].join(",");
+
+      let lastFocus = null;
+
+      function setExpanded(isOpen) {
+        header.classList.toggle("isMenuOpen", isOpen);
+        toggle.setAttribute("aria-expanded", String(isOpen));
+        menu.setAttribute("aria-hidden", String(!isOpen));
+        document.documentElement.classList.toggle("arcMobileMenuOpen", isOpen);
+        document.body.classList.toggle("arcMobileMenuOpen", isOpen);
+
+        if (isOpen) {
+          lastFocus = document.activeElement;
+          window.requestAnimationFrame(() => closeButton.focus({ preventScroll: true }));
+        } else if (lastFocus && typeof lastFocus.focus === "function") {
+          lastFocus.focus({ preventScroll: true });
+        }
+      }
+
+      function closeMenu() {
+        if (!header.classList.contains("isMenuOpen")) return;
+        setExpanded(false);
+      }
+
+      function openMenu() {
+        if (header.classList.contains("isMenuOpen")) return;
+        setExpanded(true);
+      }
+
+      toggle.addEventListener("click", () => {
+        if (header.classList.contains("isMenuOpen")) closeMenu();
+        else openMenu();
+      });
+
+      closeButton.addEventListener("click", closeMenu);
+      backdrop.addEventListener("click", closeMenu);
+
+      menu.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", closeMenu);
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (!header.classList.contains("isMenuOpen")) return;
+
+        if (event.key === "Escape") {
+          event.preventDefault();
+          closeMenu();
+          return;
+        }
+
+        if (event.key !== "Tab") return;
+        const focusable = [toggle, ...menu.querySelectorAll(focusableSelector)]
+          .filter((item) => item.offsetParent !== null);
+        if (!focusable.length) return;
+
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      });
+
+      document.addEventListener("astro:before-swap", closeMenu);
+    }
+
+    initArcwaveMobileMenu();
+    document.addEventListener("astro:after-swap", initArcwaveMobileMenu);
+  })();
+</script>

@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import { siteEs } from "../../../content/site.es";
-import { COMPANY } from "../../../content/company";
+import { COMPANY, hasRealEmail } from "../../../content/company";
 import { servicesEs } from "../../../content/services.es";
 import type { Service } from "../../../content/services";
 import { serviceDetailsEs } from "../../../content/serviceDetails.es";
@@ -66,6 +66,7 @@ const servicePath = detail.pathCards;
 const heroTags = detail.heroTags.length > 0 ? detail.heroTags : [service.title, "Soporte"];
 const quoteHints = detail.quoteHints.length > 0 ? detail.quoteHints : ["acceso", "rutas", "cableado existente", "plazo"];
 const finalCtaCopy = `Abre el formulario con ${service.title} seleccionado y añade las restricciones importantes del sitio: ${quoteHints.join(", ")} y el resultado esperado.`;
+const mailHref = hasRealEmail(COMPANY.email) ? `mailto:${COMPANY.email}` : null;
 ---
 
 <BaseLayout title={`${service.title} - ${siteEs.name}`} description={desc}>
@@ -88,7 +89,7 @@ const finalCtaCopy = `Abre el formulario con ${service.title} seleccionado y añ
       </div>
 
       <div class="interfacePanel detailHeroPanel motionIn">
-        <img src={service.heroImage} alt="" loading="eager" decoding="async" />
+        <img src={service.heroImage} alt="" loading="eager" decoding="async" fetchpriority="high" />
         <div class="interfacePanelContent">
           <div>
             <span class="interfaceIndex">Capa activa</span>
@@ -152,7 +153,7 @@ const finalCtaCopy = `Abre el formulario con ${service.title} seleccionado y añ
             </div>
             <div>
               <dt>Contacto</dt>
-              <dd><a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a></dd>
+              <dd>{mailHref ? <a href={mailHref} data-track="service_detail_email">{COMPANY.email}</a> : "Usa el formulario"}</dd>
             </div>
             <div>
               <dt>Preselección</dt>

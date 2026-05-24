@@ -3,7 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import SignalInfrastructureField from "./SignalInfrastructureField";
 import { services } from "../content/services";
 import { servicesEs } from "../content/services.es";
-import { COMPANY } from "../content/company";
+import { COMPANY, hasRealEmail } from "../content/company";
 
 type PageProps = {
   title?: string;
@@ -376,8 +376,8 @@ const pageNavItems = copy.pageNavItems;
         </p>
 
         <div class="actions">
-          <a class="primary" href="#technical-request" data-vt="1">{copy.quoteCta}</a>
-          <a class="secondary" href={servicesHref} data-vt="1">{copy.servicesCta}</a>
+          <a class="primary" href="#technical-request" data-vt="1" data-track="home_hero_quote">{copy.quoteCta}</a>
+          <a class="secondary" href={servicesHref} data-vt="1" data-track="home_hero_services">{copy.servicesCta}</a>
         </div>
 
         <div class="signalFormula" aria-label="Commercial journey">
@@ -587,13 +587,13 @@ const pageNavItems = copy.pageNavItems;
         <div class="eyebrow">{copy.requestEyebrow}</div>
         <h2>{copy.requestTitle}</h2>
         <p>{copy.requestText}</p>
-        <a class="mobileHomeFinalCta primary" href={contactHref} data-vt="1">{copy.quoteCta}</a>
+        <a class="mobileHomeFinalCta primary" href={contactHref} data-vt="1" data-track="home_mobile_final_quote">{copy.quoteCta}</a>
       </div>
 
       <form
         class="quoteInterface"
         data-quote-interface
-        data-quote-email={COMPANY.email}
+        data-quote-email={hasRealEmail(COMPANY.email) ? COMPANY.email : ""}
         data-mail-subject-prefix={copy.mailSubjectPrefix}
         data-mail-service-label={copy.mailBodyLabels.service}
         data-mail-space-label={copy.mailBodyLabels.space}
@@ -727,8 +727,8 @@ const pageNavItems = copy.pageNavItems;
             </p>
 
             <div class="briefActions">
-              <a class="primary" href={contactHref} data-quote-mailto data-vt="1">{copy.sendBrief}</a>
-              <a class="secondary" href={contactHref} data-vt="1">{copy.openForm}</a>
+              <a class="primary" href={contactHref} data-quote-mailto data-vt="1" data-track="home_brief_send">{copy.sendBrief}</a>
+              <a class="secondary" href={contactHref} data-vt="1" data-track="home_brief_open_form">{copy.openForm}</a>
             </div>
           </aside>
         </div>
@@ -845,7 +845,7 @@ const pageNavItems = copy.pageNavItems;
       form.setAttribute("data-quote-ready", "true");
 
       const mailto = form.querySelector("[data-quote-mailto]");
-      const fallbackEmail = form.getAttribute("data-quote-email") || "hello@example.com";
+      const fallbackEmail = form.getAttribute("data-quote-email") || "";
       const subjectPrefix = form.getAttribute("data-mail-subject-prefix") || "ARCWAVE technical request";
       const mailLabels = {
         service: form.getAttribute("data-mail-service-label") || "Service path",
@@ -895,7 +895,7 @@ const pageNavItems = copy.pageNavItems;
           label.classList.toggle("isSelected", label.querySelector("input")?.checked);
         });
 
-        if (mailto) {
+        if (mailto && fallbackEmail) {
           const subject = `${subjectPrefix} - ${service}`;
           const body = [
             subjectPrefix,
@@ -913,6 +913,8 @@ const pageNavItems = copy.pageNavItems;
             "href",
             `mailto:${encodeURIComponent(fallbackEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
           );
+        } else if (mailto) {
+          mailto.removeAttribute("href");
         }
       }
 
@@ -1283,32 +1285,34 @@ const pageNavItems = copy.pageNavItems;
 
     .pageNav{
       position:fixed;
-      right: clamp(8px, 1vw, 18px);
+      right: clamp(16px, 1.3vw, 24px);
       top: 50%;
       z-index:60;
       display:flex;
       flex-direction:column;
       align-items:center;
-      gap: 5px;
-      width: 46px;
-      padding: 9px 7px;
-      border: 1px solid rgba(15,15,20,.075);
+      gap: 9px;
+      width: 28px;
+      padding: 10px 0;
+      border: 1px solid rgba(15,15,20,.045);
       border-radius: 999px;
       background:
-        linear-gradient(180deg, rgba(255,255,255,.70), rgba(255,255,255,.42));
-      backdrop-filter: blur(20px) saturate(1.16);
-      -webkit-backdrop-filter: blur(20px) saturate(1.16);
+        linear-gradient(180deg, rgba(255,255,255,.42), rgba(255,255,255,.22));
+      backdrop-filter: blur(12px) saturate(1.08);
+      -webkit-backdrop-filter: blur(12px) saturate(1.08);
       box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.9),
-        0 24px 68px rgba(10,10,20,.085);
+        inset 0 1px 0 rgba(255,255,255,.72),
+        0 16px 42px rgba(10,10,20,.055);
       transform: translateY(-50%);
-      opacity:.78;
-      transition: opacity .16s ease, transform .16s ease;
+      opacity:.52;
+      transition: opacity .16s ease, border-color .16s ease, background .16s ease;
     }
 
     .pageNav:hover,
     .pageNav:focus-within{
-      opacity:1;
+      opacity:.92;
+      border-color: rgba(10,132,255,.12);
+      background: rgba(255,255,255,.50);
     }
 
     .pageNavTrack{
@@ -1318,7 +1322,8 @@ const pageNavItems = copy.pageNavItems;
       bottom: 22px;
       width: 1px;
       overflow:hidden;
-      background: rgba(15,15,20,.065);
+      background: rgba(10,132,255,.10);
+      border-radius:999px;
       pointer-events:none;
       transform: translateX(-50%);
     }
@@ -1328,8 +1333,8 @@ const pageNavItems = copy.pageNavItems;
       width:100%;
       height: calc(var(--page-progress, 0) * 100%);
       border-radius:999px;
-      background: linear-gradient(180deg, rgba(10,132,255,.88), rgba(255,186,94,.42));
-      box-shadow: 0 0 22px rgba(10,132,255,.24);
+      background: rgba(10,132,255,.62);
+      box-shadow: 0 0 14px rgba(10,132,255,.18);
     }
 
     .pageNav a{
@@ -1337,13 +1342,15 @@ const pageNavItems = copy.pageNavItems;
       display:flex;
       align-items:center;
       justify-content:center;
-      width: 32px;
-      height: 32px;
+      width: 28px;
+      height: 28px;
+      padding: 0;
       border-radius: 999px;
-      color: rgba(15,15,20,.58);
+      color: rgba(15,15,20,.64);
       font-size: 11px;
       text-decoration:none;
-      transition: color .16s ease, background .16s ease, transform .16s ease, box-shadow .16s ease, width .16s ease;
+      isolation:isolate;
+      transition: transform .16s ease;
     }
 
     .pageNav a:before{
@@ -1351,13 +1358,16 @@ const pageNavItems = copy.pageNavItems;
       position:absolute;
       left:50%;
       top: 50%;
-      width: 7px;
-      height: 7px;
+      z-index:2;
+      width: 6px;
+      height: 6px;
       border-radius:999px;
-      background: rgba(10,132,255,.38);
-      box-shadow: 0 0 0 5px rgba(10,132,255,.055);
+      background: rgba(10,132,255,.42);
+      box-shadow:
+        0 0 0 4px rgba(10,132,255,.045),
+        0 1px 0 rgba(255,255,255,.9);
       transform: translate(-50%, -50%);
-      transition: background .16s ease, box-shadow .16s ease;
+      transition: background .16s ease, box-shadow .16s ease, transform .16s ease;
     }
 
     .pageNav a:after{
@@ -1365,33 +1375,31 @@ const pageNavItems = copy.pageNavItems;
       position:absolute;
       right: calc(100% + 10px);
       top: 50%;
-      max-width: 150px;
-      padding: 8px 10px;
-      border-radius: 12px;
-      border: 1px solid rgba(15,15,20,.075);
-      background: rgba(255,255,255,.76);
-      backdrop-filter: blur(16px) saturate(1.12);
-      -webkit-backdrop-filter: blur(16px) saturate(1.12);
-      color: rgba(15,15,20,.72);
-      box-shadow: 0 16px 42px rgba(10,10,20,.07);
-      font-size: 10px;
-      letter-spacing:.14em;
+      max-width: 170px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(15,15,20,.07);
+      background: rgba(255,255,255,.78);
+      backdrop-filter: blur(18px) saturate(1.14);
+      -webkit-backdrop-filter: blur(18px) saturate(1.14);
+      color: rgba(15,15,20,.68);
+      box-shadow: 0 14px 36px rgba(10,10,20,.07);
+      font-size: 9px;
+      letter-spacing:.12em;
+      line-height:1;
       text-transform:uppercase;
       white-space:nowrap;
       opacity:0;
       pointer-events:none;
-      transform: translate(8px, -50%);
+      transform: translate(6px, -50%);
       transition: opacity .16s ease, transform .16s ease;
     }
 
     .pageNav a:hover,
     .pageNav a:focus-visible,
     .pageNav a.isActive{
-      color: rgba(15,15,20,.92);
-      background: rgba(255,255,255,.68);
       transform: scale(1.04);
       outline:none;
-      box-shadow: 0 12px 32px rgba(10,10,20,.055);
     }
 
     .pageNav a:hover:after,
@@ -1403,17 +1411,18 @@ const pageNavItems = copy.pageNavItems;
     .pageNav a.isActive:before{
       background: rgba(10,132,255,.90);
       box-shadow:
-        0 0 0 6px rgba(10,132,255,.10),
-        0 0 24px rgba(10,132,255,.30);
+        0 0 0 6px rgba(10,132,255,.095),
+        0 0 20px rgba(10,132,255,.28);
+      transform: translate(-50%, -50%) scale(1.28);
     }
 
     .pageNav a span{
-      position:relative;
-      z-index:2;
-      color: rgba(10,132,255,.72);
-      font-size: 9px;
-      letter-spacing:.12em;
-      font-weight: 760;
+      position:absolute;
+      width:1px;
+      height:1px;
+      overflow:hidden;
+      clip: rect(0 0 0 0);
+      white-space:nowrap;
     }
 
     .pageNav a strong{
@@ -6805,6 +6814,11 @@ const pageNavItems = copy.pageNavItems;
       :global(.fieldCanvas canvas){
         width:100% !important;
         height:100% !important;
+      }
+
+      :global(.fieldCanvas){
+        -webkit-mask-image: linear-gradient(90deg, transparent 0, transparent 18px, rgba(0,0,0,.42) 34px, black 58px);
+        mask-image: linear-gradient(90deg, transparent 0, transparent 18px, rgba(0,0,0,.42) 34px, black 58px);
       }
 
       :global(.fieldReadout){

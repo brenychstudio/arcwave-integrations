@@ -2,7 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import QuoteForm from "../components/forms/QuoteForm.tsx";
 import { site } from "../content/site";
-import { COMPANY } from "../content/company";
+import { COMPANY, hasRealEmail } from "../content/company";
 import { services, commonQuoteFields } from "../content/services";
 import type { ServiceKey } from "../content/services";
 import "../styles/interface.css";
@@ -14,7 +14,7 @@ const defaultServiceKey: ServiceKey | undefined =
   services.some((s) => s.key === serviceParam) ? (serviceParam as ServiceKey) : undefined;
 
 const telHref = `tel:${COMPANY.phoneTel}`;
-const mailHref = `mailto:${COMPANY.email}`;
+const mailHref = hasRealEmail(COMPANY.email) ? `mailto:${COMPANY.email}` : null;
 const requestSteps = ["Service", "Space", "Constraints", "Brief"];
 ---
 
@@ -32,7 +32,7 @@ const requestSteps = ["Service", "Space", "Constraints", "Brief"];
           ARCWAVE enough signal to respond with a practical technical path.
         </p>
         <div class="interfaceActions">
-          <a class="primary" href="#quote">Start request</a>
+          <a class="primary" href="#quote" data-track="contact_hero_start_request">Start request</a>
           <a class="secondary" href="/services" data-vt="1">Explore services</a>
         </div>
         <div class="interfaceFormula" aria-label="Request flow">
@@ -65,10 +65,12 @@ const requestSteps = ["Service", "Space", "Constraints", "Brief"];
           </p>
 
           <div class="contactChannels">
-            <a class="interfaceCard contactChannel" href={mailHref}>
-              <span>Email</span>
-              <strong>{COMPANY.email}</strong>
-            </a>
+            {mailHref ? (
+              <a class="interfaceCard contactChannel" href={mailHref} data-track="contact_page_email">
+                <span>Email</span>
+                <strong>{COMPANY.email}</strong>
+              </a>
+            ) : null}
             <a class="interfaceCard contactChannel" href={telHref}>
               <span>Phone</span>
               <strong>{COMPANY.phoneDisplay}</strong>
@@ -109,7 +111,7 @@ const requestSteps = ["Service", "Space", "Constraints", "Brief"];
             endpoint={site.form.endpoint}
             commonFields={commonQuoteFields}
             defaultServiceKey={defaultServiceKey}
-            fallbackEmail={COMPANY.email}
+            fallbackEmail={mailHref ? COMPANY.email : undefined}
             fallbackSubject={`${site.name} - quote request`}
           />
         </div>
