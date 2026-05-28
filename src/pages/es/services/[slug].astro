@@ -113,7 +113,7 @@ const mailHref = hasRealEmail(COMPANY.email) ? `mailto:${COMPANY.email}` : null;
         <h2>De solicitud a sistema mantenible.</h2>
       </div>
 
-      <div class="detailPathGrid">
+      <div class="detailPathGrid" data-mobile-carousel="detail-paths" data-mobile-carousel-label="Ruta de servicio">
         {servicePath.map((item) => (
           <article class="interfaceCard detailTile">
             <span class="interfaceIndex">{item.index}</span>
@@ -194,7 +194,7 @@ const mailHref = hasRealEmail(COMPANY.email) ? `mailto:${COMPANY.email}` : null;
             <p>La mayoría de instalaciones toca más de una capa. Estas rutas suelen conectarse.</p>
           </div>
 
-          <div class="relatedCompactList">
+          <div class="relatedCompactList" data-mobile-carousel="related-paths" data-mobile-carousel-label="Rutas relacionadas">
             {relatedServices.map((item, index) => (
               <a class="interfaceCard relatedCompactCard" href={`/es/services/${item.key}`} data-vt="1">
                 <div>

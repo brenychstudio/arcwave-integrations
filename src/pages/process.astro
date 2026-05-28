@@ -105,7 +105,7 @@ const briefItems = ["Service", "Space", "Constraints", "Next response"];
         <div class="diagnosticPathLine" aria-hidden="true">
           <span></span><span></span><span></span><span></span><span></span>
         </div>
-        <div class="diagnosticStageGrid">
+        <div class="diagnosticStageGrid" data-mobile-carousel="diagnostic-stages" data-mobile-carousel-label="Request signal stages">
           {heroStages.map((item, index) => (
             <div class={`diagnosticStage ${index === 2 ? "isActive" : ""}`.trim()}>
               <div>
@@ -153,7 +153,7 @@ const briefItems = ["Service", "Space", "Constraints", "Next response"];
       </div>
 
       <div class="interfaceTopology">
-        <div class="processLane" aria-label="Request diagnostic lane">
+        <div class="processLane" data-mobile-carousel="process-steps" data-mobile-carousel-label="Request diagnostic lane">
           {process.map((item) => (
             <article class="interfaceCard pathStep">
               <div class="pathStepHead">

@@ -428,6 +428,7 @@ const creditLabel = t(lang, "Design & development", "Diseno y desarrollo");
         body[data-mobile-cta="true"] .waFab{
           bottom: calc(74px + env(safe-area-inset-bottom));
         }
+
       }
 
       /* Footer */
@@ -1674,6 +1675,175 @@ const creditLabel = t(lang, "Design & development", "Diseno y desarrollo");
           source: window.location.pathname,
         });
       });
+    </script>
+
+    <script is:inline>
+      (() => {
+        const mq = window.matchMedia("(max-width: 760px)");
+
+        function wrapIndex(index, length) {
+          return ((index % length) + length) % length;
+        }
+
+        function circularOffset(index, activeIndex, length) {
+          let offset = index - activeIndex;
+          const half = length / 2;
+          if (offset > half) offset -= length;
+          if (offset < -half) offset += length;
+          return offset;
+        }
+
+        function formatCount(index, total) {
+          return `${String(index + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}`;
+        }
+
+        function getCarouselItems(root) {
+          const items = Array.from(root.children).filter((child) => {
+            return child instanceof HTMLElement
+              && child.getAttribute("data-mobile-carousel-exclude") !== "true"
+              && !child.classList.contains("mobileCarouselControls")
+              && !child.classList.contains("mobileCarouselDots");
+          });
+
+          const mobileLimit = Number(root.getAttribute("data-mobile-carousel-mobile-limit") || 0);
+          if (mq.matches && Number.isFinite(mobileLimit) && mobileLimit > 0) {
+            return items.slice(0, mobileLimit);
+          }
+
+          return items;
+        }
+
+        function resetArcwaveMobileCarousel(root) {
+          root.querySelectorAll(".mobileCarouselControls, .mobileCarouselDots").forEach((node) => node.remove());
+          root.classList.remove("isMobileCarousel");
+          root.removeAttribute("data-mobile-carousel-ready");
+          root.removeAttribute("role");
+          root.removeAttribute("aria-roledescription");
+
+          root.querySelectorAll("[data-mobile-carousel-item]").forEach((item) => {
+            item.removeAttribute("data-mobile-carousel-item");
+            item.removeAttribute("data-carousel-offset");
+            item.removeAttribute("aria-hidden");
+            item.removeAttribute("aria-label");
+            if ("tabIndex" in item) item.removeAttribute("tabindex");
+          });
+        }
+
+        function initArcwaveMobileCarousels() {
+          if (!mq.matches) return;
+
+          document.querySelectorAll("[data-mobile-carousel]").forEach((root) => {
+            if (root.getAttribute("data-mobile-carousel-ready") === "true") return;
+
+            const items = getCarouselItems(root);
+
+            if (items.length < 3) return;
+
+            root.setAttribute("data-mobile-carousel-ready", "true");
+            root.classList.add("isMobileCarousel");
+            root.setAttribute("role", "region");
+            root.setAttribute("aria-roledescription", "carousel");
+            root.setAttribute("aria-label", root.getAttribute("data-mobile-carousel-label") || "Mobile carousel");
+
+            const controls = document.createElement("div");
+            controls.className = "mobileCarouselControls";
+            controls.innerHTML = `
+              <button type="button" data-carousel-prev aria-label="Previous item" title="Previous">&lt;</button>
+              <span class="mobileCarouselCount" aria-live="polite"></span>
+              <button type="button" data-carousel-next aria-label="Next item" title="Next">&gt;</button>
+            `;
+
+            const dots = document.createElement("div");
+            dots.className = "mobileCarouselDots";
+            dots.setAttribute("aria-label", "Carousel navigation");
+
+            items.forEach((item, index) => {
+              item.setAttribute("data-mobile-carousel-item", "");
+              item.setAttribute("aria-label", `${index + 1} of ${items.length}`);
+
+              const dot = document.createElement("button");
+              dot.type = "button";
+              dot.setAttribute("aria-label", `Show item ${index + 1}`);
+              dot.addEventListener("click", () => select(index));
+              dots.appendChild(dot);
+            });
+
+            root.prepend(controls);
+            root.appendChild(dots);
+
+            const count = controls.querySelector(".mobileCarouselCount");
+            const prev = controls.querySelector("[data-carousel-prev]");
+            const next = controls.querySelector("[data-carousel-next]");
+            const dotButtons = Array.from(dots.querySelectorAll("button"));
+            let activeIndex = Number(root.getAttribute("data-mobile-carousel-start") || 0);
+            let pointerStartX = 0;
+            let pointerStartY = 0;
+            let tracking = false;
+
+            function update() {
+              activeIndex = wrapIndex(activeIndex, items.length);
+              if (count) count.textContent = formatCount(activeIndex, items.length);
+
+              items.forEach((item, index) => {
+                const offset = circularOffset(index, activeIndex, items.length);
+                const visibleOffset = Math.abs(offset) <= 1 ? String(offset) : "hidden";
+                item.setAttribute("data-carousel-offset", visibleOffset);
+                item.setAttribute("aria-hidden", index === activeIndex ? "false" : "true");
+                if ("tabIndex" in item) item.tabIndex = index === activeIndex ? 0 : -1;
+              });
+
+              dotButtons.forEach((dot, index) => {
+                dot.setAttribute("aria-pressed", index === activeIndex ? "true" : "false");
+              });
+            }
+
+            function select(index) {
+              activeIndex = wrapIndex(index, items.length);
+              update();
+            }
+
+            prev?.addEventListener("click", () => select(activeIndex - 1));
+            next?.addEventListener("click", () => select(activeIndex + 1));
+
+            root.addEventListener("pointerdown", (event) => {
+              if (!mq.matches) return;
+              if (event.target?.closest?.("button")) return;
+              tracking = true;
+              pointerStartX = event.clientX;
+              pointerStartY = event.clientY;
+            }, { passive: true });
+
+            root.addEventListener("pointerup", (event) => {
+              if (!tracking) return;
+              tracking = false;
+              const dx = event.clientX - pointerStartX;
+              const dy = event.clientY - pointerStartY;
+              if (Math.abs(dx) < 42 || Math.abs(dx) < Math.abs(dy) * 1.12) return;
+              select(activeIndex + (dx < 0 ? 1 : -1));
+            }, { passive: true });
+
+            root.addEventListener("pointercancel", () => {
+              tracking = false;
+            }, { passive: true });
+
+            update();
+          });
+        }
+
+        function syncArcwaveMobileCarousels() {
+          document.querySelectorAll("[data-mobile-carousel-ready='true']").forEach((root) => {
+            if (!mq.matches) resetArcwaveMobileCarousel(root);
+          });
+
+          initArcwaveMobileCarousels();
+        }
+
+        syncArcwaveMobileCarousels();
+        mq.addEventListener?.("change", syncArcwaveMobileCarousels);
+        window.addEventListener("resize", syncArcwaveMobileCarousels, { passive: true });
+        document.addEventListener("astro:page-load", syncArcwaveMobileCarousels);
+        document.addEventListener("astro:after-swap", syncArcwaveMobileCarousels);
+      })();
     </script>
 
     {showMobileBottomCta ? (

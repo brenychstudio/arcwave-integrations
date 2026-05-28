@@ -57,4 +57,14 @@ const href = waNumber ? `https://wa.me/${waNumber}?text=${text}` : null;
   @media (prefers-reduced-motion: reduce){
     .waFab{ transition: none; }
   }
+
+  @media (max-width: 760px){
+    .waFab{
+      left: 14px;
+      bottom: calc(12px + env(safe-area-inset-bottom));
+      width: 50px;
+      height: 50px;
+      z-index: 60;
+    }
+  }
 </style>
