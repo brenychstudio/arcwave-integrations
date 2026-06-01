@@ -9,9 +9,11 @@ type ServiceNode = {
   labelClass: string;
 };
 
+type FieldProfile = "full" | "tablet" | "mobile";
+
 type Props = {
   locale?: "en" | "es";
-  profile?: "full" | "mobile";
+  profile?: FieldProfile;
 };
 
 type WebGLComponent = React.ComponentType<Props>;
@@ -127,9 +129,11 @@ function getShouldReduceMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-function getIsCompactViewport() {
-  if (typeof window === "undefined") return false;
-  return window.matchMedia("(max-width: 760px)").matches;
+function getViewportProfile(): FieldProfile {
+  if (typeof window === "undefined") return "full";
+  if (window.matchMedia("(max-width: 760px)").matches) return "mobile";
+  if (window.matchMedia("(min-width: 681px) and (max-width: 1080px)").matches) return "tablet";
+  return "full";
 }
 
 function scheduleIdle(callback: () => void) {
@@ -156,11 +160,13 @@ export default function SignalInfrastructureField({ locale = "en" }: Props) {
   const [WebGLField, setWebGLField] = useState<WebGLComponent | null>(null);
   const [shouldLoadWebGL, setShouldLoadWebGL] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
-  const [webGLProfile, setWebGLProfile] = useState<"full" | "mobile">("full");
+  const [webGLProfile, setWebGLProfile] = useState<FieldProfile>("full");
   const pauseUntil = useRef(0);
   const visibleLabelNodes =
     webGLProfile === "mobile"
       ? serviceNodes.filter((node) => ["telecom", "electricity", "security", "quote"].includes(node.key))
+      : webGLProfile === "tablet"
+        ? serviceNodes.filter((node) => ["telecom", "networks", "electricity", "security", "quote"].includes(node.key))
       : serviceNodes;
 
   const activeNode = useMemo(
@@ -170,16 +176,29 @@ export default function SignalInfrastructureField({ locale = "en" }: Props) {
 
   useEffect(() => {
     const reduced = getShouldReduceMotion();
-    const compactViewport = getIsCompactViewport();
     setReduceMotion(reduced);
-    setWebGLProfile(compactViewport ? "mobile" : "full");
-    if (reduced) return;
+
+    const updateProfile = () => setWebGLProfile(getViewportProfile());
+    const mediaQueries = [
+      window.matchMedia("(max-width: 760px)"),
+      window.matchMedia("(min-width: 681px) and (max-width: 1080px)"),
+    ];
+
+    updateProfile();
+    mediaQueries.forEach((query) => query.addEventListener("change", updateProfile));
+
+    if (reduced) {
+      return () => {
+        mediaQueries.forEach((query) => query.removeEventListener("change", updateProfile));
+      };
+    }
 
     let cleanupIdle = () => {};
+    let observer: IntersectionObserver | null = null;
     const stage = document.querySelector("#signal-field .signalStage");
 
     if ("IntersectionObserver" in window && stage) {
-      const observer = new IntersectionObserver(
+      observer = new IntersectionObserver(
         ([entry]) => {
           if (!entry?.isIntersecting) return;
           cleanupIdle = scheduleIdle(() => setShouldLoadWebGL(true));
@@ -190,13 +209,17 @@ export default function SignalInfrastructureField({ locale = "en" }: Props) {
 
       observer.observe(stage);
       return () => {
-        observer.disconnect();
+        observer?.disconnect();
         cleanupIdle();
+        mediaQueries.forEach((query) => query.removeEventListener("change", updateProfile));
       };
     }
 
     cleanupIdle = scheduleIdle(() => setShouldLoadWebGL(true));
-    return cleanupIdle;
+    return () => {
+      cleanupIdle();
+      mediaQueries.forEach((query) => query.removeEventListener("change", updateProfile));
+    };
   }, []);
 
   useEffect(() => {

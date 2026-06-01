@@ -2,7 +2,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
-type FieldProfile = "full" | "mobile";
+type FieldProfile = "full" | "tablet" | "mobile";
 
 type ServiceNode = {
   key: string;
@@ -439,8 +439,11 @@ function TubePath({
   );
 }
 
-function FieldShader({ activeNode }: { activeNode: ServiceNode }) {
+function FieldShader({ activeNode, profile = "full" }: { activeNode: ServiceNode; profile?: FieldProfile }) {
   const material = useRef<THREE.ShaderMaterial>(null);
+  const isTablet = profile === "tablet";
+  const planeArgs: [number, number, number, number] = isTablet ? [14.8, 13.6, 1, 1] : [10.8, 5.8, 1, 1];
+  const planePosition: [number, number, number] = isTablet ? [0.18, 0.04, -0.92] : [0.45, -0.06, -0.82];
   const uniforms = useMemo(
     () => ({
       uTime: { value: 0 },
@@ -456,8 +459,8 @@ function FieldShader({ activeNode }: { activeNode: ServiceNode }) {
   });
 
   return (
-    <mesh position={[0.45, -0.06, -0.82]}>
-      <planeGeometry args={[10.8, 5.8, 1, 1]} />
+    <mesh position={planePosition}>
+      <planeGeometry args={planeArgs} />
       <shaderMaterial
         ref={material}
         uniforms={uniforms}
@@ -487,16 +490,18 @@ function FieldParticles({ profile = "full" }: { profile?: FieldProfile }) {
     const colorC = new THREE.Color("#9da6be");
     const colorD = new THREE.Color("#5fc7c2");
 
-    const count = profile === "mobile" ? 155 : 360;
-    const sizeScale = profile === "mobile" ? 0.78 : 1;
-    const alphaScale = profile === "mobile" ? 0.72 : 1;
+    const count = profile === "mobile" ? 155 : profile === "tablet" ? 420 : 360;
+    const sizeScale = profile === "mobile" ? 0.78 : profile === "tablet" ? 0.9 : 1;
+    const alphaScale = profile === "mobile" ? 0.72 : profile === "tablet" ? 0.86 : 1;
+    const spreadX = profile === "tablet" ? 12.8 : 11.2;
+    const spreadY = profile === "tablet" ? 11.6 : 5.55;
 
     for (let i = 0; i < count; i += 1) {
       const r1 = seeded(i + 1);
       const r2 = seeded(i + 7);
       const r3 = seeded(i + 17);
-      const x = (r1 - 0.5) * 11.2;
-      const y = (r2 - 0.5) * 5.55;
+      const x = (r1 - 0.5) * spreadX;
+      const y = (r2 - 0.5) * spreadY;
       const z = -0.92 + r3 * 1.15;
       positions.push(x, y, z);
 
@@ -688,6 +693,7 @@ function SignalScene({
 }) {
   const group = useRef<THREE.Group>(null);
   const isMobile = profile === "mobile";
+  const isTablet = profile === "tablet";
   const activeIndex = Math.max(0, serviceNodes.findIndex((node) => node.key === activeKey));
   const activeNode = serviceNodes[activeIndex];
   const visibleConnections = useMemo(
@@ -709,14 +715,16 @@ function SignalScene({
   useFrame(({ clock, pointer }) => {
     if (!group.current) return;
 
-    group.current.rotation.y = isMobile ? 0 : pointer.x * 0.035;
-    group.current.rotation.x = -0.075 + (isMobile ? 0 : pointer.y * 0.02);
-    group.current.position.y = Math.sin(clock.elapsedTime * (isMobile ? 0.18 : 0.28)) * (isMobile ? 0.012 : 0.02);
+    group.current.rotation.y = isMobile ? 0 : pointer.x * (isTablet ? 0.02 : 0.035);
+    group.current.rotation.x = -0.075 + (isMobile ? 0 : pointer.y * (isTablet ? 0.012 : 0.02));
+    group.current.position.x = isTablet ? 0.08 : 0;
+    group.current.position.y =
+      Math.sin(clock.elapsedTime * (isMobile ? 0.18 : 0.28)) * (isMobile ? 0.012 : 0.02);
   });
 
   return (
-    <group ref={group}>
-      <FieldShader activeNode={activeNode} />
+    <group ref={group} scale={isTablet ? 0.98 : 1}>
+      <FieldShader activeNode={activeNode} profile={profile} />
       <FieldParticles profile={profile} />
 
       <StructuralBand from={[-5.15, 1.16, -0.46]} to={[5.28, -0.46, -0.46]} color="#446276" opacity={isMobile ? 0.02 : 0.032} lift={0.86} radius={isMobile ? 0.018 : 0.028} />
@@ -808,6 +816,8 @@ export default function SignalInfrastructureField({
   const visibleLabelNodes =
     profile === "mobile"
       ? serviceNodes.filter((node) => ["telecom", "electricity", "security", "quote"].includes(node.key))
+      : profile === "tablet"
+        ? serviceNodes.filter((node) => ["telecom", "networks", "electricity", "security", "quote"].includes(node.key))
       : serviceNodes;
 
   useEffect(() => {
@@ -843,9 +853,16 @@ export default function SignalInfrastructureField({
     <div className="signalField">
       <div className="fieldCanvas" aria-hidden="true">
         <Canvas
-          camera={{ position: [0, 0, profile === "mobile" ? 6.85 : 6.3], fov: profile === "mobile" ? 43 : 38 }}
-          dpr={profile === "mobile" ? [1, 1.2] : [1, 1.65]}
-          gl={{ alpha: true, antialias: profile !== "mobile", powerPreference: profile === "mobile" ? "low-power" : "high-performance" }}
+          camera={{
+            position: [0, 0, profile === "mobile" ? 6.85 : profile === "tablet" ? 7.9 : 6.3],
+            fov: profile === "mobile" ? 43 : profile === "tablet" ? 60 : 38,
+          }}
+          dpr={profile === "mobile" ? [1, 1.2] : profile === "tablet" ? [1, 1.45] : [1, 1.65]}
+          gl={{
+            alpha: true,
+            antialias: profile !== "mobile",
+            powerPreference: profile === "mobile" ? "low-power" : "high-performance",
+          }}
         >
           <SignalScene activeKey={activeKey} serviceNodes={serviceNodes} profile={profile} />
         </Canvas>

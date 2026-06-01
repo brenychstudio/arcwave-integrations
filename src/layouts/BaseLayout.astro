@@ -94,6 +94,10 @@ const isLegalPage =
   pathParts.includes("legal") ||
   pathParts.at(-1) === "privacy" ||
   pathParts.at(-1) === "cookies";
+const isHomePage =
+  Astro.url.pathname === "/" ||
+  Astro.url.pathname === "/es" ||
+  Astro.url.pathname === "/es/";
 const showMobileBottomCta = !isContactPage && !isLegalPage;
 const mobileBottomCtaLabel = t(lang, "Start request", "Iniciar solicitud");
 const mobileBottomCtaHref = isServiceDetail
@@ -1270,6 +1274,174 @@ const creditLabel = t(lang, "Design & development", "Diseno y desarrollo");
         }
       }
 
+      @media (min-width: 681px) and (max-width: 1080px){
+        .ft{
+          margin-top: 26px;
+          padding: 34px 0 26px;
+        }
+
+        .ft:before{
+          background:
+            linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.74) 26%, rgba(255,255,255,.965) 76%, rgba(255,255,255,.995) 100%),
+            radial-gradient(760px 320px at 76% 8%, rgba(10,132,255,.08), transparent 66%);
+        }
+
+        .ft:after{
+          top: 30px;
+        }
+
+        .ftShell{
+          width: 100%;
+          max-width: 100%;
+          grid-template-columns: 1fr;
+          gap: 10px;
+          padding: 12px;
+          border-radius: 24px;
+        }
+
+        .ftBrandPanel{
+          display:grid;
+          grid-template-columns: minmax(260px, .82fr) minmax(220px, .58fr);
+          align-items:center;
+          gap: 18px;
+          min-height: 0;
+          padding: 16px 18px;
+          border-right: 0;
+          border-bottom: 1px solid rgba(10,36,70,.075);
+        }
+
+        .ftBlurb{
+          max-width: 44ch;
+          margin-top: 12px;
+          font-size: 12px;
+          line-height:1.48;
+          display:-webkit-box;
+          -webkit-line-clamp:3;
+          -webkit-box-orient:vertical;
+          overflow:hidden;
+        }
+
+        .ftStatus{
+          justify-content:flex-end;
+          align-content:center;
+          gap: 7px;
+        }
+
+        .ftStatus span{
+          min-height: 28px;
+          padding: 0 9px;
+          font-size: 10px;
+        }
+
+        .ftSystemPanel{
+          grid-template-columns: minmax(150px, .78fr) minmax(230px, 1.22fr) minmax(150px, .78fr);
+          gap: 8px;
+          padding: 0;
+        }
+
+        .ftColumn{
+          min-height: 0;
+          padding: 15px;
+          border-right: 0;
+          border-bottom: 0;
+          border-radius: 17px;
+        }
+
+        .ftColumn:last-child{
+          padding-right: 15px;
+        }
+
+        .ftK{
+          margin-bottom: 11px;
+          font-size: 10px;
+        }
+
+        .ftLinks,
+        .ftContact{
+          gap: 7px;
+        }
+
+        .ftLinks a{
+          min-height: 28px;
+          font-size: 12px;
+        }
+
+        .ftLinks a:after{
+          width: 14px;
+        }
+
+        .ftContact{
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .ftContact > div:first-child:last-child,
+        .ftContact > div:nth-child(3):last-child{
+          grid-column: span 2;
+        }
+
+        .ftContact a,
+        .ftContact span{
+          font-size: 12px;
+          line-height:1.35;
+        }
+
+        .ftContact small{
+          margin-bottom: 2px;
+          font-size: 9px;
+        }
+
+        .ftActions{
+          margin-top: 12px;
+          gap: 7px;
+        }
+
+        .ftAction{
+          min-height: 32px;
+          padding: 0 10px;
+          font-size: 12px;
+        }
+
+        .ft .social{
+          margin-top: 12px;
+          gap: 8px;
+        }
+
+        .ft .ico{
+          width: 30px;
+          height: 30px;
+        }
+
+        .ftBottom{
+          max-width: 100%;
+          flex-direction: row;
+          align-items:center;
+          justify-content:space-between;
+          gap: 12px;
+          padding: 12px 4px 0;
+          font-size: 12px;
+        }
+
+        .ftCredit{
+          white-space: nowrap;
+        }
+
+        body[data-home="true"] .ft{
+          margin-top: -34px;
+          padding-top: 68px;
+        }
+
+        body[data-home="true"] .ft:before{
+          inset: -104px 0 0;
+          background:
+            linear-gradient(180deg, rgba(246,250,253,0) 0%, rgba(246,250,253,.58) 18%, rgba(255,255,255,.94) 54%, rgba(255,255,255,.995) 100%),
+            radial-gradient(780px 340px at 74% 12%, rgba(10,132,255,.075), transparent 68%);
+        }
+
+        body[data-home="true"] .ft:after{
+          display:none;
+        }
+      }
+
       @media (max-width: 680px){
         .ft{
           margin-top: 28px;
@@ -1415,7 +1587,7 @@ const creditLabel = t(lang, "Design & development", "Diseno y desarrollo");
     </style>
   </head>
 
-  <body data-mobile-cta={showMobileBottomCta ? "true" : undefined}>
+  <body data-mobile-cta={showMobileBottomCta ? "true" : undefined} data-home={isHomePage ? "true" : undefined}>
     <Header active={Astro.url.pathname} />
 
     <main class="main">
@@ -1679,7 +1851,8 @@ const creditLabel = t(lang, "Design & development", "Diseno y desarrollo");
 
     <script is:inline>
       (() => {
-        const mq = window.matchMedia("(max-width: 760px)");
+        const mobileMq = window.matchMedia("(max-width: 760px)");
+        const tabletMq = window.matchMedia("(min-width: 761px) and (max-width: 1080px)");
 
         function wrapIndex(index, length) {
           return ((index % length) + length) % length;
@@ -1697,7 +1870,13 @@ const creditLabel = t(lang, "Design & development", "Diseno y desarrollo");
           return `${String(index + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}`;
         }
 
-        function getCarouselItems(root) {
+        function carouselMode(root) {
+          if (mobileMq.matches) return "mobile";
+          if (tabletMq.matches && root.getAttribute("data-mobile-carousel-tablet") === "true") return "tablet";
+          return "";
+        }
+
+        function getCarouselItems(root, mode) {
           const items = Array.from(root.children).filter((child) => {
             return child instanceof HTMLElement
               && child.getAttribute("data-mobile-carousel-exclude") !== "true"
@@ -1706,7 +1885,7 @@ const creditLabel = t(lang, "Design & development", "Diseno y desarrollo");
           });
 
           const mobileLimit = Number(root.getAttribute("data-mobile-carousel-mobile-limit") || 0);
-          if (mq.matches && Number.isFinite(mobileLimit) && mobileLimit > 0) {
+          if (mode === "mobile" && Number.isFinite(mobileLimit) && mobileLimit > 0) {
             return items.slice(0, mobileLimit);
           }
 
@@ -1717,6 +1896,7 @@ const creditLabel = t(lang, "Design & development", "Diseno y desarrollo");
           root.querySelectorAll(".mobileCarouselControls, .mobileCarouselDots").forEach((node) => node.remove());
           root.classList.remove("isMobileCarousel");
           root.removeAttribute("data-mobile-carousel-ready");
+          root.removeAttribute("data-mobile-carousel-mode");
           root.removeAttribute("role");
           root.removeAttribute("aria-roledescription");
 
@@ -1730,16 +1910,17 @@ const creditLabel = t(lang, "Design & development", "Diseno y desarrollo");
         }
 
         function initArcwaveMobileCarousels() {
-          if (!mq.matches) return;
-
           document.querySelectorAll("[data-mobile-carousel]").forEach((root) => {
+            const mode = carouselMode(root);
+            if (!mode) return;
             if (root.getAttribute("data-mobile-carousel-ready") === "true") return;
 
-            const items = getCarouselItems(root);
+            const items = getCarouselItems(root, mode);
 
             if (items.length < 3) return;
 
             root.setAttribute("data-mobile-carousel-ready", "true");
+            root.setAttribute("data-mobile-carousel-mode", mode);
             root.classList.add("isMobileCarousel");
             root.setAttribute("role", "region");
             root.setAttribute("aria-roledescription", "carousel");
@@ -1806,7 +1987,7 @@ const creditLabel = t(lang, "Design & development", "Diseno y desarrollo");
             next?.addEventListener("click", () => select(activeIndex + 1));
 
             root.addEventListener("pointerdown", (event) => {
-              if (!mq.matches) return;
+              if (!carouselMode(root)) return;
               if (event.target?.closest?.("button")) return;
               tracking = true;
               pointerStartX = event.clientX;
@@ -1832,14 +2013,18 @@ const creditLabel = t(lang, "Design & development", "Diseno y desarrollo");
 
         function syncArcwaveMobileCarousels() {
           document.querySelectorAll("[data-mobile-carousel-ready='true']").forEach((root) => {
-            if (!mq.matches) resetArcwaveMobileCarousel(root);
+            const mode = carouselMode(root);
+            if (!mode || mode !== root.getAttribute("data-mobile-carousel-mode")) {
+              resetArcwaveMobileCarousel(root);
+            }
           });
 
           initArcwaveMobileCarousels();
         }
 
         syncArcwaveMobileCarousels();
-        mq.addEventListener?.("change", syncArcwaveMobileCarousels);
+        mobileMq.addEventListener?.("change", syncArcwaveMobileCarousels);
+        tabletMq.addEventListener?.("change", syncArcwaveMobileCarousels);
         window.addEventListener("resize", syncArcwaveMobileCarousels, { passive: true });
         document.addEventListener("astro:page-load", syncArcwaveMobileCarousels);
         document.addEventListener("astro:after-swap", syncArcwaveMobileCarousels);

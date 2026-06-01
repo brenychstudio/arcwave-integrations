@@ -536,6 +536,7 @@ const pageNavItems = copy.pageNavItems;
         <div
           class="pathGrid"
           data-mobile-carousel="home-paths"
+          data-mobile-carousel-tablet="true"
           data-mobile-carousel-label={copy.journeyTitle}
           data-mobile-carousel-mobile-limit="3"
         >
@@ -6026,6 +6027,482 @@ const pageNavItems = copy.pageNavItems;
 
       .proofPanel div{
         min-height: auto;
+      }
+    }
+
+    @media (min-width: 681px) and (max-width: 1080px){
+      .v2Hero{
+        min-height: 100svh;
+        padding: 0;
+        overflow:hidden;
+      }
+
+      .heroGrid{
+        width:100vw;
+        min-height: 100svh;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        position:relative;
+        top:auto;
+        display:grid;
+        align-items:start;
+        overflow:hidden;
+        isolation:isolate;
+      }
+
+      .heroGrid:before{
+        content:"";
+        position:absolute;
+        inset:0;
+        z-index:4;
+        display:block;
+        pointer-events:none;
+        background:
+          linear-gradient(90deg, rgba(255,255,255,.96) 0%, rgba(255,255,255,.88) 27%, rgba(255,255,255,.52) 48%, rgba(255,255,255,.16) 68%, transparent 100%),
+          radial-gradient(620px 660px at 18% 42%, rgba(255,255,255,.74), rgba(255,255,255,.32) 54%, transparent 78%),
+          linear-gradient(180deg, rgba(255,255,255,.34) 0%, transparent 26%, transparent 72%, rgba(248,251,254,.30) 100%);
+      }
+
+      .heroGrid:after{
+        content:"";
+        position:absolute;
+        inset:0;
+        z-index:0;
+        display:block;
+        pointer-events:none;
+        opacity:.72;
+        background:
+          radial-gradient(720px 620px at 68% 18%, rgba(10,132,255,.22), transparent 68%),
+          radial-gradient(620px 520px at 24% 78%, rgba(255,186,94,.075), transparent 70%),
+          linear-gradient(180deg, rgba(238,248,255,.36), rgba(249,252,255,.58));
+        mask-image:none;
+      }
+
+      .heroCopy{
+        position:relative;
+        z-index:8;
+        width: min(590px, calc(100vw - 116px));
+        margin-left: clamp(72px, 8.8vw, 96px);
+        margin-right: auto;
+        padding-top: clamp(164px, 15.5svh, 186px);
+        gap: 17px;
+      }
+
+      h1{
+        max-width: 7.1em;
+        font-size: clamp(58px, 8.1vw, 74px);
+        line-height:.86;
+        letter-spacing:-.058em;
+        text-wrap: balance;
+      }
+
+      .lead{
+        max-width: 48ch;
+        font-size: 16px;
+        line-height:1.58;
+      }
+
+      .actions{
+        margin-top: 0;
+      }
+
+      .signalFormula{
+        max-width: 560px;
+        gap: 9px;
+        margin-top: 8px;
+        font-size: 11px;
+        letter-spacing:.13em;
+      }
+
+      .signalFormula i{
+        width: 24px;
+      }
+
+      .focusRail{
+        max-width: min(540px, 100%);
+        gap: 8px;
+      }
+
+      .focusRail button{
+        min-height: 36px;
+        padding: 0 11px;
+        background: rgba(255,255,255,.66);
+      }
+
+      .signalStage{
+        position:absolute;
+        inset:0;
+        z-index:2;
+        width:100%;
+        height:100%;
+        min-height:100%;
+        margin:0;
+        border:0;
+        border-radius:0;
+        box-shadow:none;
+        overflow:hidden;
+        background:
+          radial-gradient(760px 620px at 66% 20%, rgba(10,132,255,.24), transparent 70%),
+          radial-gradient(620px 520px at 22% 76%, rgba(255,186,94,.08), transparent 68%),
+          linear-gradient(180deg, rgba(237,248,255,.74), rgba(248,252,255,.94));
+        mask-image:none;
+      }
+
+      :global(.signalFieldShell),
+      :global(.signalField),
+      :global(.signalFieldFallback),
+      :global(.fieldCanvas),
+      :global(.fieldGrain){
+        position:absolute;
+        inset:0;
+        width:100%;
+        height:100%;
+      }
+
+      :global(.fieldCanvas canvas){
+        width:100% !important;
+        height:100% !important;
+      }
+
+      :global(.fieldCanvas){
+        display:block !important;
+        filter: saturate(1.42) contrast(1.24) brightness(1.08);
+        -webkit-mask-image: linear-gradient(90deg, rgba(0,0,0,.28) 0%, rgba(0,0,0,.62) 24%, black 46%, black 100%);
+        mask-image: linear-gradient(90deg, rgba(0,0,0,.28) 0%, rgba(0,0,0,.62) 24%, black 46%, black 100%);
+      }
+
+      :global(.fieldGrain){
+        opacity:.68;
+        mask-image: radial-gradient(circle at 60% 50%, black, transparent 86%);
+      }
+
+      :global(.fieldAxis){
+        opacity:.16;
+      }
+
+      :global(.fieldLabels){
+        opacity:.84;
+      }
+
+      :global(.signalFieldShell.isEnhanced .signalFieldFallback .fieldLabels){
+        display:none !important;
+      }
+
+      :global(.fieldNode){
+        min-height: 31px;
+        padding: 0 10px;
+        background: rgba(255,255,255,.66);
+        box-shadow:
+          inset 0 1px 0 rgba(255,255,255,.76),
+          0 14px 34px rgba(10,36,70,.08);
+        backdrop-filter: blur(12px) saturate(1.08);
+        -webkit-backdrop-filter: blur(12px) saturate(1.08);
+      }
+
+      :global(.fieldNode.telecom){ left: 62%; top: 44%; }
+      :global(.fieldNode.networks){ left: 46%; bottom: 22%; }
+      :global(.fieldNode.electricity){ right: 9%; top: 24%; }
+      :global(.fieldNode.security){ right: 10%; bottom: 21%; }
+      :global(.fieldNode.quote){ right: 8%; bottom: 37%; }
+      :global(.fieldNode.ev),
+      :global(.fieldNode.audio){
+        display:none;
+      }
+
+      :global(.fieldReadout){
+        left:auto;
+        right: clamp(42px, 6vw, 72px);
+        bottom: clamp(114px, 11.5svh, 136px);
+        width: min(390px, 44vw);
+        transform:none;
+        padding: 16px;
+      }
+
+      :global(.fieldReadout strong){
+        font-size: 21px;
+      }
+
+      :global(.fieldReadout p){
+        font-size: 12px;
+        line-height:1.42;
+      }
+
+      .stageCaption{
+        display:none;
+      }
+
+      .impactStrip{
+        margin-top: clamp(58px, 7vw, 84px);
+        padding: clamp(52px, 6.5vw, 76px) 0 clamp(88px, 11vw, 128px);
+      }
+
+      .impactStripHead{
+        grid-template-columns: minmax(180px, .34fr) minmax(0, .66fr);
+        gap: clamp(22px, 4vw, 54px);
+        align-items:start;
+        margin-bottom: 40px;
+      }
+
+      .impactStripHead p{
+        max-width: 56ch;
+      }
+
+      .impactLine{
+        margin-bottom: 38px;
+      }
+
+      .impactStats{
+        grid-template-columns: repeat(auto-fit, minmax(138px, 1fr));
+        justify-content:center;
+        justify-items:center;
+        align-items:start;
+        gap: 22px 16px;
+        padding-inline: clamp(6px, 2vw, 18px);
+      }
+
+      .impactStat,
+      .impactStat:nth-child(2),
+      .impactStat:nth-child(3),
+      .impactStat:nth-child(4){
+        justify-self:center;
+        max-width: 156px;
+        padding-top: 16px;
+        text-align:center;
+      }
+
+      .impactStat:before{
+        left:50%;
+        top:-25px;
+        transform: translateX(-50%) scale(.84);
+      }
+
+      .impactStat.isCounted:before{
+        transform: translateX(-50%) scale(1);
+      }
+
+      .impactStat strong{
+        font-size: clamp(42px, 6.2vw, 56px);
+      }
+
+      .impactStat h3{
+        max-width: 13ch;
+        margin: 12px auto 0;
+        font-size: 16px;
+      }
+
+      .impactStat p{
+        max-width: 18ch;
+        margin: 10px auto 0;
+        font-size: 12px;
+        line-height:1.46;
+      }
+
+      .pathSection{
+        padding-top: clamp(58px, 8vw, 92px);
+      }
+
+      .pathSection .sectionHead.compact{
+        max-width: 640px;
+        margin-bottom: 24px;
+      }
+
+      .pathStage{
+        min-height: auto;
+        padding: 14px;
+        border-radius: 30px;
+        overflow:hidden;
+      }
+
+      .pathStage:before{
+        inset: 8% auto auto 3%;
+        width: 96%;
+        height: 78%;
+        opacity:.46;
+      }
+
+      .pathRoute{
+        left: 7%;
+        right: 7%;
+        top: 48%;
+        opacity:.56;
+      }
+
+      .pathGrid[data-mobile-carousel="home-paths"].isMobileCarousel{
+        --home-path-carousel-height: clamp(540px, 62svh, 610px);
+        --home-path-card-width: min(430px, calc(100vw - 220px));
+        --home-path-controls-space: 100px;
+        position:relative;
+        z-index:2;
+        display:block;
+        width:100%;
+        max-width:100%;
+        min-height: var(--home-path-carousel-height);
+        padding:0;
+        overflow:hidden;
+        perspective: 1100px;
+        touch-action: pan-y;
+        isolation:isolate;
+      }
+
+      .pathGrid[data-mobile-carousel="home-paths"].isMobileCarousel .pathItem[data-mobile-carousel-item]{
+        position:absolute !important;
+        left:50%;
+        top:0;
+        z-index:1;
+        width: var(--home-path-card-width);
+        max-width: calc(100% - 80px);
+        height: calc(var(--home-path-carousel-height) - var(--home-path-controls-space));
+        min-height:0;
+        margin:0 !important;
+        display:flex !important;
+        flex-direction:column;
+        justify-content:flex-start;
+        gap: 12px;
+        padding: 24px;
+        overflow:hidden;
+        opacity:0;
+        pointer-events:none;
+        transform: translateX(-50%) translateY(30px) translateZ(-110px) scale(.82);
+        transform-origin:center bottom;
+        transition:
+          transform .52s cubic-bezier(.22, .9, .24, 1),
+          opacity .34s ease,
+          filter .34s ease;
+        will-change: transform, opacity;
+      }
+
+      .pathGrid[data-mobile-carousel="home-paths"].isMobileCarousel .pathItem[data-carousel-offset="0"]{
+        z-index:5;
+        opacity:1;
+        pointer-events:auto;
+        filter:none;
+        transform: translateX(-50%) translateY(0) translateZ(0) scale(1);
+      }
+
+      .pathGrid[data-mobile-carousel="home-paths"].isMobileCarousel .pathItem[data-carousel-offset="-1"]{
+        z-index:3;
+        opacity:.18;
+        filter: saturate(.78) blur(.45px);
+        transform: translateX(calc(-50% - 70%)) translateY(32px) translateZ(-140px) scale(.82) rotateY(8deg);
+      }
+
+      .pathGrid[data-mobile-carousel="home-paths"].isMobileCarousel .pathItem[data-carousel-offset="1"]{
+        z-index:3;
+        opacity:.18;
+        filter: saturate(.78) blur(.45px);
+        transform: translateX(calc(-50% + 70%)) translateY(32px) translateZ(-140px) scale(.82) rotateY(-8deg);
+      }
+
+      .pathGrid[data-mobile-carousel="home-paths"].isMobileCarousel .pathItem[data-carousel-offset="hidden"]{
+        opacity:0;
+        pointer-events:none;
+        transform: translateX(-50%) translateY(34px) translateZ(-140px) scale(.80);
+      }
+
+      .pathGrid[data-mobile-carousel="home-paths"].isMobileCarousel .pathItem:before{
+        left:auto;
+        right: 24px;
+        top: 24px;
+        bottom:auto;
+      }
+
+      .pathGrid[data-mobile-carousel="home-paths"].isMobileCarousel .pathItem dl{
+        margin: 28px 0 12px;
+      }
+
+      .pathGrid[data-mobile-carousel="home-paths"].isMobileCarousel .pathItem ul{
+        margin-top: 2px;
+      }
+
+      .pathGrid[data-mobile-carousel="home-paths"].isMobileCarousel .pathItem h3{
+        margin-top: auto;
+        font-size: clamp(30px, 4.4vw, 38px);
+      }
+
+      .pathGrid[data-mobile-carousel="home-paths"].isMobileCarousel .pathItem p{
+        font-size: 13px;
+        line-height:1.5;
+      }
+
+      .pathGrid[data-mobile-carousel="home-paths"].isMobileCarousel :global(.mobileCarouselControls){
+        position:absolute;
+        left:50%;
+        bottom: 14px;
+        z-index:8;
+        width: var(--home-path-card-width);
+        max-width: calc(100% - 80px);
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap: 12px;
+        transform: translateX(-50%);
+        pointer-events:auto;
+      }
+
+      .pathGrid[data-mobile-carousel="home-paths"].isMobileCarousel :global(.mobileCarouselDots){
+        position:absolute;
+        left:50%;
+        bottom: 60px;
+        z-index:8;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        gap: 8px;
+        transform: translateX(-50%);
+      }
+
+      .pathGrid[data-mobile-carousel="home-paths"].isMobileCarousel :global(.mobileCarouselControls button),
+      .pathGrid[data-mobile-carousel="home-paths"].isMobileCarousel :global(.mobileCarouselDots button){
+        border: 1px solid rgba(10,132,255,.18);
+        background: rgba(255,255,255,.72);
+        color: rgba(15,15,20,.72);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.84);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .pathGrid[data-mobile-carousel="home-paths"].isMobileCarousel :global(.mobileCarouselControls button){
+        min-width: 40px;
+        width: 40px;
+        min-height: 36px;
+        padding:0;
+        border-radius:999px;
+        font-size: 15px;
+        font-weight:760;
+        letter-spacing:0;
+      }
+
+      .pathGrid[data-mobile-carousel="home-paths"].isMobileCarousel :global(.mobileCarouselCount){
+        min-height: 36px;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        padding: 0 13px;
+        border-radius:999px;
+        border: 1px solid rgba(15,15,20,.07);
+        background: rgba(255,255,255,.60);
+        color: rgba(10,132,255,.78);
+        font-size: 11px;
+        font-weight:780;
+        letter-spacing:.14em;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+
+      .pathGrid[data-mobile-carousel="home-paths"].isMobileCarousel :global(.mobileCarouselDots button){
+        width: 9px;
+        height: 9px;
+        padding:0;
+        border-radius:999px;
+        opacity:.48;
+        transition: width .2s ease, opacity .2s ease, background .2s ease;
+      }
+
+      .pathGrid[data-mobile-carousel="home-paths"].isMobileCarousel :global(.mobileCarouselDots button[aria-pressed="true"]){
+        width: 24px;
+        opacity:1;
+        background: rgba(10,132,255,.74);
       }
     }
 

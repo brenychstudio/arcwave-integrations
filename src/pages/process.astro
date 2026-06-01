@@ -153,7 +153,12 @@ const briefItems = ["Service", "Space", "Constraints", "Next response"];
       </div>
 
       <div class="interfaceTopology">
-        <div class="processLane" data-mobile-carousel="process-steps" data-mobile-carousel-label="Request diagnostic lane">
+        <div
+          class="processLane"
+          data-mobile-carousel="process-steps"
+          data-mobile-carousel-tablet="true"
+          data-mobile-carousel-label="Request diagnostic lane"
+        >
           {process.map((item) => (
             <article class="interfaceCard pathStep">
               <div class="pathStepHead">
@@ -994,6 +999,354 @@ const briefItems = ["Service", "Space", "Constraints", "Next response"];
       .processNode:nth-child(5){
         min-height: 230px;
         transform:none;
+      }
+    }
+
+    @media (min-width: 761px) and (max-width: 1080px){
+      .processPage{
+        --interface-container: min(100% - 44px, 920px);
+      }
+
+      .processPage .interfaceHero{
+        padding-top: clamp(52px, 7vw, 76px);
+        padding-bottom: clamp(42px, 6vw, 64px);
+      }
+
+      .processHeroPanel{
+        min-height:auto;
+        grid-template-rows: auto auto auto;
+        gap: 12px;
+        padding: 16px;
+        border-radius: 28px;
+      }
+
+      .processHeroPanel:before{
+        inset: 10% 7% 14%;
+        opacity:.55;
+      }
+
+      .processHeroPanel:after,
+      .diagnosticPathLine{
+        display:none;
+      }
+
+      .diagnosticRail{
+        grid-template-columns: minmax(0, 1fr) 34px minmax(0, 1fr) 34px minmax(0, 1fr);
+        gap: 8px;
+        padding: 11px 14px;
+        border-radius: 999px;
+      }
+
+      .diagnosticRail span{
+        min-width:0;
+        text-align:center;
+        font-size: 9.5px;
+        letter-spacing:.14em;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+      }
+
+      .diagnosticStageGrid{
+        grid-template-columns: 1fr;
+        gap: 8px;
+        align-items:stretch;
+      }
+
+      .diagnosticStage,
+      .diagnosticStage:nth-child(2),
+      .diagnosticStage:nth-child(4),
+      .diagnosticStage:nth-child(5),
+      .diagnosticStage.isActive{
+        min-height:auto;
+        display:grid;
+        grid-template-columns: minmax(150px, .42fr) minmax(0, 1fr);
+        align-items:center;
+        gap: 14px;
+        padding: 12px 14px;
+        border-radius: 18px;
+        transform:none;
+        box-shadow:
+          inset 0 1px 0 rgba(255,255,255,.88),
+          0 12px 36px rgba(10,10,20,.045);
+      }
+
+      .diagnosticStage.isActive{
+        background:
+          linear-gradient(90deg, rgba(10,132,255,.08), rgba(255,255,255,.78) 42%, rgba(255,255,255,.70));
+      }
+
+      .diagnosticStage > div{
+        display:grid;
+        grid-template-columns: 34px minmax(0, 1fr);
+        grid-template-areas:
+          "index title"
+          "index state";
+        align-items:center;
+        gap: 4px 10px;
+        min-width:0;
+      }
+
+      .diagnosticStage span{
+        grid-area:index;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        width: 30px;
+        height: 30px;
+        border-radius:999px;
+        background: rgba(10,132,255,.08);
+        box-shadow: inset 0 0 0 1px rgba(10,132,255,.14);
+        font-size: 10px;
+        letter-spacing:0;
+      }
+
+      .diagnosticStage strong{
+        grid-area:title;
+        margin:0;
+        font-size: 20px;
+        line-height:1;
+        letter-spacing:-.025em;
+      }
+
+      .diagnosticStage p{
+        grid-area:state;
+        margin:0;
+        padding: 0;
+        border:0;
+        background:transparent;
+        font-size: 9.5px;
+      }
+
+      .diagnosticStage dl{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin:0;
+        border-radius: 14px;
+      }
+
+      .diagnosticStage dl div{
+        padding: 9px 10px;
+      }
+
+      .diagnosticStage dd{
+        font-size: 12px;
+      }
+
+      .diagnosticSummary{
+        grid-template-columns: minmax(180px, .4fr) minmax(0, 1fr);
+        gap: 12px;
+        padding: 12px;
+        border-radius: 18px;
+      }
+
+      .diagnosticSummary > div > strong{
+        font-size: 18px;
+      }
+
+      .diagnosticSummary dl div{
+        padding: 9px 10px;
+      }
+
+      .processJourneySection{
+        padding-top: clamp(42px, 6vw, 66px);
+      }
+
+      .processJourneySection .interfaceSectionHead{
+        grid-template-columns: 1fr;
+        gap: 16px;
+        align-items:start;
+      }
+
+      .processJourneySection .interfaceSectionHead h2{
+        max-width: 8.8em;
+        font-size: clamp(44px, 6.8vw, 58px);
+      }
+
+      .processJourneySection .interfaceTopology{
+        padding: 14px;
+        border-radius: 30px;
+      }
+
+      .processLane[data-mobile-carousel="process-steps"].isMobileCarousel{
+        --process-tablet-carousel-height: clamp(550px, 62svh, 620px);
+        --process-tablet-card-width: min(440px, calc(100vw - 220px));
+        --process-tablet-controls-space: 102px;
+        position:relative;
+        z-index:2;
+        display:block;
+        width:100%;
+        min-height: var(--process-tablet-carousel-height);
+        padding:0 !important;
+        overflow:hidden;
+        background:transparent !important;
+        perspective:1100px;
+        touch-action: pan-y;
+        isolation:isolate;
+      }
+
+      .processLane[data-mobile-carousel="process-steps"].isMobileCarousel:before{
+        display:block;
+        left: 7%;
+        right: 7%;
+        top: 48%;
+        bottom:auto;
+        width:auto;
+        height:1px;
+        opacity:.52;
+        background: linear-gradient(90deg, transparent, rgba(10,132,255,.34), rgba(35,198,190,.18), transparent);
+      }
+
+      .processLane[data-mobile-carousel="process-steps"].isMobileCarousel .pathStep[data-mobile-carousel-item]{
+        position:absolute !important;
+        left:50%;
+        top:0;
+        z-index:1;
+        width: var(--process-tablet-card-width);
+        max-width: calc(100% - 80px);
+        height: calc(var(--process-tablet-carousel-height) - var(--process-tablet-controls-space));
+        min-height:0;
+        margin:0 !important;
+        display:grid !important;
+        grid-template-rows: auto auto auto 1fr;
+        align-content:start;
+        gap: 18px;
+        padding: 24px !important;
+        overflow:hidden;
+        opacity:0;
+        pointer-events:none;
+        transform: translateX(-50%) translateY(28px) translateZ(-120px) scale(.82);
+        transform-origin:center bottom;
+        transition:
+          transform .52s cubic-bezier(.22, .9, .24, 1),
+          opacity .34s ease,
+          filter .34s ease;
+        will-change: transform, opacity;
+      }
+
+      .processLane[data-mobile-carousel="process-steps"].isMobileCarousel .pathStep[data-carousel-offset="0"]{
+        z-index:5;
+        opacity:1;
+        pointer-events:auto;
+        filter:none;
+        transform: translateX(-50%) translateY(0) translateZ(0) scale(1);
+      }
+
+      .processLane[data-mobile-carousel="process-steps"].isMobileCarousel .pathStep[data-carousel-offset="-1"]{
+        z-index:3;
+        opacity:.16;
+        filter: saturate(.78) blur(.45px);
+        transform: translateX(calc(-50% - 72%)) translateY(30px) translateZ(-140px) scale(.82) rotateY(8deg);
+      }
+
+      .processLane[data-mobile-carousel="process-steps"].isMobileCarousel .pathStep[data-carousel-offset="1"]{
+        z-index:3;
+        opacity:.16;
+        filter: saturate(.78) blur(.45px);
+        transform: translateX(calc(-50% + 72%)) translateY(30px) translateZ(-140px) scale(.82) rotateY(-8deg);
+      }
+
+      .processLane[data-mobile-carousel="process-steps"].isMobileCarousel .pathStep[data-carousel-offset="hidden"]{
+        opacity:0;
+        pointer-events:none;
+        transform: translateX(-50%) translateY(32px) translateZ(-140px) scale(.80);
+      }
+
+      .processLane[data-mobile-carousel="process-steps"].isMobileCarousel .pathStep h3{
+        font-size: clamp(30px, 4.5vw, 38px);
+      }
+
+      .processLane[data-mobile-carousel="process-steps"].isMobileCarousel .pathStep p{
+        font-size: 14px;
+        line-height:1.5;
+      }
+
+      .processLane[data-mobile-carousel="process-steps"].isMobileCarousel .pathStep ul{
+        align-self:start;
+        gap: 7px;
+      }
+
+      .processLane[data-mobile-carousel="process-steps"].isMobileCarousel .pathStepIO{
+        margin-top: 8px;
+      }
+
+      .processLane[data-mobile-carousel="process-steps"].isMobileCarousel :global(.mobileCarouselControls){
+        position:absolute;
+        left:50%;
+        bottom: 14px;
+        z-index:8;
+        width: var(--process-tablet-card-width);
+        max-width: calc(100% - 80px);
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap: 12px;
+        transform: translateX(-50%);
+        pointer-events:auto;
+      }
+
+      .processLane[data-mobile-carousel="process-steps"].isMobileCarousel :global(.mobileCarouselDots){
+        position:absolute;
+        left:50%;
+        bottom: 60px;
+        z-index:8;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        gap: 8px;
+        transform: translateX(-50%);
+      }
+
+      .processLane[data-mobile-carousel="process-steps"].isMobileCarousel :global(.mobileCarouselControls button),
+      .processLane[data-mobile-carousel="process-steps"].isMobileCarousel :global(.mobileCarouselDots button){
+        border: 1px solid rgba(10,132,255,.18);
+        background: rgba(255,255,255,.72);
+        color: rgba(15,15,20,.72);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.84);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+
+      .processLane[data-mobile-carousel="process-steps"].isMobileCarousel :global(.mobileCarouselControls button){
+        min-width: 40px;
+        width: 40px;
+        min-height: 36px;
+        padding:0;
+        border-radius:999px;
+        font-size: 15px;
+        font-weight:760;
+        letter-spacing:0;
+      }
+
+      .processLane[data-mobile-carousel="process-steps"].isMobileCarousel :global(.mobileCarouselCount){
+        min-height: 36px;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        padding: 0 13px;
+        border-radius:999px;
+        border: 1px solid rgba(15,15,20,.07);
+        background: rgba(255,255,255,.60);
+        color: rgba(10,132,255,.78);
+        font-size: 11px;
+        font-weight:780;
+        letter-spacing:.14em;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+
+      .processLane[data-mobile-carousel="process-steps"].isMobileCarousel :global(.mobileCarouselDots button){
+        width: 9px;
+        height: 9px;
+        padding:0;
+        border-radius:999px;
+        opacity:.48;
+        transition: width .2s ease, opacity .2s ease, background .2s ease;
+      }
+
+      .processLane[data-mobile-carousel="process-steps"].isMobileCarousel :global(.mobileCarouselDots button[aria-pressed="true"]){
+        width: 24px;
+        opacity:1;
+        background: rgba(10,132,255,.74);
       }
     }
 
