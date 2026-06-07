@@ -429,7 +429,7 @@ const creditLabel = t(lang, "Design & development", "Diseno y desarrollo");
           transform: translateY(0);
         }
 
-        body[data-mobile-cta="true"] .waFab{
+        body[data-mobile-cta="true"] .mobileBottomCta.isReady ~ .waFab{
           bottom: calc(74px + env(safe-area-inset-bottom));
         }
 
